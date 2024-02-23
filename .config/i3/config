@@ -15,7 +15,7 @@ set $mod Mod4
 # is used in the bar {} block below.
 font pango:monospace 8
 # exec_always swaybg -i Downloads/nature-3082832_1920.jpg
-exec_always feh --bg-fill Downloads/colorful-2556353_1920.jpg
+exec_always feh --bg-fill .background.jpg
 exec_always picom -f
 exec_always conky -c .conky/card
 exec_always conky -c .conky/machine
