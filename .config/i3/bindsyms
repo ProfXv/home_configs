@@ -15,7 +15,7 @@ bindsym $mod+comma exec i3-msg exit
 bindsym $mod+semicolon exec reboot
 bindsym $mod+period exec poweroff
 
-bindsym $mod+b exec google-chrome
+bindsym $mod+b exec firefox --new-window
 bindsym $mod+c exec google-chrome --new-window chat.openai.com
 bindsym $mod+Shift+c exec google-chrome --new-window copilot.microsoft.com
 # bindsym $mod+w exec weixin
