@@ -1,10 +1,12 @@
-git
-vim
+rsync
+cronie
+scrcpy
 conky
 zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
 kitty
 ranger
-google-chrome-stable
+wofi
 picom
-
-steam
+texlive-most
