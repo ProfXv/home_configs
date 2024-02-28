@@ -8,14 +8,21 @@ for f in `cat .packages`; do sudo pacman -S --needed --noconfirm $f; done
 
 chsh -s `which zsh`
 
-i3-msg restart
-
 git config --global user.email "nparadoxist@gmail.com"
 git config --global user.name "Paradoxist@Paradoxer"
 cd .ssh
 mkdir -p github gitlab
 ssh-keygen -t rsa -C 849460963@qq.com -N '' -f github/id_rsa
 ssh-keygen -t rsa -C xuenqiao@swarma.org -N '' -f gitlab/id_rsa
+
+curl https://glados.rocks/tools/clash-linux.zip -o clash.zip
+unzip clash.zip
+rm clash.zip
+cd clash
+curl https://update.glados-config.com/clash/290141/765f3fd/50821/glados-terminal.yaml
+chmod +x ./clash-linux-amd64-v1.10.0
+
+i3-msg restart
 
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do
 #     echo "Processing $DEVICE"

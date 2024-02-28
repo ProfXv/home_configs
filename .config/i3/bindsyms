@@ -5,10 +5,8 @@ bindsym $mod+Shift+apostrophe exec --no-startup-id gnome-screenshot -r
 bindsym $mod+apostrophe exec --no-startup-id gnome-screenshot -i
 
 # 媒体键快捷键
-# bindsym $mod+f exec gnome-calculator
 bindsym $mod+Shift+slash exec yelp
-# bindsym $mod+h exec nautilus
-bindsym $mod+Escape exec gnome-screensaver-command -l
+bindsym $mod+f exec kitty ranger
 
 # 自定义快捷键
 bindsym $mod+comma exec i3-msg exit
@@ -19,7 +17,7 @@ bindsym $mod+b exec firefox --new-window
 bindsym $mod+c exec google-chrome --new-window chat.openai.com
 bindsym $mod+Shift+c exec google-chrome --new-window copilot.microsoft.com
 # bindsym $mod+w exec weixin
-bindsym $mod+f exec bytedance-feishu
+# bindsym $mod+f exec bytedance-feishu
 bindsym $mod+t exec wemeet
 bindsym $mod+j exec jupyter lab
 bindsym $mod+m exec mathematica
