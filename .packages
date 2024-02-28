@@ -8,10 +8,12 @@ ttf-dejavu
 picom
 
 scrcpy
+gnome-connections
 
 zsh
 zsh-autosuggestions
 zsh-syntax-highlighting
+zsh-theme-powerlevel10k
 
 kitty
 ranger
