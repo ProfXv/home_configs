@@ -19,7 +19,6 @@ exec_always feh --bg-fill .background.jpg
 exec_always picom -f
 exec conky -c .conky/card
 exec conky -c .conky/machine
-exec_always "export http_proxy=127.0.0.1:7890 https_proxy=127.0.0.1:7890 all_proxy=127.0.0.1:7890"
 exec "cd Desktop/Repository/kards/exposure; if [ `date -r . +'%F'` != `date +'%F'` ]; then rm *; fi; cd ~"
 exec clash -f .proxy.yaml -d .
 exec adb connect 192.168.1.9:4321
@@ -147,11 +146,11 @@ bindsym $mod+Shift+9 move container to workspace number $ws9
 for_window [class="Mathematica"] move to workspace $ws1
 for_window [class="libreoffice"] move to workspace $ws2
 for_window [class="scrcpy"] move to workspace $ws3
-for_window [class="Gnome-connections"] move to workspace $ws3
+for_window [class="org.remmina.Remmina"] move to workspace $ws3
 for_window [class="Gnome-boxes"] move to workspace $ws3
 for_window [class="sunloginclient"] move to workspace $ws3
 for_window [class="weixin"] move to workspace $ws4
-for_window [class="Bytedance-feishu"] move to workspace $ws4
+for_window [class="Feishu"] move to workspace $ws4
 for_window [class="wemeetapp"] move to workspace $ws4
 for_window [class="steam"] move to workspace $ws6
 for_window [class="conky"] move to workspace $ws9

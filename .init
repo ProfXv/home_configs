@@ -1,3 +1,8 @@
+chsh -s `which zsh`
+
+sudo sed -i 's/#zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
+sudo locale-gen
+
 sudo pacman -Sy git
 git config --global user.email "nparadoxist@gmail.com"
 git config --global user.name "Paradoxist@Paradoxer"
@@ -7,18 +12,27 @@ git clone -n https://github.com/ProfXv/home_configs
 mv -i home_configs/.git/ .
 rm -r home_configs/
 git checkout -f
+git remote remove origin
+git remote add origin git@github.com:ProfXv/home_configs.git
+
+curl https://update.glados-config.com/clash/290141/765f3fd/50821/glados-terminal.yaml > .proxy.yaml
+sed -i 's/external-ui: dashboard/# external-ui: dashboard/g' .proxy.yaml
+clash &
 
 sudo pacman -S --needed --noconfirm `cat .packages`
 sudo pacman -Rs --noconfirm xterm nano
 
-chsh -s `which zsh`
+git clone https://aur.archlinux.org/yay.git
+cd yay 
+makepkg -si
+cd ..
+rm -rf yay
+
+yay -S `cat .opt_packages`
 
 mkdir -p .ssh/github .ssh/gitlab
 ssh-keygen -t rsa -C 849460963@qq.com -N '' -f .ssh/github/id_rsa
 ssh-keygen -t rsa -C xuenqiao@swarma.org -N '' -f .ssh/gitlab/id_rsa
-
-curl https://update.glados-config.com/clash/290141/765f3fd/50821/glados-terminal.yaml > .proxy.yaml
-sed -i 's/external-ui: dashboard/# external-ui: dashboard/g' .proxy.yaml
 
 systemctl enable bluetooth.service
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do
@@ -33,9 +47,5 @@ systemctl enable bluetooth.service
 # done
 # 
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do for act in pair connect trust; do bluetoothctl $act $device; done; done
-
-sudo mount /dev/sdb1 /mnt/disk
-sudo bash /mnt/disk/softwares/Mathematica_14.0.0_BNDL_LINUX_CN.sh
-sudo umount /dev/sdb1
 
 reboot

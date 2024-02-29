@@ -50,11 +50,7 @@ source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
-aur() {
-	git clone https://aur.archlinux.org/$1.git
-	cd $1
-	makepkg -si
-}
+export http_proxy=127.0.0.1:7890 https_proxy=127.0.0.1:7890 all_proxy=127.0.0.1:7890
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

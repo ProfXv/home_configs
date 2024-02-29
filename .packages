@@ -4,6 +4,7 @@ rsync
 cronie
 unzip
 
+tree
 man-db
 tldr
 
@@ -15,7 +16,7 @@ ttf-dejavu
 picom
 
 scrcpy
-gnome-connections
+remmina
 clash
 
 zsh
