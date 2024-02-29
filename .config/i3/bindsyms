@@ -16,6 +16,7 @@ bindsym $mod+period exec poweroff
 bindsym $mod+b exec firefox --new-window
 bindsym $mod+c exec google-chrome --new-window chat.openai.com
 bindsym $mod+Shift+c exec google-chrome --new-window copilot.microsoft.com
+bindsym $mod+a exec firefox --new-window https://aur.archlinux.org/
 # bindsym $mod+w exec weixin
 # bindsym $mod+f exec bytedance-feishu
 bindsym $mod+t exec wemeet

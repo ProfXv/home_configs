@@ -1,29 +1,26 @@
+sudo pacman -Sy git
+git config --global user.email "nparadoxist@gmail.com"
+git config --global user.name "Paradoxist@Paradoxer"
+
 cd ~
 git clone -n https://github.com/ProfXv/home_configs
 mv -i home_configs/.git/ .
 rm -r home_configs/
 git checkout -f
 
-for f in `cat .packages`; do sudo pacman -S --needed --noconfirm $f; done
+sudo pacman -S --needed --noconfirm `cat .packages`
+sudo pacman -Rs --noconfirm xterm nano
 
 chsh -s `which zsh`
 
-git config --global user.email "nparadoxist@gmail.com"
-git config --global user.name "Paradoxist@Paradoxer"
-cd .ssh
-mkdir -p github gitlab
-ssh-keygen -t rsa -C 849460963@qq.com -N '' -f github/id_rsa
-ssh-keygen -t rsa -C xuenqiao@swarma.org -N '' -f gitlab/id_rsa
+mkdir -p .ssh/github .ssh/gitlab
+ssh-keygen -t rsa -C 849460963@qq.com -N '' -f .ssh/github/id_rsa
+ssh-keygen -t rsa -C xuenqiao@swarma.org -N '' -f .ssh/gitlab/id_rsa
 
-curl https://glados.rocks/tools/clash-linux.zip -o clash.zip
-unzip clash.zip
-rm clash.zip
-cd clash
-curl https://update.glados-config.com/clash/290141/765f3fd/50821/glados-terminal.yaml
-chmod +x ./clash-linux-amd64-v1.10.0
+curl https://update.glados-config.com/clash/290141/765f3fd/50821/glados-terminal.yaml > .proxy.yaml
+sed -i 's/external-ui: dashboard/# external-ui: dashboard/g' .proxy.yaml
 
-i3-msg restart
-
+systemctl enable bluetooth.service
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do
 #     echo "Processing $DEVICE"
 #     bluetoothctl << EOF
@@ -36,3 +33,9 @@ i3-msg restart
 # done
 # 
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do for act in pair connect trust; do bluetoothctl $act $device; done; done
+
+sudo mount /dev/sdb1 /mnt/disk
+sudo bash /mnt/disk/softwares/Mathematica_14.0.0_BNDL_LINUX_CN.sh
+sudo umount /dev/sdb1
+
+reboot

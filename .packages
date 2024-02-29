@@ -1,7 +1,13 @@
+bluez
+bluez-utils
 rsync
 cronie
 unzip
 
+man-db
+tldr
+
+feh
 conky
 noto-fonts-cjk
 noto-fonts-emoji
@@ -10,6 +16,7 @@ picom
 
 scrcpy
 gnome-connections
+clash
 
 zsh
 zsh-autosuggestions
@@ -18,11 +25,14 @@ zsh-theme-powerlevel10k
 
 kitty
 ranger
-wofi
+rofi
 
 firefox
 jupyterlab
+libreoffice-fresh
 texlive-most
+
+steam
 
 cmatrix
 lolcat
