@@ -1,3 +1,6 @@
+unlet! skip_defaults_vim
+source $VIMRUNTIME/defaults.vim
+
 set nu
 
 autocmd BufNewFile,BufRead *.wl set syntax=wl
