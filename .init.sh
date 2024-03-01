@@ -6,9 +6,6 @@ sudo sed -i 's/#zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
 sudo locale-gen
 
 sudo pacman -Sy git
-git config --global user.email "nparadoxist@gmail.com"
-git config --global user.name "Paradoxist@Paradoxer"
-
 cd ~
 git clone -n https://github.com/ProfXv/home_configs
 mv -i home_configs/.git/ .
