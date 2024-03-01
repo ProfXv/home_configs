@@ -1,3 +1,5 @@
+echo WARNING: ONLY BARE MACHINES CAN EXECUTE THIS SCRIPT FOR AUTOMATIC CONFIGURATION
+echo By typing your password, you admit you are fully aware of the risk, and we start.
 chsh -s `which zsh`
 
 sudo sed -i 's/#zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
@@ -30,9 +32,14 @@ rm -rf yay
 
 yay -S `cat .opt_packages`
 
-mkdir -p .ssh/github .ssh/gitlab
-ssh-keygen -t rsa -C 849460963@qq.com -N '' -f .ssh/github/id_rsa
-ssh-keygen -t rsa -C xuenqiao@swarma.org -N '' -f .ssh/gitlab/id_rsa
+for repo in github gitlab; do
+	case $repo in
+		github) mail=849460963@qq.com;;
+		gitlab) mail=xuenqiao@swarma.org;;
+	esac
+	mkdir -p .ssh/$repo
+	ssh-keygen -t rsa -C $mail -N '' -f .ssh/$repo/id_rsa
+done
 
 systemctl enable bluetooth.service
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do
