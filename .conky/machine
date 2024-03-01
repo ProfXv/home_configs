@@ -63,9 +63,9 @@ ${fs_bar /}
 
 ${font AR PL KaitiM GB:bold:size=10}NETWORK ${hr 2}
 ${font AR PL KaitiM GB:size=8}${if_match ${hwmon 1 temp 1} < 50}${color green}${else}${color red}${endif}WiFi Temp: ${hwmon 1 temp 1}°C$color
-${font AR PL KaitiM GB:size=8}Internal IP:${execi 1 ip -4 a show wlo1 | grep -oP 'inet \K[\d.]+'} ${alignr} External IP:${execi 1 wget -q -O- https://api.ipify.org}
-${font AR PL KaitiM GB:normal:size=8}Down: ${downspeed wlo1}  ${alignr}Up: ${upspeed wlo1} 
-${color lightgray}${downspeedgraph wlo1 80,130 } ${alignr}${upspeedgraph wlo1 80,130 }$color
+${font AR PL KaitiM GB:size=8}Internal IP:${execi 1 ip -4 a show wlan0 | grep -oP 'inet \K[\d.]+'} ${alignr} External IP:${execi 1 wget -q -O- https://api.ipify.org}
+${font AR PL KaitiM GB:normal:size=8}Down: ${downspeed wlan0}  ${alignr}Up: ${upspeed wlan0} 
+${color lightgray}${downspeedgraph wlan0 80,130 } ${alignr}${upspeedgraph wlan0 80,130 }$color
 Proxy State: ${execi 1 gsettings get org.gnome.system.proxy mode}
 Android Device: ${execi 1 adb devices}
 
