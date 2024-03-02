@@ -1,0 +1,38 @@
+# 截图
+bindsym $mod+Alt+apostrophe exec --no-startup-id gnome-screenshot
+bindsym $mod+Control+apostrophe exec --no-startup-id gnome-screenshot -w
+bindsym $mod+Shift+apostrophe exec --no-startup-id gnome-screenshot -r
+bindsym $mod+apostrophe exec --no-startup-id gnome-screenshot -i
+
+# 媒体键快捷键
+bindsym $mod+Shift+slash exec yelp
+
+# 自定义快捷键
+bindsym $mod+comma exec i3-msg exit
+bindsym $mod+semicolon exec reboot
+bindsym $mod+period exec poweroff
+
+bindsym $mod+m exec mathematica
+bindsym $mod+k exec mathematica Desktop/Repository/kards/kards.nb
+bindsym $mod+j exec jupyter lab
+bindsym $mod+b exec firefox --new-window
+bindsym $mod+c exec firefox --new-window chat.openai.com
+bindsym $mod+Shift+c exec firefox --new-window copilot.microsoft.com
+bindsym $mod+a exec firefox --new-window https://aur.archlinux.org/
+bindsym $mod+d exec remmina --enable-fullscreen -c rdp://swarma:swarmagents2050@192.168.0.119:3389
+bindsym $mod+i exec cat .zsh_history | xclip -selection clipboard
+bindsym $mod+o exec cat .zshlog | xclip -selection clipboard
+
+bindsym $mod+F1 exec kitty ranger Desktop
+bindsym $mod+F2 exec kitty ranger Documents
+bindsym $mod+F3 exec kitty ranger Downloads
+bindsym $mod+F4 exec kitty ranger Public
+bindsym $mod+F5 exec kitty ranger Music
+bindsym $mod+F6 exec kitty ranger Pictures
+bindsym $mod+F7 exec kitty ranger Videos
+bindsym $mod+F8 exec kitty ranger Templates
+bindsym $mod+F9 exec kitty ranger
+bindsym $mod+F10 exec kitty sudo ranger /
+
+bindsym $mod+Shift+bracketleft exec ibus engine libpinyin
+bindsym $mod+Shift+bracketright exec ibus engine xkb:us::eng

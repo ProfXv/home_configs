@@ -14,8 +14,7 @@ set $mod Mod4
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 font pango:monospace 8
-# exec_always swaybg -i Downloads/nature-3082832_1920.jpg
-exec feh --bg-fill .background.jpg
+exec swaybg -i .background.jpg
 exec picom -f --corner-radius=12
 exec conky -c .conky/card
 exec conky -c .conky/machine
@@ -192,7 +191,7 @@ client.urgent           $u-bgcolor      $u-bgcolor      $text           $u-bgcol
 # finds out, if available)
 bar {
 	status_command i3status -c .config/i3status/i3status.conf
-	i3bar_command i3bar --transparency
+	# i3bar_command i3bar --transparency
 	font pango: Droid Sans Mono 11
 	colors {
 		background $bgcolor

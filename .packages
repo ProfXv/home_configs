@@ -1,5 +1,13 @@
+feh
+conky
+
 sway
 swaybg
+
+noto-fonts-cjk
+noto-fonts-emoji
+ttf-dejavu
+picom
 
 xss-lock
 
@@ -13,16 +21,9 @@ tree
 man-db
 tldr
 
-feh
-conky
-noto-fonts-cjk
-noto-fonts-emoji
-ttf-dejavu
-picom
-
 scrcpy
+freerdp
 remmina
-clash
 
 zsh
 zsh-autosuggestions
@@ -39,7 +40,7 @@ nyxt
 firefox
 jupyterlab
 libreoffice-fresh
-texlive-most
+texlive-basic
 
 steam
 
