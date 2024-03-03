@@ -1,15 +1,20 @@
 feh
-conky
+picom
+xss-lock
 
 sway
+xorg-xwayland
 swaybg
+
+conky
 
 noto-fonts-cjk
 noto-fonts-emoji
 ttf-dejavu
-picom
 
-xss-lock
+ibus
+ibus-pinyin
+ibus-libpinyin
 
 bluez
 bluez-utils

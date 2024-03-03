@@ -6,9 +6,9 @@ sudo locale-gen
 
 sudo pacman -Sy git clash
 
-curl https://update.glados-config.com/clash/290141/765f3fd/50821/glados-terminal.yaml > .proxy.yaml
-sed -i 's/external-ui: dashboard/# external-ui: dashboard/g' .proxy.yaml
-clash -f .proxy.yaml -d . &
+curl https://update.glados-config.com/clash/290141/765f3fd/50821/glados-terminal.yaml > .config/clash/config.yaml
+sed -i 's/external-ui: dashboard/# external-ui: dashboard/g' .config/clash/config.yaml
+clash -d .config/clash/ &
 
 cd ~
 git clone -n https://github.com/ProfXv/home_configs
