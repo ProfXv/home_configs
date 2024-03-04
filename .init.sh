@@ -41,6 +41,7 @@ done
 chsh -s `which zsh`
 
 systemctl enable bluetooth.service
+systemctl enable runsunloginclient.service
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do
 #     echo "Processing $DEVICE"
 #     bluetoothctl << EOF
