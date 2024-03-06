@@ -15,10 +15,10 @@ bindsym $mod+period exec poweroff
 bindsym $mod+m exec mathematica
 bindsym $mod+k exec mathematica Desktop/Repository/kards/kards.nb
 bindsym $mod+j exec jupyter lab
-bindsym $mod+b exec firefox --new-window
-bindsym $mod+c exec firefox --new-window chat.openai.com
-bindsym $mod+Shift+c exec firefox --new-window copilot.microsoft.com
-bindsym $mod+a exec firefox --new-window https://aur.archlinux.org/
+bindsym $mod+b exec google-chrome --new-window
+bindsym $mod+c exec google-chrome --new-window chat.openai.com
+bindsym $mod+Shift+c exec google-chrome --new-window copilot.microsoft.com
+bindsym $mod+a exec google-chrome --new-window https://aur.archlinux.org/
 bindsym $mod+d exec remmina --enable-fullscreen -c rdp://swarma:swarmagents2050@192.168.0.119:3389
 bindsym $mod+i exec cat .zsh_history | xclip -selection clipboard
 bindsym $mod+o exec cat .zshlog | xclip -selection clipboard
