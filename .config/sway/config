@@ -19,7 +19,7 @@ exec picom -f --corner-radius=12
 exec conky -c .conky/card
 exec conky -c .conky/machine
 exec "cd Desktop/Repository/kards/exposure; if [ `date -r . +'%F'` != `date +'%F'` ]; then rm *; fi; cd ~"
-exec ibus start
+exec fcitx5
 exec clash -d .config/clash/
 exec adb connect 192.168.1.9:4321
 #exec_always /usr/local/Wolfram/Mathematica/14.0/SystemFiles/Links/WSTPServer/wstpserver &
@@ -141,6 +141,7 @@ bindsym $mod+Shift+9 move container to workspace number $ws9
 for_window [class="Mathematica"] move to workspace $ws1
 for_window [class="libreoffice"] move to workspace $ws2
 for_window [class="scrcpy"] move to workspace $ws3
+for_window [class="waydroid"] move to workspace $ws3
 for_window [class="org.remmina.Remmina"] move to workspace $ws3
 for_window [class="Gnome-boxes"] move to workspace $ws3
 for_window [class="sunloginclient"] move to workspace $ws3

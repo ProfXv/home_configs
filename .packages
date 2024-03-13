@@ -12,11 +12,8 @@ noto-fonts-cjk
 noto-fonts-emoji
 ttf-dejavu
 
-ibus
-ibus-pinyin
-ibus-libpinyin
-ibus-table
-ibus-table-chinese
+fcitx5-im
+fcitx5-chinese-addons
 
 bluez
 bluez-utils
@@ -45,7 +42,6 @@ python-pillow
 
 nyxt
 jupyterlab
-libreoffice-fresh
 texlive-basic
 
 steam

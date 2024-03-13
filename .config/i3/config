@@ -20,8 +20,8 @@ exec picom -f --corner-radius=12
 exec conky -c .conky/card
 exec conky -c .conky/machine
 exec "cd Desktop/Repository/kards/exposure; if [ `date -r . +'%F'` != `date +'%F'` ]; then rm *; fi; cd ~"
+exec fcitx5
 exec clash -d .config/clash/
-exec ibus start
 exec adb connect 192.168.1.9:4321
 #exec_always /usr/local/Wolfram/Mathematica/14.0/SystemFiles/Links/WSTPServer/wstpserver &
 
