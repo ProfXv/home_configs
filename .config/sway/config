@@ -142,7 +142,7 @@ for_window [class="Mathematica"] move to workspace $ws1
 for_window [class="libreoffice"] move to workspace $ws2
 for_window [class="scrcpy"] move to workspace $ws3
 for_window [class="waydroid"] move to workspace $ws3
-for_window [class="org.remmina.Remmina"] move to workspace $ws3
+for_window [app_id="org.remmina.Remmina"] move to workspace $ws3
 for_window [class="Gnome-boxes"] move to workspace $ws3
 for_window [class="sunloginclient"] move to workspace $ws3
 for_window [class="QQ"] move to workspace $ws4
@@ -205,4 +205,4 @@ bar {
 	}
 }
 
-include bindsyms
+include ../i3/bindsyms

@@ -19,7 +19,8 @@ bindsym $mod+k exec mathematica Desktop/Repository/kards/kards.nb
 bindsym $mod+j exec jupyter lab
 bindsym $mod+b exec $br --new-window
 bindsym $mod+c exec $br --new-window chat.openai.com
-bindsym $mod+Shift+c exec $br --new-window claude.ai
+# bindsym $mod+ctrl+c exec $br --new-window claude.ai
+bindsym $mod+Shift+c exec $br --new-window xinghuo.xfyun.cn
 bindsym $mod+o exec $br --new-window https://www.office.com
 bindsym $mod+a exec $br --new-window https://aur.archlinux.org
 bindsym $mod+d exec remmina --enable-fullscreen -c rdp://swarma:swarmagents2050@192.168.0.119:3389
