@@ -42,16 +42,17 @@ bindsym $mod+Shift+bracketright exec ibus engine xkb:us::eng
 # resize window (you can also use the mouse for that)
 mode "chat" {
         bindsym Return exec $br --new-window chat.openai.com
-	bindsym $mod+Shift+c exec $br --new-window copilot.microsoft.com
-	bindsym $mod+c exec $br --new-window claude.ai
-	bindsym $mod+x exec $br --new-window xinghuo.xfyun.cn
-	bindsym $mod+t exec $br --new-window tongyi.aliyun.com
-	bindsym $mod+k exec $br --new-window kimi.moonshot.cn
-	bindsym $mod+z exec $br --new-window chatglm.cn/main/detail
-	bindsym $mod+b exec $br --new-window www.baichuan-ai.com/chat
+	bindsym Shift+c exec $br --new-window copilot.microsoft.com
+	bindsym c exec $br --new-window claude.ai
+	bindsym x exec $br --new-window xinghuo.xfyun.cn
+	bindsym t exec $br --new-window tongyi.aliyun.com
+	bindsym k exec $br --new-window kimi.moonshot.cn
+	bindsym z exec $br --new-window chatglm.cn/main/detail
+	bindsym b exec $br --new-window www.baichuan-ai.com/chat
 
         # back to normal: Enter or Escape or $mod+r
         bindsym Escape mode "default"
+	bindsym $mod+c mode "default"
 }
 
 bindsym $mod+c mode "chat"
