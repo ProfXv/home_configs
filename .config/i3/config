@@ -140,7 +140,7 @@ bindsym $mod+Shift+9 move container to workspace number $ws9
 
 # 分配应用到工作区
 for_window [class="Mathematica"] move to workspace $ws1
-for_window [class="libreoffice"] move to workspace $ws2
+for_window [class="obsidian"] move to workspace $ws2
 for_window [class="scrcpy"] move to workspace $ws3
 for_window [class="org.remmina.Remmina"] move to workspace $ws3
 for_window [class="Gnome-boxes"] move to workspace $ws3

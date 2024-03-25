@@ -17,6 +17,7 @@ bindsym $mod+period exec poweroff
 bindsym $mod+m exec mathematica
 bindsym $mod+k exec mathematica Desktop/Repository/kards/kards.nb
 bindsym $mod+j exec jupyter lab
+bindsym $mod+t exec obsidian
 bindsym $mod+b exec $br --new-window
 bindsym $mod+c exec $br --new-window chat.openai.com
 # bindsym $mod+ctrl+c exec $br --new-window claude.ai
