@@ -19,9 +19,6 @@ bindsym $mod+k exec mathematica Desktop/Repository/kards/kards.nb
 bindsym $mod+j exec jupyter lab
 bindsym $mod+t exec obsidian
 bindsym $mod+b exec $br --new-window
-bindsym $mod+c exec $br --new-window chat.openai.com
-# bindsym $mod+ctrl+c exec $br --new-window claude.ai
-bindsym $mod+Shift+c exec $br --new-window xinghuo.xfyun.cn
 bindsym $mod+o exec $br --new-window https://www.office.com
 bindsym $mod+a exec $br --new-window https://aur.archlinux.org
 bindsym $mod+d exec remmina --enable-fullscreen -c rdp://swarma:swarmagents2050@192.168.0.119:3389
@@ -41,3 +38,20 @@ bindsym $mod+F10 exec kitty sudo ranger /
 
 bindsym $mod+Shift+bracketleft exec ibus engine libpinyin
 bindsym $mod+Shift+bracketright exec ibus engine xkb:us::eng
+
+# resize window (you can also use the mouse for that)
+mode "chat" {
+        bindsym Return exec $br --new-window chat.openai.com
+	bindsym $mod+Shift+c exec $br --new-window copilot.microsoft.com
+	bindsym $mod+c exec $br --new-window claude.ai
+	bindsym $mod+x exec $br --new-window xinghuo.xfyun.cn
+	bindsym $mod+t exec $br --new-window tongyi.aliyun.com
+	bindsym $mod+k exec $br --new-window kimi.moonshot.cn
+	bindsym $mod+z exec $br --new-window chatglm.cn/main/detail
+	bindsym $mod+b exec $br --new-window www.baichuan-ai.com/chat
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+c mode "chat"
