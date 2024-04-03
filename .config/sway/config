@@ -22,6 +22,11 @@ exec "cd Desktop/Repository/kards/exposure; if [ `date -r . +'%F'` != `date +'%F
 exec fcitx5
 exec clash -d .config/clash/
 exec adb connect 192.168.1.9:4321
+exec wechat-universal
+exec linuxqq
+exec feishu
+exec qqmusic
+exec obsidian
 #exec_always /usr/local/Wolfram/Mathematica/14.0/SystemFiles/Links/WSTPServer/wstpserver &
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
@@ -138,10 +143,10 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 
 # 分配应用到工作区
-for_window [class="Mathematica"] move to workspace $ws1
+for_window [app_id="com.wolfram.Mathematica.14.0"] move to workspace $ws1
 for_window [class="obsidian"] move to workspace $ws2
 for_window [class="scrcpy"] move to workspace $ws3
-for_window [class="waydroid"] move to workspace $ws3
+for_window [app_id="Waydroid"] move to workspace $ws3
 for_window [app_id="org.remmina.Remmina"] move to workspace $ws3
 for_window [class="Gnome-boxes"] move to workspace $ws3
 for_window [class="sunloginclient"] move to workspace $ws3
