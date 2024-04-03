@@ -1,3 +1,7 @@
+# hardware control
+bindsym Shift+F1 exec pactl set-default-sink bluez_output.41_42_F3_F5_21_38.1
+bindsym Shift+F2 exec pactl set-default-source alsa_input.usb-SN0002_2K_USB_Camera_46435000_P020300_SN0002-02.mono-fallback
+
 set $br google-chrome-stable
 
 # 截图
@@ -41,14 +45,17 @@ bindsym $mod+Shift+bracketright exec ibus engine xkb:us::eng
 
 # resize window (you can also use the mouse for that)
 mode "chat" {
-        bindsym Return exec $br --new-window chat.openai.com
-	bindsym Shift+c exec $br --new-window copilot.microsoft.com
-	bindsym c exec $br --new-window claude.ai
-	bindsym x exec $br --new-window xinghuo.xfyun.cn
-	bindsym t exec $br --new-window tongyi.aliyun.com
-	bindsym k exec $br --new-window kimi.moonshot.cn
-	bindsym z exec $br --new-window chatglm.cn/main/detail
-	bindsym b exec $br --new-window www.baichuan-ai.com/chat
+        bindsym Return exec $br --new-window chat.openai.com; mode "default"
+	bindsym Shift+c exec $br --new-window copilot.microsoft.com; mode "default"
+	bindsym c exec $br --new-window claude.ai; mode "default"
+	bindsym p exec $br --new-window perplexity.ai; mode "default"
+	bindsym x exec $br --new-window xinghuo.xfyun.cn; mode "default"
+	bindsym t exec $br --new-window tongyi.aliyun.com; mode "default"
+	bindsym k exec $br --new-window kimi.moonshot.cn; mode "default"
+	bindsym m exec $br --new-window metaso.cn; mode "default"
+	bindsym s exec $br --new-window stepchat.cn; mode "default"
+	bindsym z exec $br --new-window chatglm.cn/main/detail; mode "default"
+	bindsym b exec $br --new-window www.baichuan-ai.com/chat; mode "default"
 
         # back to normal: Enter or Escape or $mod+r
         bindsym Escape mode "default"
