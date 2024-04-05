@@ -43,23 +43,47 @@ bindsym $mod+F10 exec kitty sudo ranger /
 bindsym $mod+Shift+bracketleft exec ibus engine libpinyin
 bindsym $mod+Shift+bracketright exec ibus engine xkb:us::eng
 
-# resize window (you can also use the mouse for that)
+bindsym $mod+c mode "chat"
 mode "chat" {
         bindsym Return exec $br --new-window chat.openai.com; mode "default"
 	bindsym Shift+c exec $br --new-window copilot.microsoft.com; mode "default"
+	bindsym b exec $br --new-window www.baichuan-ai.com/chat; mode "default"
 	bindsym c exec $br --new-window claude.ai; mode "default"
-	bindsym p exec $br --new-window perplexity.ai; mode "default"
-	bindsym x exec $br --new-window xinghuo.xfyun.cn; mode "default"
-	bindsym t exec $br --new-window tongyi.aliyun.com; mode "default"
 	bindsym k exec $br --new-window kimi.moonshot.cn; mode "default"
 	bindsym m exec $br --new-window metaso.cn; mode "default"
+	bindsym p exec $br --new-window perplexity.ai; mode "default"
 	bindsym s exec $br --new-window stepchat.cn; mode "default"
+	bindsym t exec $br --new-window tongyi.aliyun.com; mode "default"
+	bindsym x exec $br --new-window xinghuo.xfyun.cn; mode "default"
 	bindsym z exec $br --new-window chatglm.cn/main/detail; mode "default"
-	bindsym b exec $br --new-window www.baichuan-ai.com/chat; mode "default"
-
-        # back to normal: Enter or Escape or $mod+r
+        # back to normal: Enter or Escape or $mod+c
         bindsym Escape mode "default"
 	bindsym $mod+c mode "default"
 }
 
-bindsym $mod+c mode "chat"
+bindsym $mod+l mode "life"
+mode "life" {
+	bindsym b exec $br --new-window bilibili.com; mode "default"
+	bindsym e exec $br --new-window earth.google.com; mode "default"
+	bindsym g exec $br --new-window ditu.amap.com; mode "default"
+	bindsym p exec $br --new-window glados.network/console; mode "default"
+        bindsym t exec $br --new-window taobao.com; mode "default"
+	bindsym x exec $br --new-window xiaohongshu.com; mode "default"
+	bindsym y exec $br --new-window youtube.com; mode "default"
+        # back to normal: Enter or Escape or $mod+l
+        bindsym Escape mode "default"
+	bindsym $mod+l mode "default"
+}
+
+bindsym $mod+s mode "swarma"
+mode "swarma" {
+	bindsym Return exec $br --new-window swarma.org; mode "default"
+	bindsym c exec $br --new-window campus.swarma.org; mode "default"
+	bindsym g exec $br --new-window gitlab.swarma.org; mode "default"
+	bindsym p exec $br --new-window pattern.swarma.org; mode "default"
+	bindsym r exec $br --new-window research.swarma.org; mode "default"
+        bindsym w exec $br --new-window wiki.swarma.org; mode "default"
+        # back to normal: Enter or Escape or $mod+s
+        bindsym Escape mode "default"
+	bindsym $mod+s mode "default"
+}
