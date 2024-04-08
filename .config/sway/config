@@ -157,6 +157,9 @@ for_window [class="conky"] move to workspace $ws9
 bindsym $mod+Tab reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+Tab restart
+# adapt config files
+bindsym $mod+Ctrl+Tab exec kitty vim .config/sway/config
+bindsym $mod+Alt+Tab exec kitty vim .config/i3/bindsyms
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
