@@ -4,6 +4,8 @@ bindsym Shift+F2 exec pactl set-default-source alsa_input.usb-SN0002_2K_USB_Came
 
 set $br google-chrome-stable
 
+bindsym $mod+equal exec "python .chat.py"
+
 # 截图
 bindsym $mod+apostrophe exec grim $(xdg-user-dir PICTURES)/$(date +'%s.png')
 bindsym $mod+Shift+apostrophe exec grim -g "$(slurp)"
