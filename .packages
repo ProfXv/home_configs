@@ -6,6 +6,10 @@ sway
 xorg-xwayland
 swaybg
 
+grim
+slurp
+wf-recorder
+
 conky
 
 noto-fonts-cjk

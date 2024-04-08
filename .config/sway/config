@@ -91,11 +91,6 @@ bindsym $mod+Return fullscreen toggle
 bindsym $mod+Shift+equal move scratchpad
 bindsym $mod+minus scratchpad show
 
-# change container layout (stacked, tabbed, toggle split)
-# bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
-
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 # change focus between tiling / floating windows
@@ -172,6 +167,11 @@ mode "resize" {
         bindsym Down resize grow height 10 px or 10 ppt
         bindsym Up resize shrink height 10 px or 10 ppt
         bindsym Right resize grow width 10 px or 10 ppt
+
+	# change container layout (stacked, tabbed, toggle split)
+	bindsym s layout stacking
+	bindsym w layout tabbed
+	bindsym e layout toggle split
 
         # back to normal: Enter or Escape or $mod+r
         bindsym Return mode "default"

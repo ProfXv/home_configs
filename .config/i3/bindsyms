@@ -5,13 +5,10 @@ bindsym Shift+F2 exec pactl set-default-source alsa_input.usb-SN0002_2K_USB_Came
 set $br google-chrome-stable
 
 # 截图
-bindsym $mod+Alt+apostrophe exec --no-startup-id gnome-screenshot
-bindsym $mod+Control+apostrophe exec --no-startup-id gnome-screenshot -w
-bindsym $mod+Shift+apostrophe exec --no-startup-id gnome-screenshot -r
-bindsym $mod+apostrophe exec --no-startup-id gnome-screenshot -i
-
-# 媒体键快捷键
-bindsym $mod+Shift+slash exec yelp
+bindsym $mod+apostrophe exec grim $(xdg-user-dir PICTURES)/$(date +'%s.png')
+bindsym $mod+Shift+apostrophe exec grim -g "$(slurp)"
+bindsym $mod+Alt+apostrophe exec wf-recorder -f $(xdg-user-dir VIDEOS)/$(date +'%s.mp4')
+bindsym $mod+Alt+Shift+apostrophe exec pkill wf-recorder
 
 # 自定义快捷键
 bindsym $mod+comma exec i3-msg exit
@@ -40,15 +37,13 @@ bindsym $mod+F8 exec kitty ranger Templates
 bindsym $mod+F9 exec kitty ranger
 bindsym $mod+F10 exec kitty sudo ranger /
 
-bindsym $mod+Shift+bracketleft exec ibus engine libpinyin
-bindsym $mod+Shift+bracketright exec ibus engine xkb:us::eng
-
 bindsym $mod+c mode "chat"
 mode "chat" {
         bindsym Return exec $br --new-window chat.openai.com; mode "default"
 	bindsym Shift+c exec $br --new-window copilot.microsoft.com; mode "default"
 	bindsym b exec $br --new-window www.baichuan-ai.com/chat; mode "default"
 	bindsym c exec $br --new-window claude.ai; mode "default"
+	bindsym g exec $br --new-window gemini.google.com; mode "default"
 	bindsym k exec $br --new-window kimi.moonshot.cn; mode "default"
 	bindsym m exec $br --new-window metaso.cn; mode "default"
 	bindsym p exec $br --new-window perplexity.ai; mode "default"
@@ -56,9 +51,19 @@ mode "chat" {
 	bindsym t exec $br --new-window tongyi.aliyun.com; mode "default"
 	bindsym x exec $br --new-window xinghuo.xfyun.cn; mode "default"
 	bindsym z exec $br --new-window chatglm.cn/main/detail; mode "default"
+	bindsym Space exec $br --new-window huggingface.co/spaces/lmsys/chatbot-arena-leaderboard; mode "default"
         # back to normal: Enter or Escape or $mod+c
         bindsym Escape mode "default"
 	bindsym $mod+c mode "default"
+}
+
+bindsym $mod+w mode "wiki"
+mode "wiki" {
+        bindsym Return exec $br --new-window wikipedia.org; mode "default"
+        bindsym a exec $br --new-window wiki.archlinux.org; mode "default"
+        # back to normal: Enter or Escape or $mod+w
+        bindsym Escape mode "default"
+	bindsym $mod+w mode "default"
 }
 
 bindsym $mod+l mode "life"
