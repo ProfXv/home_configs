@@ -1,11 +1,9 @@
 # coding: utf-8
 import _thread as thread
 import os
-import time
 import base64
 
 import pyperclip
-import datetime
 import hashlib
 import hmac
 import json

@@ -51,6 +51,7 @@ mode "chat" {
 	bindsym p exec $br --new-window perplexity.ai; mode "default"
 	bindsym s exec $br --new-window stepchat.cn; mode "default"
 	bindsym t exec $br --new-window tongyi.aliyun.com; mode "default"
+	bindsym w exec $br --new-window yiyan.baidu.com; mode "default"
 	bindsym x exec $br --new-window xinghuo.xfyun.cn; mode "default"
 	bindsym z exec $br --new-window chatglm.cn/main/detail; mode "default"
 	bindsym Space exec $br --new-window huggingface.co/spaces/lmsys/chatbot-arena-leaderboard; mode "default"
@@ -59,26 +60,24 @@ mode "chat" {
 	bindsym $mod+c mode "default"
 }
 
-bindsym $mod+w mode "wiki"
-mode "wiki" {
-        bindsym Return exec $br --new-window wikipedia.org; mode "default"
-        bindsym a exec $br --new-window wiki.archlinux.org; mode "default"
-        # back to normal: Enter or Escape or $mod+w
-        bindsym Escape mode "default"
-	bindsym $mod+w mode "default"
-}
-
 bindsym $mod+l mode "life"
 mode "life" {
+	bindsym a exec $br --new-window amazon.com; mode "default"
 	bindsym b exec $br --new-window bilibili.com; mode "default"
+	bindsym d exec $br --new-window duolingo.com; mode "default"
 	bindsym e exec $br --new-window earth.google.com; mode "default"
+	bindsym f exec $br --new-window facebook.com; mode "default"
 	bindsym g exec $br --new-window ditu.amap.com; mode "default"
+	bindsym i exec $br --new-window instagram.com; mode "default"
+	bindsym j exec $br --new-window jd.com; mode "default"
 	bindsym m exec $br --new-window mail.google.com; mode "default"
 	bindsym p exec $br --new-window glados.network/console; mode "default"
 	bindsym q exec $br --new-window mail.qq.com; mode "default"
 	bindsym Shift+q exec $br --new-window exmail.qq.com/login; mode "default"
+        bindsym s exec $br --new-window speak.ef.com; mode "default"
         bindsym t exec $br --new-window taobao.com; mode "default"
         bindsym v exec $br --new-window tvyan.com; mode "default"
+        bindsym w exec $br --new-window weibo.com; mode "default"
 	bindsym x exec $br --new-window xiaohongshu.com; mode "default"
 	bindsym y exec $br --new-window youtube.com; mode "default"
         # back to normal: Enter or Escape or $mod+l
@@ -98,4 +97,13 @@ mode "swarma" {
         # back to normal: Enter or Escape or $mod+s
         bindsym Escape mode "default"
 	bindsym $mod+s mode "default"
+}
+
+bindsym $mod+w mode "wiki"
+mode "wiki" {
+        bindsym Return exec $br --new-window wikipedia.org; mode "default"
+        bindsym a exec $br --new-window wiki.archlinux.org; mode "default"
+        # back to normal: Enter or Escape or $mod+w
+        bindsym Escape mode "default"
+	bindsym $mod+w mode "default"
 }
