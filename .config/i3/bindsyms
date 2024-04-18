@@ -1,109 +1,105 @@
 # hardware control
-bindsym Shift+F1 exec pactl set-default-sink bluez_output.41_42_F3_F5_21_38.1
-bindsym Shift+F2 exec pactl set-default-source alsa_input.usb-SN0002_2K_USB_Camera_46435000_P020300_SN0002-02.mono-fallback
+bindsym Shift+F1 exec ~/.hotkey.sh 'Shift+F1' 'exec pactl set-default-sink bluez_output.41_42_F3_F5_21_38.1'
+bindsym Shift+F2 exec ~/.hotkey.sh 'Shift+F2' 'exec pactl set-default-source alsa_input.usb-SN0002_2K_USB_Camera_46435000_P020300_SN0002-02.mono-fallback'
 
 set $br google-chrome-stable
 
-bindsym $mod+equal exec "python .chat.py"
+bindsym $mod+equal exec ~/.hotkey.sh 'mod+equal' 'exec python .chat.py'
 
 # 截图
-bindsym $mod+apostrophe exec grim $(xdg-user-dir PICTURES)/$(date +'%s.png')
-bindsym $mod+Shift+apostrophe exec grim -g "$(slurp)"
-bindsym $mod+Alt+apostrophe exec wf-recorder -f $(xdg-user-dir VIDEOS)/$(date +'%s.mp4')
-bindsym $mod+Alt+Shift+apostrophe exec pkill wf-recorder
+bindsym $mod+apostrophe exec ~/.hotkey.sh 'mod+apostrophe' 'exec grim $(xdg-user-dir PICTURES)/$(date +'%s.png')'
+bindsym $mod+Shift+apostrophe exec ~/.hotkey.sh 'mod+Shift+apostrophe' 'exec grim -g "$(slurp)"'
+bindsym $mod+Alt+apostrophe exec ~/.hotkey.sh 'mod+Alt+apostrophe' 'exec wf-recorder -f $(xdg-user-dir VIDEOS)/$(date +'%s.mp4')'
+bindsym $mod+Alt+Shift+apostrophe exec ~/.hotkey.sh 'mod+Alt+Shift+apostrophe' 'exec pkill wf-recorder'
 
 # 自定义快捷键
-bindsym $mod+comma exec i3-msg exit
-bindsym $mod+semicolon exec reboot
-bindsym $mod+period exec poweroff
+bindsym $mod+comma exec ~/.hotkey.sh 'mod+comma' 'exec i3-msg exit'
+bindsym $mod+semicolon exec ~/.hotkey.sh 'mod+semicolon' 'exec reboot'
+bindsym $mod+period exec ~/.hotkey.sh 'mod+period' 'exec poweroff'
 
-bindsym $mod+m exec mathematica
-bindsym $mod+k exec mathematica Desktop/Repository/kards/kards.nb
-bindsym $mod+j exec jupyter lab
-bindsym $mod+t exec obsidian
-bindsym $mod+b exec $br --new-window
-bindsym $mod+o exec $br --new-window https://www.office.com
-bindsym $mod+a exec $br --new-window https://aur.archlinux.org
-bindsym $mod+d exec remmina --enable-fullscreen -c rdp://swarma:swarmagents2050@192.168.0.119:3389
-# bindsym $mod+i exec cat .zsh_history | xclip -selection clipboard
-# bindsym $mod+o exec cat .zshlog | xclip -selection clipboard
+bindsym $mod+m exec ~/.hotkey.sh 'mod+m' 'exec mathematica'
+bindsym $mod+k exec ~/.hotkey.sh 'mod+k' 'exec mathematica Desktop/Repository/kards/kards.nb'
+bindsym $mod+j exec ~/.hotkey.sh 'mod+j' 'exec jupyter lab'
+bindsym $mod+t exec ~/.hotkey.sh 'mod+t' 'exec obsidian'
+bindsym $mod+b exec ~/.hotkey.sh 'mod+b' 'exec $br --new-window'
+bindsym $mod+o exec ~/.hotkey.sh 'mod+o' 'exec $br --new-window https://www.office.com'
+bindsym $mod+a exec ~/.hotkey.sh 'mod+a' 'exec $br --new-window https://aur.archlinux.org'
+bindsym $mod+d exec ~/.hotkey.sh 'mod+d' 'exec remmina --enable-fullscreen -c rdp://swarma:swarmagents2050@192.168.0.119:3389'
 
-bindsym $mod+F1 exec kitty ranger Desktop
-bindsym $mod+F2 exec kitty ranger Documents
-bindsym $mod+F3 exec kitty ranger Downloads
-bindsym $mod+F4 exec kitty ranger Public
-bindsym $mod+F5 exec kitty ranger Music
-bindsym $mod+F6 exec kitty ranger Pictures
-bindsym $mod+F7 exec kitty ranger Videos
-bindsym $mod+F8 exec kitty ranger Templates
-bindsym $mod+F9 exec kitty ranger
-bindsym $mod+F10 exec kitty sudo ranger /
+bindsym $mod+F1 exec ~/.hotkey.sh 'mod+F1' 'exec kitty ranger Desktop'
+bindsym $mod+F2 exec ~/.hotkey.sh 'mod+F2' 'exec kitty ranger Documents'
+bindsym $mod+F3 exec ~/.hotkey.sh 'mod+F3' 'exec kitty ranger Downloads'
+bindsym $mod+F4 exec ~/.hotkey.sh 'mod+F4' 'exec kitty ranger Public'
+bindsym $mod+F5 exec ~/.hotkey.sh 'mod+F5' 'exec kitty ranger Music'
+bindsym $mod+F6 exec ~/.hotkey.sh 'mod+F6' 'exec kitty ranger Pictures'
+bindsym $mod+F7 exec ~/.hotkey.sh 'mod+F7' 'exec kitty ranger Videos'
+bindsym $mod+F8 exec ~/.hotkey.sh 'mod+F8' 'exec kitty ranger Templates'
+bindsym $mod+F9 exec ~/.hotkey.sh 'mod+F9' 'exec kitty ranger'
+bindsym $mod+F10 exec ~/.hotkey.sh 'mod+F10' 'exec kitty sudo ranger /'
 
-bindsym $mod+c mode "chat"
+bindsym $mod+c exec ~/.hotkey.sh 'mod+c' 'mode "chat"'
 mode "chat" {
-        bindsym Return exec $br --new-window chat.openai.com; mode "default"
-	bindsym Shift+c exec $br --new-window copilot.microsoft.com; mode "default"
-	bindsym b exec $br --new-window www.baichuan-ai.com/chat; mode "default"
-	bindsym c exec $br --new-window claude.ai; mode "default"
-	bindsym g exec $br --new-window gemini.google.com; mode "default"
-	bindsym k exec $br --new-window kimi.moonshot.cn; mode "default"
-	bindsym m exec $br --new-window metaso.cn; mode "default"
-	bindsym p exec $br --new-window perplexity.ai; mode "default"
-	bindsym s exec $br --new-window stepchat.cn; mode "default"
-	bindsym t exec $br --new-window tongyi.aliyun.com; mode "default"
-	bindsym w exec $br --new-window yiyan.baidu.com; mode "default"
-	bindsym x exec $br --new-window xinghuo.xfyun.cn; mode "default"
-	bindsym z exec $br --new-window chatglm.cn/main/detail; mode "default"
-	bindsym Space exec $br --new-window huggingface.co/spaces/lmsys/chatbot-arena-leaderboard; mode "default"
-        # back to normal: Enter or Escape or $mod+c
-        bindsym Escape mode "default"
-	bindsym $mod+c mode "default"
+    bindsym Return exec ~/.hotkey.sh 'Return' 'exec $br --new-window chat.openai.com; mode "default"'
+    bindsym Shift+c exec ~/.hotkey.sh 'Shift+c' 'exec $br --new-window copilot.microsoft.com; mode "default"'
+    bindsym b exec ~/.hotkey.sh 'b' 'exec $br --new-window www.baichuan-ai.com/chat; mode "default"'
+    bindsym c exec ~/.hotkey.sh 'c' 'exec $br --new-window claude.ai; mode "default"'
+    bindsym g exec ~/.hotkey.sh 'g' 'exec $br --new-window gemini.google.com; mode "default"'
+    bindsym k exec ~/.hotkey.sh 'k' 'exec $br --new-window kimi.moonshot.cn; mode "default"'
+    bindsym m exec ~/.hotkey.sh 'm' 'exec $br --new-window chat.mistral.ai; mode "default"'
+    bindsym Shift+m exec ~/.hotkey.sh 'Shift+m' 'exec $br --new-window metaso.cn; mode "default"'
+    bindsym p exec ~/.hotkey.sh 'p' 'exec $br --new-window perplexity.ai; mode "default"'
+    bindsym s exec ~/.hotkey.sh 's' 'exec $br --new-window stepchat.cn; mode "default"'
+    bindsym t exec ~/.hotkey.sh 't' 'exec $br --new-window tongyi.aliyun.com/qianwen; mode "default"'
+    bindsym w exec ~/.hotkey.sh 'w' 'exec $br --new-window yiyan.baidu.com; mode "default"'
+    bindsym x exec ~/.hotkey.sh 'x' 'exec $br --new-window xinghuo.xfyun.cn; mode "default"'
+    bindsym z exec ~/.hotkey.sh 'z' 'exec $br --new-window chatglm.cn/main/detail; mode "default"'
+    bindsym Space exec ~/.hotkey.sh 'Space' 'exec $br --new-window huggingface.co/spaces/lmsys/chatbot-arena-leaderboard; mode "default"'
+    bindsym Escape exec ~/.hotkey.sh 'Escape' 'mode "default"'
+    bindsym $mod+c exec ~/.hotkey.sh 'mod+c' 'mode "default"'
 }
 
-bindsym $mod+l mode "life"
+bindsym $mod+l exec ~/.hotkey.sh 'mod+l' 'mode "life"'
 mode "life" {
-	bindsym a exec $br --new-window amazon.com; mode "default"
-	bindsym b exec $br --new-window bilibili.com; mode "default"
-	bindsym d exec $br --new-window duolingo.com; mode "default"
-	bindsym e exec $br --new-window earth.google.com; mode "default"
-	bindsym f exec $br --new-window facebook.com; mode "default"
-	bindsym g exec $br --new-window ditu.amap.com; mode "default"
-	bindsym i exec $br --new-window instagram.com; mode "default"
-	bindsym j exec $br --new-window jd.com; mode "default"
-	bindsym m exec $br --new-window mail.google.com; mode "default"
-	bindsym p exec $br --new-window glados.network/console; mode "default"
-	bindsym q exec $br --new-window mail.qq.com; mode "default"
-	bindsym Shift+q exec $br --new-window exmail.qq.com/login; mode "default"
-        bindsym s exec $br --new-window speak.ef.com; mode "default"
-        bindsym t exec $br --new-window taobao.com; mode "default"
-        bindsym v exec $br --new-window tvyan.com; mode "default"
-        bindsym w exec $br --new-window weibo.com; mode "default"
-	bindsym x exec $br --new-window xiaohongshu.com; mode "default"
-	bindsym y exec $br --new-window youtube.com; mode "default"
-        # back to normal: Enter or Escape or $mod+l
-        bindsym Escape mode "default"
-	bindsym $mod+l mode "default"
+    bindsym a exec ~/.hotkey.sh 'a' 'exec $br --new-window amazon.com; mode "default"'
+    bindsym b exec ~/.hotkey.sh 'b' 'exec $br --new-window bilibili.com; mode "default"'
+    bindsym d exec ~/.hotkey.sh 'd' 'exec $br --new-window duolingo.com; mode "default"'
+    bindsym e exec ~/.hotkey.sh 'e' 'exec $br --new-window earth.google.com; mode "default"'
+    bindsym f exec ~/.hotkey.sh 'f' 'exec $br --new-window facebook.com; mode "default"'
+    bindsym g exec ~/.hotkey.sh 'g' 'exec $br --new-window ditu.amap.com; mode "default"'
+    bindsym i exec ~/.hotkey.sh 'i' 'exec $br --new-window instagram.com; mode "default"'
+    bindsym j exec ~/.hotkey.sh 'j' 'exec $br --new-window jd.com; mode "default"'
+    bindsym m exec ~/.hotkey.sh 'm' 'exec $br --new-window mail.google.com; mode "default"'
+    bindsym p exec ~/.hotkey.sh 'p' 'exec $br --new-window glados.network/console; mode "default"'
+    bindsym q exec ~/.hotkey.sh 'q' 'exec $br --new-window mail.qq.com; mode "default"'
+    bindsym Shift+q exec ~/.hotkey.sh 'Shift+q' 'exec $br --new-window exmail.qq.com/login; mode "default"'
+    bindsym s exec ~/.hotkey.sh 's' 'exec $br --new-window speak.ef.com; mode "default"'
+    bindsym t exec ~/.hotkey.sh 't' 'exec $br --new-window taobao.com; mode "default"'
+    bindsym v exec ~/.hotkey.sh 'v' 'exec $br --new-window tvyan.com; mode "default"'
+    bindsym w exec ~/.hotkey.sh 'w' 'exec $br --new-window weibo.com; mode "default"'
+    bindsym x exec ~/.hotkey.sh 'x' 'exec $br --new-window xiaohongshu.com; mode "default"'
+    bindsym Shift+x exec ~/.hotkey.sh 'Shift+x' 'exec $br --new-window twitter.com; mode "default"'
+    bindsym y exec ~/.hotkey.sh 'y' 'exec $br --new-window youtube.com; mode "default"'
+    bindsym Escape exec ~/.hotkey.sh 'Escape' 'mode "default"'
+    bindsym $mod+l exec ~/.hotkey.sh 'mod+l' 'mode "default"'
 }
 
-bindsym $mod+s mode "swarma"
+bindsym $mod+s exec ~/.hotkey.sh 'mod+s' 'mode "swarma"'
 mode "swarma" {
-	bindsym Return exec $br --new-window swarma.org; mode "default"
-	bindsym c exec $br --new-window campus.swarma.org; mode "default"
-	bindsym d exec $br --new-window pattern.swarma.org/grafana; mode "default"
-	bindsym g exec $br --new-window gitlab.swarma.org; mode "default"
-	bindsym p exec $br --new-window pattern.swarma.org; mode "default"
-	bindsym r exec $br --new-window research.swarma.org; mode "default"
-        bindsym w exec $br --new-window wiki.swarma.org; mode "default"
-        # back to normal: Enter or Escape or $mod+s
-        bindsym Escape mode "default"
-	bindsym $mod+s mode "default"
+    bindsym Return exec ~/.hotkey.sh 'Return' 'exec $br --new-window swarma.org; mode "default"'
+    bindsym c exec ~/.hotkey.sh 'c' 'exec $br --new-window campus.swarma.org; mode "default"'
+    bindsym d exec ~/.hotkey.sh 'd' 'exec $br --new-window pattern.swarma.org/grafana; mode "default"'
+    bindsym g exec ~/.hotkey.sh 'g' 'exec $br --new-window gitlab.swarma.org; mode "default"'
+    bindsym p exec ~/.hotkey.sh 'p' 'exec $br --new-window pattern.swarma.org; mode "default"'
+    bindsym r exec ~/.hotkey.sh 'r' 'exec $br --new-window research.swarma.org; mode "default"'
+    bindsym w exec ~/.hotkey.sh 'w' 'exec $br --new-window wiki.swarma.org; mode "default"'
+    bindsym Escape exec ~/.hotkey.sh 'Escape' 'mode "default"'
+    bindsym $mod+s exec ~/.hotkey.sh 'mod+s' 'mode "default"'
 }
 
-bindsym $mod+w mode "wiki"
+bindsym $mod+w exec ~/.hotkey.sh 'mod+w' 'mode "wiki"'
 mode "wiki" {
-        bindsym Return exec $br --new-window wikipedia.org; mode "default"
-        bindsym a exec $br --new-window wiki.archlinux.org; mode "default"
-        # back to normal: Enter or Escape or $mod+w
-        bindsym Escape mode "default"
-	bindsym $mod+w mode "default"
+    bindsym Return exec ~/.hotkey.sh 'Return' 'exec $br --new-window wikipedia.org; mode "default"'
+    bindsym a exec ~/.hotkey.sh 'a' 'exec $br --new-window wiki.archlinux.org; mode "default"'
+    bindsym Escape exec ~/.hotkey.sh 'Escape' 'mode "default"'
+    bindsym $mod+w exec ~/.hotkey.sh 'mod+w' 'mode "default"'
 }
