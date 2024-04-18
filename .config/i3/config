@@ -134,19 +134,19 @@ bindsym $mod+Shift+8 exec ~/.hotkey.sh 'Super+Shift+8' 'move container to worksp
 bindsym $mod+Shift+9 exec ~/.hotkey.sh 'Super+Shift+9' 'move container to workspace number $ws9'
 
 # 分配应用到工作区
-for_window [class="Mathematica"] exec ~/.hotkey.sh 'class=Mathematica' 'move to workspace $ws1'
-for_window [class="obsidian"] exec ~/.hotkey.sh 'class=obsidian' 'move to workspace $ws2'
-for_window [class="scrcpy"] exec ~/.hotkey.sh 'class=scrcpy' 'move to workspace $ws3'
-for_window [class="org.remmina.Remmina"] exec ~/.hotkey.sh 'class=Remmina' 'move to workspace $ws3'
-for_window [class="Gnome-boxes"] exec ~/.hotkey.sh 'class=Gnome-boxes' 'move to workspace $ws3'
-for_window [class="sunloginclient"] exec ~/.hotkey.sh 'class=sunloginclient' 'move to workspace $ws3'
-for_window [class="QQ"] exec ~/.hotkey.sh 'class=QQ' 'move to workspace $ws4'
-for_window [class="wechat"] exec ~/.hotkey.sh 'class=wechat' 'move to workspace $ws4'
-for_window [class="Feishu"] exec ~/.hotkey.sh 'class=Feishu' 'move to workspace $ws4'
-for_window [class="wemeetapp"] exec ~/.hotkey.sh 'class=wemeetapp' 'move to workspace $ws4'
-for_window [class="qqmusic"] exec ~/.hotkey.sh 'class=qqmusic' 'move to workspace $ws5'
-for_window [class="steam"] exec ~/.hotkey.sh 'class=steam' 'move to workspace $ws6'
-for_window [class="conky"] exec ~/.hotkey.sh 'class=conky' 'move to workspace $ws9'
+for_window [class="Mathematica"] move to workspace $ws1
+for_window [class="obsidian"] move to workspace $ws2
+for_window [class="scrcpy"] move to workspace $ws3
+for_window [class="org.remmina.Remmina"] move to workspace $ws3
+for_window [class="Gnome-boxes"] move to workspace $ws3
+for_window [class="sunloginclient"] move to workspace $ws3
+for_window [class="QQ"] move to workspace $ws4
+for_window [class="wechat"] move to workspace $ws4
+for_window [class="Feishu"] move to workspace $ws4
+for_window [class="wemeetapp"] move to workspace $ws4
+for_window [class="qqmusic"] move to workspace $ws5
+for_window [class="steam"] move to workspace $ws6
+for_window [class="conky"] move to workspace $ws9
 
 # reload the configuration file
 bindsym $mod+Tab exec ~/.hotkey.sh 'Super+Tab' 'reload'
