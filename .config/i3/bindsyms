@@ -45,6 +45,7 @@ mode "chat" {
     bindsym c exec ~/.hotkey.sh 'c' 'exec $br --new-window claude.ai'; mode "default"
     bindsym g exec ~/.hotkey.sh 'g' 'exec $br --new-window gemini.google.com'; mode "default"
     bindsym k exec ~/.hotkey.sh 'k' 'exec $br --new-window kimi.moonshot.cn'; mode "default"
+    bindsym l exec ~/.hotkey.sh 'l' 'exec $br --new-window meta.ai'; mode "default"
     bindsym m exec ~/.hotkey.sh 'm' 'exec $br --new-window chat.mistral.ai'; mode "default"
     bindsym Shift+m exec ~/.hotkey.sh 'Shift+m' 'exec $br --new-window metaso.cn'; mode "default"
     bindsym p exec ~/.hotkey.sh 'p' 'exec $br --new-window perplexity.ai'; mode "default"
