@@ -59,6 +59,15 @@ mode "chat" {
     bindsym $mod+c exec ~/.hotkey.sh 'Super c' 'mode "default"'
 }
 
+bindsym $mod+e exec ~/.hotkey.sh 'Super e' 'mode "execute"'
+mode "execute" {
+    bindsym Return exec ~/.hotkey.sh 'Return' 'exec ~/.fast_test.sh zsh'; mode "default"
+    bindsym b exec ~/.hotkey.sh 'b' 'exec ~/.fast_test.sh bash'; mode "default"
+    bindsym p exec ~/.hotkey.sh 'p' 'exec ~/.fast_test.sh python'; mode "default"
+    bindsym Escape exec ~/.hotkey.sh 'Escape' 'mode "default"'
+    bindsym $mod+e exec ~/.hotkey.sh 'Super e' 'mode "default"'
+}
+
 bindsym $mod+l exec ~/.hotkey.sh 'Super l' 'mode "life"'
 mode "life" {
     bindsym a exec ~/.hotkey.sh 'a' 'exec $br --new-window amazon.com'; mode "default"
