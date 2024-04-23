@@ -6,6 +6,8 @@ sway
 xorg-xwayland
 swaybg
 
+xclip
+wl-clipboard
 grim
 slurp
 wf-recorder
