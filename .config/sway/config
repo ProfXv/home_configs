@@ -158,9 +158,9 @@ bindsym $mod+Shift+Tab exec ~/.hotkey.sh 'Super Shift Tab' 'restart'
 bindsym $mod+Ctrl+Tab exec ~/.hotkey.sh 'Super Ctrl Tab' 'exec kitty vim .config/sway/config'
 bindsym $mod+Alt+Tab exec ~/.hotkey.sh 'Super Alt Tab' 'exec kitty vim .config/i3/bindsyms'
 
-bindsym $mod+r exec ~/.hotkey.sh 'Super r' 'mode "resize"'
+bindsym $mod+slash exec ~/.hotkey.sh 'Super slash' 'mode layout'
 # resize window (you can also use the mouse for that)
-mode "resize" {
+mode layout {
     # These bindings trigger as soon as you enter the resize mode
     # same bindings, but for the arrow keys
     bindsym Left exec ~/.hotkey.sh 'Left' 'resize shrink width 10 px or 10 ppt'
@@ -171,10 +171,10 @@ mode "resize" {
     bindsym s exec ~/.hotkey.sh 's' 'layout stacking'
     bindsym w exec ~/.hotkey.sh 'w' 'layout tabbed'
     bindsym e exec ~/.hotkey.sh 'e' 'layout toggle split'
-    # back to normal: Enter or Escape or $mod+r
-    bindsym Return exec ~/.hotkey.sh 'Return' 'mode "default"'
-    bindsym Escape exec ~/.hotkey.sh 'Escape' 'mode "default"'
-    bindsym $mod+r exec ~/.hotkey.sh 'Super r' 'mode "default"'
+    # back to normal: Enter or Escape or $mod+slash
+    bindsym Return exec ~/.hotkey.sh 'Return' 'mode default'
+    bindsym Escape exec ~/.hotkey.sh 'Escape' 'mode default'
+    bindsym $mod+slash exec ~/.hotkey.sh 'Super slash' 'mode default'
 }
 
 # 窗口的色彩方案
