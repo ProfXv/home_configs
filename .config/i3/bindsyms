@@ -1,9 +1,6 @@
 set $br google-chrome-stable
 
-# hardware control
-bindsym Shift+F1 exec ~/.hotkey.sh 'Shift F1' 'exec pactl set-default-sink bluez_output.41_42_F3_F5_21_38.1'
-bindsym Shift+F2 exec ~/.hotkey.sh 'Shift F2' 'exec pactl set-default-source alsa_input.usb-SN0002_2K_USB_Camera_46435000_P020300_SN0002-02.mono-fallback'
-
+bindsym $mod+Shift+bracketright exec ~/.hotkey.sh 'Super Shift bracketright' 'exec rofimoji'
 bindsym $mod+equal exec ~/.hotkey.sh 'Super equal' 'exec python .chat.py'
 
 # 截图
