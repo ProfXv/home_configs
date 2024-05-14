@@ -101,7 +101,6 @@ mode life {
 
 bindsym $mod+r exec ~/.hotkey.sh 'Super r' 'mode research'
 mode research {
-    bindsym Return exec ~/.hotkey.sh 'Return' 'exec mathematica'; mode default
     bindsym g exec ~/.hotkey.sh 'g' 'exec $br --new-window scholar.google.com'; mode default
     bindsym Escape exec ~/.hotkey.sh 'Escape' 'mode default'
     bindsym $mod+r exec ~/.hotkey.sh 'Super r' 'mode default'

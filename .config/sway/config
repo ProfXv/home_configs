@@ -58,7 +58,7 @@ bindsym $mod+bracketleft exec ~/.hotkey.sh 'Super bracketleft' 'exec kitty'
 # start dmenu (a program launcher)
 # bindsym $mod+bracketright exec  --no-startup-id dmenu_run
 # A more modern dmenu replacement is rofi:
-bindsym $mod+bracketright exec ~/.hotkey.sh 'Super bracketright' 'exec "wofi"'
+bindsym $mod+bracketright exec ~/.hotkey.sh 'Super bracketright' 'exec wofi'
 
 # kill focused window
 bindsym $mod+Delete exec ~/.hotkey.sh 'Super Delete' 'kill'
