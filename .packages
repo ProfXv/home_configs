@@ -2,8 +2,9 @@ feh
 picom
 xss-lock
 
-sway
 xorg-xwayland
+hyprland
+sway
 swaybg
 
 xclip
