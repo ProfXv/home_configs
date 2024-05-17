@@ -18,7 +18,7 @@ import websocket
 import openpyxl
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from pyautogui import write, hotkey
+from pyautogui import hotkey
 
 
 class Ws_Param(object):
@@ -141,16 +141,3 @@ def main(appid, api_secret, api_key, gpt_url, domain, query):
     ws.query = query
     ws.domain = domain
     ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
-
-
-if __name__ == "__main__":
-
-    hotkey('ctrl','c')
-    main(
-        appid="6e95be40",
-        api_secret="OWQxYjQ3YWY5YmM5ZDRhZGU5MDJmOGIz",
-        api_key="265555a6a89f11c2b7743c03ad559eef",
-        gpt_url="wss://spark-api.xf-yun.com/v3.5/chat",
-        domain="generalv3.5",
-        query=pyperclip.paste()
-    )
