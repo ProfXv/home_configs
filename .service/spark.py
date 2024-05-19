@@ -3,7 +3,6 @@ import _thread as thread
 import os
 import base64
 
-import pyperclip
 import hashlib
 import hmac
 import json
@@ -17,8 +16,6 @@ from wsgiref.handlers import format_date_time
 import websocket
 import openpyxl
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
-from pyautogui import hotkey
 
 
 class Ws_Param(object):
@@ -70,8 +67,9 @@ def on_error(ws, error):
 
 
 # 收到websocket关闭的处理
-def on_close(ws):
-    print("### closed ###")
+def on_close(*ws):
+    pass
+    # print("### closed ###")
 
 
 # 收到websocket连接建立的处理
@@ -96,11 +94,10 @@ def on_message(ws, message):
         choices = data["payload"]["choices"]
         status = choices["status"]
         content = choices["text"][0]["content"]
-        pyperclip.copy(content)
-        hotkey('ctrl','v')
-        if status == 2:
-            print("#### 关闭会话")
-            ws.close()
+        print(content, end="")
+        # if status == 2:
+        #    print("#### 关闭会话")
+        #    ws.close()
 
 
 def gen_params(appid, query, domain):
