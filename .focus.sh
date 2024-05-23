@@ -16,6 +16,9 @@ case $1 in
     generate)
         kitty --hold python .service/chat.py
         ;;
+    ask)
+        kitty --hold python .service/chat.py -p
+        ;;
     *)
         echo INVALID OPTION: $1
         ;;
