@@ -1,20 +1,11 @@
-feh
-picom
-xss-lock
-
 xorg-xwayland
 hyprland
-sway
-swaybg
 
-xclip
 wl-clipboard
 wev
 grim
 slurp
 wf-recorder
-
-conky
 
 noto-fonts-cjk
 noto-fonts-emoji
@@ -45,7 +36,6 @@ zsh-theme-powerlevel10k
 kitty
 ranger
 ffmpegthumbnailer
-rofi
 rofimoji
 
 python-pillow
