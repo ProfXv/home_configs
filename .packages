@@ -1,6 +1,4 @@
-xorg-xwayland
-hyprland
-
+waybar
 wl-clipboard
 wev
 grim
@@ -31,9 +29,7 @@ remmina
 zsh
 zsh-autosuggestions
 zsh-syntax-highlighting
-zsh-theme-powerlevel10k
 
-kitty
 ranger
 ffmpegthumbnailer
 rofimoji
