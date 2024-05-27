@@ -12,8 +12,9 @@ sed -i 's/external-ui: dashboard/# external-ui: dashboard/g' .config/clash/confi
 clash -d .config/clash/ &
 
 git clone -n https://github.com/ProfXv/home_configs
-mv -i home_configs/.git/ .
-rm -r home_configs/
+mv -i home_configs/.git .
+rm -rf home_configs
+git switch hyprland
 git checkout -f
 git remote set-url origin git@github.com:ProfXv/home_configs.git
 
@@ -26,7 +27,7 @@ makepkg -si
 cd ..
 rm -rf yay
 
-yay -S `cat .opt_packages`
+for p in `cat .packages`; do yay -S $p || echo $p >> failures.txt; done
 
 for repo in github gitlab; do
 	case $repo in
@@ -39,7 +40,7 @@ done
 
 chsh -s `which zsh`
 
-iwctl station wlan0 connect Gaia-5G
+iwctl station wlan0 connect Gaia-5G -P 6.62606896%Planck
 systemctl enable bluetooth.service
 systemctl enable runsunloginclient.service
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do
