@@ -1,3 +1,4 @@
+ping example.com || echo Network Error, please check and try again. && exit
 echo WARNING: ONLY BARE MACHINES CAN EXECUTE THIS SCRIPT FOR AUTOMATIC CONFIGURATION
 echo By typing your password, you admit you are fully aware of the risk, and we start.
 cd ~
@@ -7,14 +8,16 @@ sudo locale-gen
 
 sudo pacman -Sy git clash
 
-curl https://update.glados-config.com/clash/290141/765f3fd/50821/glados-terminal.yaml > .config/clash/config.yaml
-sed -i 's/external-ui: dashboard/# external-ui: dashboard/g' .config/clash/config.yaml
+clash=.config/clash/config.yaml
+if [ ! -f $clash ]; then curl https://update.glados-config.com/clash/290141/765f3fd/50821/glados-terminal.yaml > $clash; fi
+sed -i 's/external-ui: dashboard/# external-ui: dashboard/g' $clash
 clash -d .config/clash/ &
+sudo cp .proxy.sh /etc/profile.d/proxy.sh
+export http_proxy=127.0.0.1:7890 https_proxy=127.0.0.1:7890 all_proxy=127.0.0.1:7890
 
-git clone -n https://github.com/ProfXv/home_configs
+git clone -n https://github.com/ProfXv/home_configs --branch=hyprland
 mv -i home_configs/.git .
 rm -rf home_configs
-git switch hyprland
 git checkout -f
 git remote set-url origin git@github.com:ProfXv/home_configs.git
 
@@ -27,7 +30,7 @@ makepkg -si
 cd ..
 rm -rf yay
 
-for p in `cat .packages`; do yay -S $p || echo $p >> failures.txt; done
+for p in `cat .opt_packages`; do yay -S $p || echo $p >> failures.txt; done
 
 for repo in github gitlab; do
 	case $repo in
