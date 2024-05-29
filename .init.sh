@@ -45,6 +45,7 @@ chsh -s `which zsh`
 
 iwctl station wlan0 connect Gaia-5G -P 6.62606896%Planck
 systemctl enable bluetooth.service
+systemctl enable iwd.service
 systemctl enable runsunloginclient.service
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do
 #     echo "Processing $DEVICE"
