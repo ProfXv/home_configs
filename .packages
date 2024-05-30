@@ -18,6 +18,8 @@ rsync
 cronie
 unzip
 
+jq
+
 tree
 man-db
 tldr
