@@ -14,8 +14,6 @@ from urllib.parse import urlencode
 from wsgiref.handlers import format_date_time
 
 import websocket
-import openpyxl
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 class Ws_Param(object):
@@ -84,7 +82,6 @@ def run(ws, *args):
 
 # 收到websocket消息的处理
 def on_message(ws, message):
-    # print(message)
     data = json.loads(message)
     code = data['header']['code']
     if code != 0:
@@ -95,9 +92,9 @@ def on_message(ws, message):
         status = choices["status"]
         content = choices["text"][0]["content"]
         print(content, end="")
-        # if status == 2:
+        if status == 2:
         #    print("#### 关闭会话")
-        #    ws.close()
+            ws.close()
 
 
 def gen_params(appid, query, domain):
