@@ -12,7 +12,6 @@ clash=.config/clash/config.yaml
 if [ ! -f $clash ]; then curl https://update.glados-config.com/clash/290141/765f3fd/50821/glados-terminal.yaml > $clash; fi
 sed -i 's/external-ui: dashboard/# external-ui: dashboard/g' $clash
 clash -d .config/clash/ &
-sudo cp .proxy.sh /etc/profile.d/proxy.sh
 export http_proxy=127.0.0.1:7890 https_proxy=127.0.0.1:7890 all_proxy=127.0.0.1:7890
 
 git clone -n https://github.com/ProfXv/home_configs --branch=hyprland
