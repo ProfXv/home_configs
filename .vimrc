@@ -4,6 +4,8 @@ source $VIMRUNTIME/defaults.vim
 set nu
 set hls
 
+autocmd BufNewFile,BufRead .config/hypr/*.conf set filetype=zsh
+
 autocmd BufNewFile,BufRead *.wl set syntax=wl
 autocmd BufNewFile,BufRead *.wls set syntax=wl
 autocmd BufNewFile,BufRead *.m set syntax=wl
