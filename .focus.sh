@@ -5,7 +5,7 @@ workspace=`echo $info | jq .workspace.name | sed 's/"//g'`
 class=`echo $info | jq .class | sed 's/"//g'`
 title=`echo $info | jq .title | sed 's/"//g'`
 
-text=$(wl-paste -p)
+text=$(xclip -o)
 echo -e "$(date '+%F %T')\t$1\t$workspace\t$class\t$title\t$text" >> ~/.focus_log
 case $1 in
     paste)
