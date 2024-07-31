@@ -16,6 +16,7 @@ bluez
 bluez-utils
 rsync
 cronie
+minidlna
 unzip
 
 jq
