@@ -22,7 +22,7 @@ static int upload_userwords()
 	fp = fopen("userwords.txt", "rb");
 	if (NULL == fp)
 	{
-		printf("\nopen [userwords.txt] failed! \n");
+		fprintf(stderr, "\nopen [userwords.txt] failed! \n");
 		goto upload_exit;
 	}
 
@@ -33,14 +33,14 @@ static int upload_userwords()
 	userwords = (char*)malloc(len + 1);
 	if (NULL == userwords)
 	{
-		printf("\nout of memory! \n");
+		fprintf(stderr, "\nout of memory! \n");
 		goto upload_exit;
 	}
 
 	read_len = fread((void*)userwords, 1, len, fp);
 	if (read_len != len)
 	{
-		printf("\nread [userwords.txt] failed!\n");
+		fprintf(stderr, "\nread [userwords.txt] failed!\n");
 		goto upload_exit;
 	}
 	userwords[len] = '\0';
@@ -48,7 +48,7 @@ static int upload_userwords()
 	MSPUploadData("userwords", userwords, len, "sub = uup, dtt = userword", &ret); //上传用户词表
 	if (MSP_SUCCESS != ret)
 	{
-		printf("\nMSPUploadData failed ! errorCode: %d \n", ret);
+		fprintf(stderr, "\nMSPUploadData failed ! errorCode: %d \n", ret);
 		goto upload_exit;
 	}
 
@@ -80,12 +80,12 @@ void on_result(const char *result, char is_last)
 			if (g_result)
 				g_buffersize += BUFFER_SIZE;
 			else {
-				printf("mem alloc failed\n");
+				fprintf(stderr, "mem alloc failed\n");
 				return;
 			}
 		}
 		strncat(g_result, result, size);
-		printf("\rUpdated result: %s", g_result);
+		fprintf(stderr, "\rUpdated result: %s", g_result);
 		fflush(stdout);
 	}
 }
@@ -100,7 +100,7 @@ void on_speech_begin()
 	g_buffersize = BUFFER_SIZE;
 	memset(g_result, 0, g_buffersize);
 
-	printf("Start Listening...\n");
+	fprintf(stderr, "Start Listening...\n");
 }
 
 int speaking_done = 0;
@@ -108,20 +108,11 @@ int speaking_done = 0;
 void on_speech_end(int reason)
 {
 	if (reason == END_REASON_VAD_DETECT) {
-		printf("\nSpeaking done \n");
+		fprintf(stderr, "\nSpeaking done \n");
 		speaking_done = 1;
-		// Copy the final result to the clipboard using a pipe
-		FILE *fp = popen("wl-copy -p", "w");
-		if (fp == NULL) {
-			printf("Cannot open pipe to wl-copy\n");
-			return;
-		}
-		fprintf(fp, "%s", g_result);
-		pclose(fp);
-		// Paste the clipboard content using ydotool
-		system("ydotool click 0xC2");
+		printf("%s", g_result);
 	} else {
-		printf("\nRecognizer error %d\n", reason);
+		fprintf(stderr, "\nRecognizer error %d\n", reason);
 	}
 }
 
@@ -141,19 +132,19 @@ static void demo_mic(const char* session_begin_params)
 
 	errcode = sr_init(&iat, session_begin_params, SR_MIC, &recnotifier);
 	if (errcode) {
-		printf("speech recognizer init failed\n");
+		fprintf(stderr, "speech recognizer init failed\n");
 		return;
 	}
 	errcode = sr_start_listening(&iat);
 	if (errcode) {
-		printf("start listen failed %d\n", errcode);
+		fprintf(stderr, "start listen failed %d\n", errcode);
 	}
 	/* demo 60 seconds recording */
 	while(i++ < 60 && !speaking_done)
 		sleep(1);
 	errcode = sr_stop_listening(&iat);
 	if (errcode) {
-		printf("stop listening failed %d\n", errcode);
+		fprintf(stderr, "stop listening failed %d\n", errcode);
 	}
 
 	sr_uninit(&iat);
@@ -178,18 +169,18 @@ int main(int argc, char* argv[])
 	 * */
 	ret = MSPLogin(NULL, NULL, login_params);
 	if (MSP_SUCCESS != ret) {
-		printf("MSPLogin failed , Error code %d.\n",ret);
+		fprintf(stderr, "MSPLogin failed , Error code %d.\n",ret);
 		goto exit; // login fail, exit the program
 	}
 
-	printf("Uploading the user words ...\n");
+	fprintf(stderr, "Uploading the user words ...\n");
 	ret = upload_userwords();
 	if (MSP_SUCCESS != ret)
 		goto exit;
-	printf("Uploaded successfully\n");
+	fprintf(stderr, "Uploaded successfully\n");
 
-	printf("Demo recognizing the speech from microphone\n");
-	printf("Speak in 60 seconds\n");
+	fprintf(stderr, "Demo recognizing the speech from microphone\n");
+	fprintf(stderr, "Speak in 60 seconds\n");
 
 	demo_mic(session_begin_params);
 
