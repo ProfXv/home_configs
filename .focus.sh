@@ -18,7 +18,7 @@ case $1 in
     search)
         grep -E '^(https?://)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*/?$' <<< "$text"
         if [ $? -eq 0 ]; then query="$text"; else query="https://www.google.com/search?q=$text"; fi
-        google-chrome-stable --new-window "$query"
+	firefox --new-window "$query"
         ;;
     open)
         if [[ $(stat -c '%U' "$text") == "root" ]]; then sudo=sudo; fi
