@@ -111,7 +111,7 @@ void on_speech_end(int reason)
 		printf("\nSpeaking done \n");
 		speaking_done = 1;
 		// Copy the final result to the clipboard using a pipe
-		FILE *fp = popen("wl-copy", "w");
+		FILE *fp = popen("wl-copy -p", "w");
 		if (fp == NULL) {
 			printf("Cannot open pipe to wl-copy\n");
 			return;
@@ -119,7 +119,7 @@ void on_speech_end(int reason)
 		fprintf(fp, "%s", g_result);
 		pclose(fp);
 		// Paste the clipboard content using ydotool
-		system("ydotool key 29:1 47:1 47:0 29:0");
+		system("ydotool click 0xC2");
 	} else {
 		printf("\nRecognizer error %d\n", reason);
 	}
