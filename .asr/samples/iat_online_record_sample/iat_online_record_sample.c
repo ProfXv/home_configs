@@ -174,10 +174,12 @@ int main(int argc, char* argv[])
 	}
 
 	fprintf(stderr, "Uploading the user words ...\n");
+	/*
 	ret = upload_userwords();
 	if (MSP_SUCCESS != ret)
 		goto exit;
 	fprintf(stderr, "Uploaded successfully\n");
+	*/
 
 	fprintf(stderr, "Demo recognizing the speech from microphone\n");
 	fprintf(stderr, "Speak in 60 seconds\n");
