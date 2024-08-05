@@ -1,5 +1,3 @@
 [user]
 	email = nparadoxist@gmail.com
 	name = Paradoxist@Paradoxer
-[remote "origin"]
-	proxy = 127.0.0.1:7890
