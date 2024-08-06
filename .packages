@@ -35,6 +35,7 @@ zsh
 zsh-autosuggestions
 zsh-syntax-highlighting
 
+nvim
 ranger
 ffmpegthumbnailer
 rofimoji

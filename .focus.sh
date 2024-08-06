@@ -22,8 +22,9 @@ case $1 in
 	firefox --new-window "$query"
         ;;
     open)
+        if [ ! -f $text ]; then touch $text; fi
         if [[ $(stat -c '%U' "$text") == "root" ]]; then sudo=sudo; fi
-        kitty $sudo xdg-open "$text"
+        kitty $sudo rifle $text
         ;;
     generate)
         kitty --hold python .service/generate.py -m "$text"
