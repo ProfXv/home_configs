@@ -62,3 +62,5 @@ sudo systemctl enable minidina.service
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do for act in pair connect trust; do bluetoothctl $act $device; done; done
 
 echo Initialization Completed.
+wget https://github.com/vial-kb/vial-gui/releases/download/v0.7.1/Vial-v0.7.1-x86_64.AppImage -P ~/Desktop
+chmod +x ~/Desktop/Vial-v0.7.1-x86_64.AppImage
