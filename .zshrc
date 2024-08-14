@@ -49,6 +49,8 @@ source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+alias vim=nvim
+alias vi=vim
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
