@@ -4,7 +4,7 @@ hyprctl notify -1 1000 "rgb(ff1ea3)" "Start Recognition."
 cd .asr/bin
 words=$(./iat_online_record_sample)
 
-if [ -n $words ]; then
+if [ -n "$words" ]; then
     echo -e `date +'%F %T'`\\t$words >> ~/.words.txt
     if [ "$1" = "simple" ]; then
         wl-copy -p "$words"
