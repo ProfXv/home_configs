@@ -16,6 +16,9 @@ require("lazy").setup(
     {
         "tanvirtin/monokai.nvim",
     },
+    {
+        "xiyaowong/transparent.nvim",
+    },
 	-- Vscode-like pictograms
 	{
 		"onsails/lspkind.nvim",
