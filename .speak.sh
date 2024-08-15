@@ -7,8 +7,8 @@ words=$(./iat_online_record_sample)
 if [ -n "$words" ]; then
     echo -e `date +'%F %T'`\\t$words >> ~/.words.txt
     if [ "$1" = "simple" ]; then
-        wl-copy -p "$words"
-        ydotool click 0xC2
+        wl-copy "$words"
+        ydotool key 29:1 47:1 29:0 47:0        
     elif [ "$1" = "complex" ]; then
         echo "$words" | sed "s/这个/$(wl-paste -p)/" > /tmp/words
         wl-copy -p < /tmp/words
