@@ -10,6 +10,7 @@ socat
 noto-fonts-cjk
 noto-fonts-emoji
 ttf-dejavu
+otf-font-awesome
 
 fcitx5-im
 fcitx5-chinese-addons
