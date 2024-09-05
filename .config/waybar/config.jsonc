@@ -64,7 +64,7 @@
         "format": "👉 {}",
         "rewrite": {
             "(.*) — Mozilla Firefox": "🌎 $1",
-            "(.*) - fish": "> [$1]"
+            "(.*) - Wolfram Mathematica": "💡 $1"
         },
         "separate-outputs": true
     },
