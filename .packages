@@ -38,6 +38,7 @@ remmina
 zsh
 zsh-autosuggestions
 zsh-syntax-highlighting
+zsh-history-substring-search
 
 nvim
 ranger

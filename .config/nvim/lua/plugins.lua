@@ -50,7 +50,7 @@ require("lazy").setup(
         config = function ()
             local configs = require("nvim-treesitter.configs")
             configs.setup({
-                ensure_installed = { "markdown", "markdown_inline", "html" },
+                ensure_installed = { "markdown", "markdown_inline", "html", "hyprlang" },
                 sync_install = false,
                 highlight = { enable = true },
                 indent = { enable = true },

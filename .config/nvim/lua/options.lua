@@ -24,8 +24,6 @@ vim.opt.hlsearch = true -- highlight matches
 vim.opt.ignorecase = true -- ignore case in searches by default
 vim.opt.smartcase = true -- but make it case sensitive if an uppercase is entered
 
--- Autocommand: set filetype to zsh for .config/hypr/*.conf files
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
-  pattern = ".config/hypr/*.conf",
-  command = "set filetype=zsh"
+vim.filetype.add({
+  pattern = { [".*/hypr/.*%.conf"] = "hyprlang" },
 })
