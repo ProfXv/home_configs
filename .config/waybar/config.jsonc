@@ -22,12 +22,14 @@
         "power-profiles-daemon",
         "cpu",
         "memory",
+        "disk",
         "temperature",
         "backlight",
         "keyboard-state",
         "battery",
         "battery#bat2",
         "clock",
+        "custom/count_words",
         "tray"
     ],
     "hyprland/workspaces": {
@@ -48,7 +50,6 @@
     },
     "hyprland/submap": {
         "format": "✌️ {}",
-        "max-length": 8,
         "tooltip": false
     },
     "keyboard-state": {
@@ -102,20 +103,25 @@
         }
     },
     "tray": {
-        // "icon-size": 21,
         "spacing": 10
     },
     "clock": {
-        // "timezone": "America/New_York",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
+        "format": "{:%T}",
+        "format-alt": "{:%F}",
+        "interval": 1
     },
     "cpu": {
         "format": "{usage}% ",
-        "tooltip": false
+        "format-alt": "{avg_frequency}GHz"
     },
     "memory": {
-        "format": "{}% "
+        "format": "{}% ",
+        "tooltip-format": "{used} / {total}"
+    },
+    "disk": {
+        "format": "{percentage_used}% ",
+        "tooltip-format": "{used} / {total}"
     },
     "temperature": {
         // "thermal-zone": 2,
@@ -185,7 +191,8 @@
             "car": "",
             "default": ["", "", ""]
         },
-        "on-click": "pavucontrol"
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-click-right": "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
     },
     "custom/media": {
         "format": "{icon} {}",
@@ -198,5 +205,10 @@
         "escape": true,
         "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    },
+    "custom/count_words": {
+        "format": "今天说话次数: {}",
+        "exec": "grep $(date +%F) .words.txt | wc -l",
+        "interval": 60
     }
 }

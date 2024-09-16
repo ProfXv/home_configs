@@ -64,3 +64,4 @@ sudo systemctl enable minidina.service
 echo Initialization Completed.
 wget https://github.com/vial-kb/vial-gui/releases/download/v0.7.1/Vial-v0.7.1-x86_64.AppImage -P ~/Desktop
 chmod +x ~/Desktop/Vial-v0.7.1-x86_64.AppImage
+sudo usermod -aG input `whoami`
