@@ -54,3 +54,30 @@ alias vi=vim
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# 定义文件名常量
+CONVERSATION_FILE=/tmp/conversations/$$.jsonl
+RESPONSE_FILE="/tmp/response.md"
+
+# 封装 jq 命令的函数
+append_to_conversation() {
+    jq -n --arg role "$1" --arg content "$2" '{$role, $content}' >> "$CONVERSATION_FILE"
+}
+
+mkdir -p /tmp/conversations
+append_to_conversation system "$(< system.txt)"
+
+# 定义 command_not_found_handler 函数
+command_not_found_handler() {
+    # 追加用户消息到对话记录文件
+    append_to_conversation user "$*"
+    # 发送请求并处理响应
+    curl --no-buffer -s https://open.bigmodel.cn/api/paas/v4/chat/completions \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Bearer $ZHIPU_API_KEY" \
+        -d "$(jq -s '{model: "glm-4-flash", messages: ., stream: true}' < "$CONVERSATION_FILE")" |
+        sed -u 's/^data: //g' | stdbuf -oL grep -v '\[DONE\]' |
+        jq -rj --unbuffered '.choices[0].delta.content // empty' | tee "$RESPONSE_FILE"
+    # 追加助手消息到对话记录文件
+    append_to_conversation assistant "$(< $RESPONSE_FILE)"
+}

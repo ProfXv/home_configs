@@ -10,16 +10,19 @@ echo -e "$(date '+%F %T')\t$1\t$workspace\t$class\t$title\t$text" >> ~/.focus_lo
 hyprctl notify -1 1000 "rgb(ff1ea3)" $1
 case $1 in
     paste)
-	echo $text > /tmp/clipboard
+	    echo $text > /tmp/clipboard
         echo $text > Documents/Obsidian/速记/`date +%s`_"$workspace"_"$class"_"$title".md
+        ;;
+    type)
+        ydotool type "$text"
         ;;
     copy)
         wl-copy -p < "$text"
         ;;
-    search)
+    search) # 其实应该合并到打开
         grep -E '^(https?://)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*/?$' <<< "$text"
         if [ $? -eq 0 ]; then query="$text"; else query="https://www.google.com/search?q=$text"; fi
-	firefox --new-window "$query"
+	    firefox --new-window "$query"
         ;;
     open)
         if [ ! -f $text ]; then touch $text; fi
@@ -27,10 +30,7 @@ case $1 in
         kitty $sudo rifle $text
         ;;
     generate)
-        kitty --hold python .service/generate.py -m "$text"
-        ;;
-    ask)
-        kitty --hold python .service/generate.py -p -m "$text"
+        kitty --hold zsh -ic "$text"
         ;;
     *)
         echo INVALID OPTION: $1
