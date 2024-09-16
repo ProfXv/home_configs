@@ -10,7 +10,7 @@ if [ -n "$words" ]; then
         wl-copy "$words"
         ydotool key 29:1 47:1 29:0 47:0        
     elif [ "$1" = "complex" ]; then
-        echo "$words" | sed "s/这个/$(wl-paste -p)/" > /tmp/words
+        echo "$words" | sed "s/这个/$(wl-paste -p)/" >> /tmp/words
         wl-copy -p < /tmp/words
     fi
     hyprctl notify -1 2000 "rgb(ffffa3)" "End Recognition."
