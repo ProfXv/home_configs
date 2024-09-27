@@ -24,6 +24,9 @@ vim.opt.hlsearch = true -- highlight matches
 vim.opt.ignorecase = true -- ignore case in searches by default
 vim.opt.smartcase = true -- but make it case sensitive if an uppercase is entered
 
+-- 将等待时间设置为 5000 毫秒（5 秒），可以根据需要调整
+vim.o.timeoutlen = 5000
+
 vim.filetype.add({
   pattern = { [".*/hypr/.*%.conf"] = "hyprlang" },
 })
