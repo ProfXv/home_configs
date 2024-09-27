@@ -14,7 +14,7 @@ case $1 in
         echo $text > Documents/Obsidian/速记/`date +%s`_"$workspace"_"$class"_"$title".md
         ;;
     type)
-        ydotool type "$text"
+        sleep 1; ydotool type "$text"
         ;;
     copy)
         wl-copy -p < "$text"
@@ -30,7 +30,9 @@ case $1 in
         kitty $sudo rifle $text
         ;;
     generate)
-        kitty --hold zsh -ic "$text"
+        kitty --listen-on unix:@$$ &
+        sleep 1
+        kitten @ --to unix:@$$ send-text "$text"\\n
         ;;
     *)
         echo INVALID OPTION: $1
