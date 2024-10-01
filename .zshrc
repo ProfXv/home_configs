@@ -64,14 +64,18 @@ export FZF_COMPLETION_TRIGGER='~~'
 
 # 定义文件名常量
 CONVERSATION_FILE=/tmp/conversations/$$.jsonl
-RESPONSE_FILE="/tmp/response.md"
+RESPONSE_FILE=/tmp/response.md
+RESPONSE_STATE=false
 
 # 封装 jq 命令的函数
 append_to_conversation() {
-    jq -n --arg role "$1" --arg content "$2" '{$role, $content}' >> "$CONVERSATION_FILE"
+    jq -n --arg role "$1" --arg content "$2" '{$role, $content}' >> $CONVERSATION_FILE
 }
 
-get_response() {
+mkdir -p /tmp/conversations
+append_to_conversation system "$(< system.txt)"
+
+execute_conversation() {
     # Send request and process response
     curl --no-buffer -s https://open.bigmodel.cn/api/paas/v4/chat/completions \
         -H "Content-Type: application/json" \
@@ -82,14 +86,14 @@ get_response() {
             tools: [{
                 type: "function",
                 function: {
-                    name: "execute_terminal_command",
-                    description: "Execute terminal command",
+                    name: "terminal_command",
+                    description: "Execute any linux zsh terminal command",
                     parameters: {
                         type: "object",
                         properties: {
                             command: {
                                 type: "string",
-                                description: "The terminal command to be executed."
+                                description: "The whole terminal command to be executed."
                             }
                         },
                         required: ["command"]
@@ -98,67 +102,103 @@ get_response() {
             }],
             tool_choice: "auto",
             stream: true
-        }' < "$CONVERSATION_FILE")" | tee -a /tmp/conversation_log |
-        sed -u 's/^data: //g' | while read -r line; do
-    if [[ -z "$line" ]]; then
-        continue
-    elif [[ "$line" == "[DONE]" ]]; then
-        echo "\033[32m[DONE]\033[0m" >&2
-    elif echo -E "$line" | jq -rje '.choices[0].delta.content // empty'; then
-        echo -E "$line" | jq -rje '.choices[0].delta.content // empty' >> $RESPONSE_FILE
+        }' < "$CONVERSATION_FILE")" | tee -a /tmp/conversation_log | sed -u 's/^data: //g' |
+        while read -r line; do
+            if [[ -z "$line" ]]; then
+                continue
+            elif [[ "$line" == "[DONE]" ]]; then
+                echo "\033[32m[DONE]\033[0m" >&2
+            else
+                delta=$(echo -E $line | jq -r '.choices[0].delta')
+                content=$(echo -E $delta | jq -re '.content // empty') &&
+                echo -n $content | tee -a $RESPONSE_FILE ||
+                FUNCTION=$(echo -E $delta | jq -r '.tool_calls[0].function')
+                # for debugging use
+                if [ -n "$FUNCTION" ]; then func_line="$line"; fi
+                usage=$(echo -E $line | jq -r '.usage // empty')
+                if [ -n "$usage" ]; then
+                    echo \\n
+                    in_tokens=$(echo $usage | jq -r '.prompt_tokens')
+                    out_tokens=$(echo $usage | jq -r '.completion_tokens')
+                    total_tokens=$(echo $usage | jq -r '.total_tokens')
+                    finish_reason=$(echo $line | jq -r '.choices[0].finish_reason')
+                    echo "\033[33mUsage: $in_tokens + $out_tokens = $total_tokens\033[0m" >&2
+                    echo "\033[34mFinish reason: $finish_reason\033[0m" >&2
+                fi
+            fi
+        done
+    RESPONSE_STATE=false
+    if [[ -n "$(< $RESPONSE_FILE)" ]]; then
+        append_to_conversation assistant "$(< $RESPONSE_FILE)"
+        rm $RESPONSE_FILE
+    fi
+}
+
+handle_conversation() {
+    zle -M ""
+    echo
+    execute_conversation
+    echo
+    if [[ -n $FUNCTION ]]; then
+        name=$(echo -E $FUNCTION | jq -r '.name')
+        call=$(echo -E $FUNCTION | jq -r '.arguments | fromjson')
+        case $name in
+            terminal_command)
+                command=$(echo -E $call | jq -r '.command')
+                echo "\033[31mExecuting:\n\033[0m" >&2
+                BUFFER="$command"
+                ;;
+            file_operations)
+                operation=$(echo -E $call | jq -r '.operation')
+                file=$(echo -E $call | jq -r '.file')
+                case $operation in
+                    Read)
+                        cmd="cat $file"
+                        ;;
+                    Write)
+                        content=$(echo -E $call | jq -r '.content')
+                        cmd="echo \"$content\" >$file"
+                        ;;
+                    *)
+                        cmd="echo '无效的操作'"
+                        echo -E $call
+                        ;;
+                esac
+                echo "\033[31m$operation: $file\n\033[0m" >&2
+                append_to_conversation tool "$(eval $cmd)"
+                unset BUFFER
+                ;;
+        esac
+        zle accept-line
+        RESPONSE_STATE=true
+        unset FUNCTION
+        # could add a while loop later
+        # execute_conversation
     else
-        prompt_tokens=$(echo -E "$line" | jq -r '.usage.prompt_tokens // empty')
-        completion_tokens=$(echo -E "$line" | jq -r '.usage.completion_tokens // empty')
-        total_tokens=$(echo -E "$line" | jq -r '.usage.total_tokens // empty')
-        finish_reason=$(echo -E "$line" | jq -r '.choices[0].finish_reason // empty')
-
-        if [ -n "$total_tokens" ]; then
-            echo "$prompt_tokens + $completion_tokens = $total_tokens" >&2
-        fi
-
-        if [ -n "$finish_reason" ]; then
-            echo "完成原因: $finish_reason" >&2
-            case "$finish_reason" in
-                "tool_calls")
-                    COMMAND=$(echo -E "$line" | jq -r '.choices[0].delta.tool_calls[0].function.arguments | fromjson | .command')
-                    echo "\033[31mExecuting: $COMMAND\033[0m" >&2
-                    ;;
-                *)
-                    echo "$finish_reason" >&2
-                    ;;
-            esac
-        fi
-    fi
-done
-}
-
-execute_conversation() {
-    append_to_conversation "$1" "$2"
-    get_response
-    append_to_conversation assistant "$(< $RESPONSE_FILE)"
-    # Execute the command if it's a terminal command
-    if [[ -n $COMMAND ]]; then
-        kitten @ send-text $COMMAND\\n
-        unset COMMAND
-        # execute_conversation tool "$(< $RESPONSE_FILE)"
+        unset BUFFER
+        zle accept-line
     fi
 }
-
-mkdir -p /tmp/conversations
-append_to_conversation system "$(< system.txt)"
 
 natural_language_widget() {
     if [[ -z $BUFFER ]]; then
-        zle -M "Hello boy!" # could be intelligent reminders later
+        if $RESPONSE_STATE; then
+            handle_conversation
+        else
+            zle -M "No available query since last reply." # could be intelligent reminders later
+        fi
     elif ! type ${BUFFER%% *} &>/dev/null; then
-        echo
-        execute_conversation user "$BUFFER"
-        echo
-        BUFFER=""
-        zle accept-line
+        append_to_conversation user "$BUFFER"
+        handle_conversation
     else
         zle accept-line
-        append_to_conversation tool "`kitty @ get-text --extent last_cmd_output`"
+        RESPONSE_STATE=true
+    fi
+}
+
+precmd() {
+    if $RESPONSE_STATE; then
+        append_to_conversation tool "$(jq -nc --arg in "`fc -ln -1`" --arg out "`kitty @ get-text --extent last_cmd_output`" '{$in, $out}')"
     fi
 }
 
@@ -166,3 +206,7 @@ zle -N natural_language_widget
 bindkey '^M' natural_language_widget
 # 定义 command_not_found_handler 函数
 # command_not_found_handler() {execute_conversation user "$*"}
+
+check_conversation() {zle -M "`cat $CONVERSATION_FILE`"}
+zle -N check_conversation
+bindkey '^J' check_conversation
