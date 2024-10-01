@@ -17,6 +17,7 @@ require("lazy").setup(
     "xiyaowong/transparent.nvim",
     'nvim-lualine/lualine.nvim',
     {'akinsho/bufferline.nvim', version = "*"},
+    'numToStr/Comment.nvim',
     {
         "sontungexpt/stcursorword",
         event = "VeryLazy",
@@ -153,7 +154,8 @@ require('lualine').setup {
   inactive_winbar = {},
   extensions = {}
 }
-require("bufferline").setup{}
+require("bufferline").setup()
+require('Comment').setup()
 -- default configuration
 require("stcursorword").setup({
     max_word_length = 100, -- if cursorword length > max_word_length then not highlight
