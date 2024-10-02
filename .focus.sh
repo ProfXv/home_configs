@@ -11,7 +11,9 @@ hyprctl notify -1 1000 "rgb(ff1ea3)" $1
 case $1 in
     paste)
 	    echo $text > /tmp/clipboard
-        echo $text > Documents/Obsidian/速记/`date +%s`_"$workspace"_"$class"_"$title".md
+        script=Documents/Obsidian/速记/`date +%s`_"$workspace"_"$class"_"$title".md
+        echo -e "$text\n\n---\n" > "$script"
+        kitty nvim "$script"
         ;;
     type)
         sleep 1; ydotool type "$text"
