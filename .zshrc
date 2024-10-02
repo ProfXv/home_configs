@@ -7,6 +7,7 @@ fi
 
 # Set up the prompt
 
+
 autoload -Uz promptinit
 promptinit
 prompt adam1
@@ -81,7 +82,7 @@ execute_conversation() {
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $ZHIPU_API_KEY" \
         -d "$(jq -s '{
-            model: "glm-4-flash",
+            model: "glm-4-0520",
             messages: .,
             tools: [{
                 type: "function",
@@ -110,20 +111,25 @@ execute_conversation() {
                 echo "\033[32m[DONE]\033[0m" >&2
             else
                 delta=$(echo -E $line | jq -r '.choices[0].delta')
-                content=$(echo -E $delta | jq -re '.content // empty') &&
-                echo -n $content | tee -a $RESPONSE_FILE ||
-                FUNCTION=$(echo -E $delta | jq -r '.tool_calls[0].function')
+                {
+                    content=$(echo -E $delta | jq -re '.content // empty') &&
+                    echo -n $content | tee -a $RESPONSE_FILE
+                } ||
+                {
+                    tool_calls=$(echo -E $delta | jq -r '.tool_calls')
+                    FUNCTION=$(echo -E $tool_calls | jq -r '.[0].function')
+                }
+
                 # for debugging use
-                if [ -n "$FUNCTION" ]; then func_line="$line"; fi
                 usage=$(echo -E $line | jq -r '.usage // empty')
                 if [ -n "$usage" ]; then
                     echo \\n
+                    finish_reason=$(echo -E $line | jq -r '.choices[0].finish_reason')
                     in_tokens=$(echo $usage | jq -r '.prompt_tokens')
                     out_tokens=$(echo $usage | jq -r '.completion_tokens')
                     total_tokens=$(echo $usage | jq -r '.total_tokens')
-                    finish_reason=$(echo $line | jq -r '.choices[0].finish_reason')
-                    echo "\033[33mUsage: $in_tokens + $out_tokens = $total_tokens\033[0m" >&2
                     echo "\033[34mFinish reason: $finish_reason\033[0m" >&2
+                    echo "\033[33mUsage: $in_tokens + $out_tokens = $total_tokens\033[0m" >&2
                 fi
             fi
         done
@@ -140,12 +146,13 @@ handle_conversation() {
     execute_conversation
     echo
     if [[ -n $FUNCTION ]]; then
+        jq -n --argjson tool_calls "$tool_calls" '{role: "assistant", $tool_calls}' >> $CONVERSATION_FILE
         name=$(echo -E $FUNCTION | jq -r '.name')
         call=$(echo -E $FUNCTION | jq -r '.arguments | fromjson')
         case $name in
             terminal_command)
                 command=$(echo -E $call | jq -r '.command')
-                echo "\033[31mExecuting:\n\033[0m" >&2
+                echo "\033[31mExecute:\033[0m" >&2
                 BUFFER="$command"
                 ;;
             file_operations)
@@ -171,9 +178,6 @@ handle_conversation() {
         esac
         zle accept-line
         RESPONSE_STATE=true
-        unset FUNCTION
-        # could add a while loop later
-        # execute_conversation
     else
         unset BUFFER
         zle accept-line
@@ -198,15 +202,27 @@ natural_language_widget() {
 
 precmd() {
     if $RESPONSE_STATE; then
-        append_to_conversation tool "$(jq -nc --arg in "`fc -ln -1`" --arg out "`kitty @ get-text --extent last_cmd_output`" '{$in, $out}')"
+        append_to_conversation tool "`kitty @ get-text --extent last_cmd_output`"
+        if [[ -n $FUNCTION ]]; then
+            kitten @ send-key Return
+            unset FUNCTION
+        fi
     fi
 }
 
 zle -N natural_language_widget
 bindkey '^M' natural_language_widget
 # 定义 command_not_found_handler 函数
-# command_not_found_handler() {execute_conversation user "$*"}
+# command_not_found_handler() {
+#     append_to_conversation user "$*"
+#     handle_conversation
+# }
+# unsetopt cdable_vars
 
 check_conversation() {zle -M "`cat $CONVERSATION_FILE`"}
 zle -N check_conversation
 bindkey '^J' check_conversation
+# 之后还是希望改成对话开始的时间或者对话特殊的ID。
+# save_conversation() {cp $CONVERSATION_FILE ~/Documents/conversations/`date +%s`.jsonl}
+# zle -N save_conversation
+# bindkey '^J' save_conversation
