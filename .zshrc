@@ -64,13 +64,13 @@ source <(fzf --zsh)
 export FZF_COMPLETION_TRIGGER='~~'
 
 # 定义文件名常量
-CONVERSATION_FILE=/tmp/conversations/$$.jsonl
+CONVERSATION_FILE=/tmp/conversations/`date +%s`.jsonl
 RESPONSE_FILE=/tmp/response.md
 RESPONSE_STATE=false
 
 # 封装 jq 命令的函数
 append_to_conversation() {
-    jq -n --arg role "$1" --arg content "$2" '{$role, $content}' >> $CONVERSATION_FILE
+    jq -nc --arg role "$1" --arg content "$2" '{$role, $content}' >> $CONVERSATION_FILE
 }
 
 mkdir -p /tmp/conversations
@@ -146,7 +146,7 @@ handle_conversation() {
     execute_conversation
     echo
     if [[ -n $FUNCTION ]]; then
-        jq -n --argjson tool_calls "$tool_calls" '{role: "assistant", $tool_calls}' >> $CONVERSATION_FILE
+        jq -nc --argjson tool_calls "$tool_calls" '{role: "assistant", $tool_calls}' >> $CONVERSATION_FILE
         name=$(echo -E $FUNCTION | jq -r '.name')
         call=$(echo -E $FUNCTION | jq -r '.arguments | fromjson')
         case $name in
@@ -222,7 +222,18 @@ bindkey '^M' natural_language_widget
 check_conversation() {zle -M "`cat $CONVERSATION_FILE`"}
 zle -N check_conversation
 bindkey '^J' check_conversation
-# 之后还是希望改成对话开始的时间或者对话特殊的ID。
-# save_conversation() {cp $CONVERSATION_FILE ~/Documents/conversations/`date +%s`.jsonl}
-# zle -N save_conversation
-# bindkey '^J' save_conversation
+
+save_conversation() {
+    cp $CONVERSATION_FILE ~/Documents/conversations
+    zle -M "The conversation has been saved successfully."
+}
+zle -N save_conversation
+bindkey '^[e' save_conversation
+
+back_conversation() {
+    sed -i '$ d' $CONVERSATION_FILE 
+    RESPONSE_STATE=true
+    zle -M "`tail -1 $CONVERSATION_FILE`"
+}
+zle -N back_conversation
+bindkey '^[r' back_conversation
