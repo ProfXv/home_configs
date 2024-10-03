@@ -17,6 +17,7 @@ vim.opt.splitbelow = true -- open new vertical split bottom
 vim.opt.splitright = true -- open new horizontal splits right
 vim.opt.termguicolors = true        -- enable 24-bit RGB color in the TUI
 vim.opt.showmode = false -- we have status bar plugin to show the mode.
+vim.opt.laststatus = 3 -- views can only be fully collapsed with the global statusline
 
 -- Searching
 vim.opt.incsearch = true -- search as characters are entered
