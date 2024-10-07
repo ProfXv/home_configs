@@ -36,6 +36,12 @@ case $1 in
         sleep 1
         kitten @ --to unix:@$$ send-text "$text"\\n
         ;;
+    execute)
+        script=/tmp/script
+        xclip -o > $script
+        chmod +x $script
+        kitty --hold $script
+        ;;
     *)
         echo INVALID OPTION: $1
         ;;
