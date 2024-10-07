@@ -5,11 +5,11 @@ handle() {
   echo -e `date +'%F %T'`\\t"$key"\\t"$value" >> .socket_log
   case "$key" in
     workspace|openwindow|closewindow|activespecial|fullscreen)
-      if [ "$submap" -eq 1 ]; then hyprctl dispatch submap reset; fi
+      if $submap; then hyprctl dispatch submap reset; submap=false; fi
       notify=1
       ;;
     submap)
-      if [ -n "$value" ]; then submap=1; fi
+      if [ -n "$value" ] && [ "$value" != 'clean' ]; then submap=true; fi
       ;;
     *)
       notify=0
