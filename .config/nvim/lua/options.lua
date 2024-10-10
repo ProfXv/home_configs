@@ -13,6 +13,7 @@ vim.opt.expandtab = true -- tabs are spaces, mainly because of python
 vim.opt.number = true -- show absolute number
 vim.opt.relativenumber = true -- add numbers to each line on the left side
 vim.opt.cursorline = true -- highlight cursor line underneath the cursor horizontally
+vim.opt.cursorcolumn = true -- highlight cursor column through the cursor vertically
 vim.opt.splitbelow = true -- open new vertical split bottom
 vim.opt.splitright = true -- open new horizontal splits right
 vim.opt.termguicolors = true        -- enable 24-bit RGB color in the TUI
