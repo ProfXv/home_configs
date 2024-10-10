@@ -118,17 +118,21 @@ execute_conversation() {
                 {
                     tool_calls=$(echo -E $delta | jq -r '.tool_calls')
                     FUNCTION=$(echo -E $tool_calls | jq -r '.[0].function')
+                    CALL_STATE=true
                 }
 
-                # for debugging use
+                finish_reason=$(echo -E $line | jq -r '.choices[0].finish_reason // empty')
+                if $CALL_STATE; then
+                    CALL_STATE=false
+                elif [ -n "$finish_reason" ]; then
+                    echo \\n
+                    echo "\033[34mFinish reason: $finish_reason\033[0m" >&2
+                fi
                 usage=$(echo -E $line | jq -r '.usage // empty')
                 if [ -n "$usage" ]; then
-                    echo \\n
-                    finish_reason=$(echo -E $line | jq -r '.choices[0].finish_reason')
                     in_tokens=$(echo $usage | jq -r '.prompt_tokens')
                     out_tokens=$(echo $usage | jq -r '.completion_tokens')
                     total_tokens=$(echo $usage | jq -r '.total_tokens')
-                    echo "\033[34mFinish reason: $finish_reason\033[0m" >&2
                     echo "\033[33mUsage: $in_tokens + $out_tokens = $total_tokens\033[0m" >&2
                 fi
             fi
