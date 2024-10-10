@@ -40,8 +40,10 @@ zsh-autosuggestions
 zsh-syntax-highlighting
 zsh-history-substring-search
 
+kitty
 nvim
 ranger
+btop
 ffmpegthumbnailer
 rofimoji
 
