@@ -25,7 +25,7 @@
         "disk",
         "temperature",
         "backlight",
-        "keyboard-state",
+        // "keyboard-state",
         "battery",
         "battery#bat2",
         "clock",
@@ -207,7 +207,7 @@
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     },
     "custom/count_words": {
-        "format": "今天说话次数: {}",
+        "format": "🗣️: {}",
         "exec": "grep $(date +%F) .words.txt | wc -l",
         "interval": 60
     }
