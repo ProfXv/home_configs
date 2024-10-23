@@ -13,7 +13,7 @@ case $1 in
 	    echo $text > /tmp/clipboard
         script=Documents/Obsidian/速记/`date +%s`_"$workspace"_"$class"_"$title".md
         echo -e "$text\n\n---\n" > "$script"
-        kitty nvim "$script"
+        kitty rifle "$script"
         ;;
     type)
         sleep 1; ydotool type "$text"
@@ -21,15 +21,15 @@ case $1 in
     copy)
         wl-copy -p < "$text"
         ;;
-    search) # 其实应该合并到打开
-        grep -E '^(https?://)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*/?$' <<< "$text"
-        if [ $? -eq 0 ]; then query="$text"; else query="https://www.google.com/search?q=$text"; fi
-	    firefox --new-window "$query"
-        ;;
     open)
-        if [ ! -f $text ]; then touch $text; fi
-        if [[ $(stat -c '%U' "$text") == "root" ]]; then sudo=sudo; fi
-        kitty $sudo rifle $text
+        if [ -f $text ]; then
+            if [[ $(stat -c '%U' "$text") == "root" ]]; then sudo=sudo; fi
+            kitty $sudo rifle $text
+        else
+            grep -E '^(https?://)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*/?$' <<< "$text" &&
+            query="$text" || query="https://www.google.com/search?q=$text"
+            rifle "$query"
+        fi
         ;;
     generate)
         kitty --listen-on unix:@$$ &
@@ -40,7 +40,11 @@ case $1 in
         script=/tmp/script
         xclip -o > $script
         chmod +x $script
-        kitty --hold $script
+        kitty --hold sh -c "if ! head -1 $script | grep -q '^#!'; then
+            echo 'Please enter interpreter (e.g. sh, python, wolframscript):'
+            read interpreter
+        fi
+        \$interpreter $script"
         ;;
     *)
         echo INVALID OPTION: $1
