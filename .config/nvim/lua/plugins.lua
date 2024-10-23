@@ -127,7 +127,7 @@ require("lazy").setup(
                     ---@type AvanteProvider
                     zhipu = {
                         endpoint = "https://open.bigmodel.cn/api/paas/v4/chat/completions",
-                        model = "codegeex-4",
+                        model = "glm-4-plus",
                         api_key_name = "ZHIPU_API_KEY",
                         parse_curl_args = function(opts, code_opts)
                             return {

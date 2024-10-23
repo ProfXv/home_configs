@@ -60,6 +60,8 @@ alias vi=vim
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+source .python/bin/activate
+
 source <(fzf --zsh)
 export FZF_COMPLETION_TRIGGER='~~'
 
@@ -82,7 +84,7 @@ execute_conversation() {
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $ZHIPU_API_KEY" \
         -d "$(jq -s '{
-            model: "glm-4-0520",
+            model: "glm-4-plus",
             messages: .,
             tools: [{
                 type: "function",
