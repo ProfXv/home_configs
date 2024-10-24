@@ -1,12 +1,14 @@
-waybar
 wl-clipboard
 xclip
+ydotool
+wtype
 wev
 grim
 slurp
 wf-recorder
 socat
 
+waybar
 hyprpaper
 hyprlock
 hypridle
@@ -46,7 +48,6 @@ nvim
 ranger
 btop
 ffmpegthumbnailer
-rofimoji
 
 python-pillow
 

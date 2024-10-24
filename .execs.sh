@@ -1,8 +1,10 @@
 # Set programs that you use
 te=kitty
-fe="$te ranger"
-se="$te nvim"
-rm="$te btop"
-wb="firefox --new-window"
+eo=rifle
+al='$pkill wofi || wofi'
 
-pkill wofi || eval hyprctl dispatch `grep ^bind .config/hypr/* | wofi -d | awk -F, '{print $3 $4}'`
+pkill fzf || {
+    operation=`grep ^bind .config/hypr/* | fzf | awk -F, '{print $3 $4}'`
+    hyprctl dispatch focuscurrentorlast
+    eval hyprctl dispatch $operation
+}
