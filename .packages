@@ -30,6 +30,8 @@ unzip
 
 jq
 
+fzf
+eza
 tree
 man-db
 tldr
@@ -39,9 +41,6 @@ freerdp
 remmina
 
 zsh
-zsh-autosuggestions
-zsh-syntax-highlighting
-zsh-history-substring-search
 
 kitty
 nvim
