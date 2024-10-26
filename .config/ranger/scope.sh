@@ -109,6 +109,11 @@ handle_extension() {
             python -m json.tool -- "${FILE_PATH}" && exit 5
             ;;
 
+        ## ipynb
+        ipynb)
+            euporie-preview "${FILE_PATH}" && exit 5
+            ;;
+
         ## Direct Stream Digital/Transfer (DSDIFF) and wavpack aren't detected
         ## by file(1).
         dff|dsf|wv|wvc)

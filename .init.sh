@@ -31,6 +31,10 @@ rm -rf yay
 
 for p in `cat .opt_packages`; do yay -S $p || echo $p >> failures.txt; done
 
+python -m venv .python
+source .python/bin/activate
+pip install euporie selenium
+
 for repo in github gitlab; do
 	case $repo in
 		github) mail=849460963@qq.com;;
@@ -42,7 +46,6 @@ done
 
 chsh -s `which zsh`
 
-iwctl station wlan0 connect Gaia-5G -P 6.62606896%Planck
 systemctl enable bluetooth.service
 systemctl enable iwd.service
 systemctl enable runsunloginclient.service
