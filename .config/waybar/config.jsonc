@@ -56,7 +56,7 @@
         "rewrite": {
             "(.*) — Mozilla Firefox": "  $1",
             "nyxt Nyxt - (.*)": "  $1",
-            "kitty ~": " :$1",
+            "kitty ~": " ",
             "kitty ranger(.*)": "󰙅 $1",
             "kitty euporie-notebook": "󰪚  ",
             "com.wolfram.Mathematica.14.0 (.*) - Wolfram Mathematica": "󰪚 $1",
@@ -84,11 +84,11 @@
         "format-alt": "{avg_frequency}GHz"
     },
     "memory": {
-        "format": "{}% ",
+        "format": "{}% 󰍛",
         "tooltip-format": "{used} / {total}"
     },
     "disk": {
-        "format": "{percentage_used}% ",
+        "format": "{percentage_used}% 🖴",
         "tooltip-format": "{used} / {total}"
     },
     "temperature": {
