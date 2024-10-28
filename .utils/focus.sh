@@ -1,8 +1,8 @@
 #!/bin/bash
 
 info=`hyprctl activewindow -j`
-workspace=`echo $info | jq -r .workspace.name
-class=`echo $info | jq -r .class
+workspace=`echo $info | jq -r .workspace.name`
+class=`echo $info | jq -r .class`
 
 text=$(xclip -o)
 echo -e "$(date '+%F %T')\t$1\t$workspace\t$class\t\t$text" >> ~/.focus_log
@@ -10,7 +10,7 @@ hyprctl notify -1 1000 "rgb(ff1ea3)" $1
 case $1 in
     paste)
 	    echo $text > /tmp/clipboard
-        script=~/Documents/Obsidian/速记/`date +%s`_"$workspace"_"$class".md
+        script="`~/.utils/path.sh Documents/notes`"/`date +%s`_"$class".md
         echo -e "$text\n\n---\n" > "$script"
         kitty rifle "$script"
         ;;
@@ -21,9 +21,9 @@ case $1 in
         wl-copy -p < "$text"
         ;;
     open)
-        if [ -f $text ]; then
+        if [ -f "$text" ]; then
             if [[ $(stat -c '%U' "$text") == "root" ]]; then sudo=sudo; fi
-            kitty $sudo rifle $text
+            kitty $sudo rifle "$text"
         else
             grep -E '^(https?://)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*/?$' <<< "$text" &&
             query="$text" || query="https://www.google.com/search?q=$text"

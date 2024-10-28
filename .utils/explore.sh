@@ -1,5 +1,3 @@
-#!/bin/bash
-
 cd .sites
 sites=`ls | fzf`
 site=`cat $sites | fzf`
