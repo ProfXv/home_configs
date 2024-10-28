@@ -9,7 +9,7 @@ append_to_conversation() {
 }
 
 mkdir -p /tmp/conversations
-append_to_conversation system "$(< system.txt)"
+append_to_conversation system "$(< ~/.system.txt)"
 
 execute_conversation() {
     # Send request and process response

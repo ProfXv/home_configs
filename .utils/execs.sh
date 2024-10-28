@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Set programs that you use
 te=kitty
 eo=rifle

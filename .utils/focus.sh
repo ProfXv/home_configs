@@ -1,8 +1,8 @@
 #!/bin/bash
 
 info=`hyprctl activewindow -j`
-workspace=`echo $info | jq .workspace.name | sed 's/"//g'`
-class=`echo $info | jq .class | sed 's/"//g'`
+workspace=`echo $info | jq -r .workspace.name
+class=`echo $info | jq -r .class
 
 text=$(xclip -o)
 echo -e "$(date '+%F %T')\t$1\t$workspace\t$class\t\t$text" >> ~/.focus_log
@@ -10,7 +10,7 @@ hyprctl notify -1 1000 "rgb(ff1ea3)" $1
 case $1 in
     paste)
 	    echo $text > /tmp/clipboard
-        script=Documents/Obsidian/速记/`date +%s`_"$workspace"_"$class".md
+        script=~/Documents/Obsidian/速记/`date +%s`_"$workspace"_"$class".md
         echo -e "$text\n\n---\n" > "$script"
         kitty rifle "$script"
         ;;

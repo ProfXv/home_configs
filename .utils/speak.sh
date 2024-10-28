@@ -1,7 +1,7 @@
 #!/bin/bash
 
 hyprctl notify -1 1000 "rgb(ff1ea3)" "Start Recognition."
-cd .asr/bin
+cd ~/.asr/bin
 words=$(./iat_online_record_sample)
 
 if [ -n "$words" ]; then

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ping example.com || echo Network Error, please check and try again. && exit
 echo WARNING: ONLY BARE MACHINES CAN EXECUTE THIS SCRIPT FOR AUTOMATIC CONFIGURATION
 echo By typing your password, you admit you are fully aware of the risk, and we start.
