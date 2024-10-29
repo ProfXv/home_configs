@@ -13,7 +13,6 @@ source "${ZINIT_HOME}/zinit.zsh"
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-autosuggestions
-zinit light zsh-users/zsh-history-substring-search
 zinit light Aloxaf/fzf-tab
 
 autoload -Uz promptinit
@@ -73,13 +72,13 @@ zstyle ':fzf-tab:*' use-fzf-default-opts yes
 # switch group using `<` and `>`
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias vim=nvim
 alias vi=vim
+
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
