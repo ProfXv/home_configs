@@ -77,6 +77,15 @@ alias grep='grep --color=auto'
 alias vim=nvim
 alias vi=vim
 
+mathematica() {
+    for arg in "$@"; do
+        if [ ! -f "$arg" ]; then
+            cp Templates/template.nb "$arg"
+        fi
+    done
+    command mathematica "$@"
+}
+
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
 
