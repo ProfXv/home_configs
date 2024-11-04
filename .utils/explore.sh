@@ -1,5 +1,5 @@
 cd .sites
-sites=`ls | fzf`
+sites=`ls | fzf || kill $KITTY_PID`
 site=`cat $sites | fzf`
 if [ -n "$site" ]; then
     nohup rifle $site &

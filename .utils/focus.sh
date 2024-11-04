@@ -39,6 +39,7 @@ case $1 in
         script=/tmp/script
         xclip -o > $script
         chmod +x $script
+        source ~/.python/bin/activate
         kitty --hold sh -c "if ! head -1 $script | grep -q '^#!'; then
             echo 'Please enter interpreter (e.g. sh, python, wolframscript):'
             read interpreter
