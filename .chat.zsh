@@ -1,23 +1,75 @@
+MODEL_URL=`eval echo \$"$SERVICE"_MODEL_URL`
+API_KEY=`eval echo \$"$SERVICE"_API_KEY`
+
 # 定义文件名常量
 CONVERSATION_FILE=/tmp/conversations/`date +%s`.jsonl
 RESPONSE_FILE=/tmp/response.md
 RESPONSE_STATE=false
 
-# 封装 jq 命令的函数
 append_to_conversation() {
-    jq -nc --arg role "$1" --arg content "$2" '{$role, $content}' >> $CONVERSATION_FILE
+    local role=""
+    local content=""
+    local tool_calls=""
+    local parsed_options=$(getopt -o "r:c:t:" --long "role:,content:,tool-calls:" -- "$@")
+    if [[ $? -ne 0 ]]; then
+        echo "Invalid options provided." 1>&2
+        return 1
+    fi
+    eval set -- "$parsed_options"
+    while true; do
+        case "$1" in
+            -r | --role)
+                role="$2"
+                shift 2
+                ;;
+            -c | --content)
+                content="$2"
+                shift 2
+                ;;
+            -t | --tool-calls)
+                tool_calls="$2"
+                shift 2
+                ;;
+            --)
+                shift
+                break
+                ;;
+            *)
+                echo "Internal error!" 1>&2
+                return 1
+                ;;
+        esac
+    done
+    case "$SERVICE" in
+        ZHIPU)
+            if [ -n "$content" ]; then
+                jq -nc --arg role $role --arg content "$content" '{$role, $content}' \
+                    >> $CONVERSATION_FILE
+            fi
+            if [ -n "$tool_calls" ]; then
+                jq -nc --arg role $role --argjson tool_calls "$tool_calls" '{$role, $tool_calls}' \
+                    >> $CONVERSATION_FILE
+            fi
+            ;;
+        *)
+            [ -z "$tool_calls" ] && tool_calls='{}'
+            jq -nc --arg role $role --arg content "$content" --argjson tool_calls "$tool_calls" \
+                '{$role, $content} + if $tool_calls != {} then {$tool_calls} else {} end' \
+                >> "$CONVERSATION_FILE"
+            ;;
+    esac
 }
 
 mkdir -p /tmp/conversations
-append_to_conversation system "$(< ~/.system.txt)"
+append_to_conversation -r system -c "$(< ~/.system.txt)"
 
 execute_conversation() {
     # Send request and process response
-    curl --no-buffer -s https://open.bigmodel.cn/api/paas/v4/chat/completions \
+    curl --no-buffer -s $MODEL_URL \
         -H "Content-Type: application/json" \
-        -H "Authorization: Bearer $ZHIPU_API_KEY" \
+        -H "Authorization: Bearer $API_KEY" \
         -d "$(jq -s '{
-            model: "glm-4-plus",
+            model: "'$MODEL_NAME'",
             messages: .,
             tools: [{
                 type: "function",
@@ -38,45 +90,44 @@ execute_conversation() {
             }],
             tool_choice: "auto",
             stream: true
-        }' < "$CONVERSATION_FILE")" | tee -a /tmp/conversation_log | sed -u 's/^data: //g' |
+        }' < "$CONVERSATION_FILE")" | tee -a /tmp/conversation_log |
         while read -r line; do
-            if [[ -z "$line" ]]; then
+            if [ -z "$line" ]; then
                 continue
-            elif [[ "$line" == "[DONE]" ]]; then
-                echo "\033[32m[DONE]\033[0m" >&2
-            else
+            elif echo $line | grep -q ^data; then
+                line=$(echo -E $line | sed -u 's/^data: //')
+                if [ "$line" = "[DONE]" ]; then continue; fi
                 delta=$(echo -E $line | jq -r '.choices[0].delta')
                 {
                     content=$(echo -E $delta | jq -re '.content // empty') &&
                     echo -n $content | tee -a $RESPONSE_FILE
                 } ||
                 {
-                    tool_calls=$(echo -E $delta | jq -r '.tool_calls')
-                    FUNCTION=$(echo -E $tool_calls | jq -r '.[0].function')
-                    CALL_STATE=true
+                    tool_calls=$(echo -E $delta | jq -r '.tool_calls // empty')
+                    if [ -n "$tool_calls" ]; then
+                        FUNCTION=$(echo -E $tool_calls | jq -r '.[0].function')
+                    fi
                 }
 
                 finish_reason=$(echo -E $line | jq -r '.choices[0].finish_reason // empty')
-                if $CALL_STATE; then
-                    CALL_STATE=false
-                elif [ -n "$finish_reason" ]; then
-                    echo \\n
-                    echo "\033[34mFinish reason: $finish_reason\033[0m" >&2
-                fi
                 usage=$(echo -E $line | jq -r '.usage // empty')
                 if [ -n "$usage" ]; then
                     in_tokens=$(echo $usage | jq -r '.prompt_tokens')
                     out_tokens=$(echo $usage | jq -r '.completion_tokens')
                     total_tokens=$(echo $usage | jq -r '.total_tokens')
-                    echo "\033[33mUsage: $in_tokens + $out_tokens = $total_tokens\033[0m" >&2
                 fi
+            else
+                echo $line
             fi
         done
+    echo \\n
+    echo "\033[34mFinish reason: $finish_reason\033[0m" >&2
+    echo "\033[33mUsage: $in_tokens + $out_tokens = $total_tokens\033[0m" >&2
+    echo "\033[32m[DONE]\033[0m" >&2
     RESPONSE_STATE=false
-    if [[ -n "$(< $RESPONSE_FILE)" ]]; then
-        append_to_conversation assistant "$(< $RESPONSE_FILE)"
-        rm $RESPONSE_FILE
-    fi
+    append_to_conversation -r assistant -c "$(< $RESPONSE_FILE)" -t "$tool_calls"
+    rm $RESPONSE_FILE
+    unset tool_calls
 }
 
 handle_conversation() {
@@ -85,7 +136,6 @@ handle_conversation() {
     execute_conversation
     echo
     if [[ -n $FUNCTION ]]; then
-        jq -nc --argjson tool_calls "$tool_calls" '{role: "assistant", $tool_calls}' >> $CONVERSATION_FILE
         name=$(echo -E $FUNCTION | jq -r '.name')
         call=$(echo -E $FUNCTION | jq -r '.arguments | fromjson')
         case $name in
@@ -111,7 +161,7 @@ handle_conversation() {
                         ;;
                 esac
                 echo "\033[31m$operation: $file\n\033[0m" >&2
-                append_to_conversation tool "$(eval $cmd)"
+                append_to_conversation -r tool -c "$(eval $cmd)"
                 unset BUFFER
                 ;;
         esac
@@ -131,7 +181,7 @@ natural_language_widget() {
             zle -M "No available query since last reply." # could be intelligent reminders later
         fi
     elif ! type ${BUFFER%% *} &>/dev/null; then
-        append_to_conversation user "$BUFFER"
+        append_to_conversation -r user -c "$BUFFER"
         handle_conversation
     else
         zle accept-line
@@ -141,7 +191,7 @@ natural_language_widget() {
 
 precmd() {
     if $RESPONSE_STATE; then
-        append_to_conversation tool "`kitty @ get-text --extent last_cmd_output`"
+        append_to_conversation -r tool -c "`kitty @ get-text --extent last_cmd_output`"
         if [[ -n $FUNCTION ]]; then
             kitten @ send-key Return
             unset FUNCTION
@@ -153,7 +203,7 @@ zle -N natural_language_widget
 bindkey '^M' natural_language_widget
 # 定义 command_not_found_handler 函数
 # command_not_found_handler() {
-#     append_to_conversation user "$*"
+#     append_to_conversation -r user -c "$*"
 #     handle_conversation
 # }
 # unsetopt cdable_vars
