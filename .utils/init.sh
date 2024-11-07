@@ -69,6 +69,12 @@ systemctl enable runsunloginclient.service
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do for act in pair connect trust; do bluetoothctl $act $device; done; done
 
 echo Initialization Completed.
-wget https://github.com/vial-kb/vial-gui/releases/download/v0.7.1/Vial-v0.7.1-x86_64.AppImage -P ~/Desktop
-chmod +x ~/Desktop/Vial-v0.7.1-x86_64.AppImage
+
+cd .local/bin
+curl https://github.com/vial-kb/vial-gui/releases/download/v0.7.1/Vial-v0.7.1-x86_64.AppImage -o vial
+curl https://dldir1.qq.com/qqfile/qq/QQNT/Linux/QQ_3.2.13_241104_x86_64_01.AppImage -o qq
+curl https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage -o wechat
+chmod +x *
+cd -
+
 sudo usermod -aG input `whoami`
