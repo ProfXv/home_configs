@@ -98,10 +98,7 @@ execute_conversation() {
                 line=$(echo -E $line | sed -u 's/^data: //')
                 if [ "$line" = "[DONE]" ]; then continue; fi
                 delta=$(echo -E $line | jq -r '.choices[0].delta')
-                {
-                    content=$(echo -E $delta | jq -re '.content // empty') &&
-                    echo -n $content | tee -a $RESPONSE_FILE
-                } ||
+                echo -E $delta | jq -rje '.content // empty' | tee -a $RESPONSE_FILE ||
                 {
                     tool_calls=$(echo -E $delta | jq -r '.tool_calls // empty')
                     if [ -n "$tool_calls" ]; then

@@ -20,7 +20,7 @@ promptinit
 prompt adam1
 zinit light romkatv/powerlevel10k
 
-setopt histignorealldups sharehistory
+setopt histignorealldups sharehistory pipefail
 
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
