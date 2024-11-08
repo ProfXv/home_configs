@@ -25,8 +25,8 @@ handle() {
                     # also, don't work at all, but anyway we first put it here
                     hyprctl keyword bind "SUPER CTRL ALT, mouse_down, sendshortcut, CTRL, prior,"
                     hyprctl keyword bind "SUPER CTRL ALT, mouse_up, sendshortcut, CTRL, next,"
-                    hyprctl keyword bind "SUPER CTRL ALT, mouse_down, sendshortcut, CTRL SHIFT, prior,"
-                    hyprctl keyword bind "SUPER CTRL ALT, mouse_up, sendshortcut, CTRL SHIFT, next,"
+                    hyprctl keyword bind "SUPER SHIFT CTRL ALT, mouse_down, sendshortcut, CTRL SHIFT, prior,"
+                    hyprctl keyword bind "SUPER SHIFT CTRL ALT, mouse_up, sendshortcut, CTRL SHIFT, next,"
                     ;;
                 *)
                     ;;
