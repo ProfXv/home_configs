@@ -57,7 +57,7 @@
             "(.*) — Mozilla Firefox": "  $1",
             "nyxt Nyxt - (.*)": "  $1",
             "kitty ~": " ",
-            "kitty ranger(.*)": "󰙅 $1",
+            "kitty Yazi(.*)": "󰙅 $1",
             "kitty euporie-notebook": "󰪚  ",
             "com.wolfram.Mathematica.14.0 (.*) - Wolfram Mathematica": "󰪚 $1",
         },

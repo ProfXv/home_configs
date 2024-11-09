@@ -18,7 +18,7 @@ handle() {
                         vi*|vim*|nvim*)
                             hyprctl keyword bind ", pause, sendshortcut, , escape,"
                             ;;
-                        ranger*|btop*|man*|git\ diff*)
+                        Yazi*|btop*|man*|git\ diff*)
                             hyprctl keyword bind ", pause, sendshortcut, , q,"
                             ;;
                         *)
@@ -30,6 +30,7 @@ handle() {
                     hyprctl keyword bind ", pause, sendshortcut, CTRL, w,"
                     ;;
                 *)
+                    hyprctl keyword bind ", pause, sendshortcut, , escape,"
                     ;;
             esac
             notify=0
