@@ -9,28 +9,30 @@ handle() {
             notify=1
             ;;
         activewindow)
-            hyprctl keyword unbind "SUPER CTRL ALT, mouse_down"
-            hyprctl keyword unbind "SUPER CTRL ALT, mouse_up"
-            hyprctl keyword unbind "SUPER SHIFT CTRL ALT, mouse_down"
-            hyprctl keyword unbind "SUPER SHIFT CTRL ALT, mouse_up"
-            case `echo $value | cut -d, -f 1` in
+            hyprctl keyword unbind ", pause"
+            class=`echo $value | cut -d, -f 1`
+            name=`echo $value | cut -d, -f 2-`
+            case $class in
                 kitty)
-                    hyprctl keyword bind "SUPER CTRL ALT, mouse_down, sendshortcut, CTRL SHIFT, bracketleft,"
-                    hyprctl keyword bind "SUPER CTRL ALT, mouse_up, sendshortcut, CTRL SHIFT, bracketright,"
-                    # hyprland get troubles when executing the binds below, we need to fix it by ourselves
-                    hyprctl keyword bind "SUPER SHIFT CTRL ALT, mouse_down, sendshortcut, CTRL SHIFT, b,"
-                    hyprctl keyword bind "SUPER SHIFT CTRL ALT, mouse_up, sendshortcut, CTRL SHIFT, f,"
+                    case $name in
+                        vi*|vim*|nvim*)
+                            hyprctl keyword bind ", pause, sendshortcut, , escape,"
+                            ;;
+                        ranger*|btop*|man*|git\ diff*)
+                            hyprctl keyword bind ", pause, sendshortcut, , q,"
+                            ;;
+                        *)
+                            hyprctl keyword bind ", pause, sendshortcut, CTRL, d,"
+                            ;;
+                    esac
                     ;;
                 firefox)
-                    # also, don't work at all, but anyway we first put it here
-                    hyprctl keyword bind "SUPER CTRL ALT, mouse_down, sendshortcut, CTRL, prior,"
-                    hyprctl keyword bind "SUPER CTRL ALT, mouse_up, sendshortcut, CTRL, next,"
-                    hyprctl keyword bind "SUPER SHIFT CTRL ALT, mouse_down, sendshortcut, CTRL SHIFT, prior,"
-                    hyprctl keyword bind "SUPER SHIFT CTRL ALT, mouse_up, sendshortcut, CTRL SHIFT, next,"
+                    hyprctl keyword bind ", pause, sendshortcut, CTRL, w,"
                     ;;
                 *)
                     ;;
             esac
+            notify=0
             ;;
         submap)
             if [ -n "$value" ] && [ "$value" != 'clean' ]; then submap=true; fi

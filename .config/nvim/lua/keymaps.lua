@@ -4,6 +4,8 @@ local opts = {
     silent = true,       -- do not show message
 }
 
+vim.api.nvim_set_keymap('n', '<Esc>', '<Cmd>q<CR>', {noremap = true, silent = true})
+
 -----------------
 -- Normal mode --
 -----------------
