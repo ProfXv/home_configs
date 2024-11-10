@@ -1,13 +1,4 @@
-cd .sites
-sites=`ls | fzf || kill $KITTY_PID`
-site=`cat $sites | fzf`
-if [ -n "$site" ]; then
-    nohup rifle $site &
-else
-    # assuming in a browser
-    hyprctl dispatch focuscurrentorlast
-    ydotool key -d 100 29:1 38:1 38:0 46:1 46:0 29:0 && sleep .5
-    text=$(xclip -o)
-    curl "$text" && echo $text >> $sites
-fi
+cd "`~/.utils/path.sh`"
+site="$(for f in `ls Sites.txt ~/.sites/*`; do cat $f; done | fzf)"
+if [ -n "$site" ]; then nohup rifle $site > /dev/null &; fi
 kill $KITTY_PID
