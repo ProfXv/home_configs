@@ -77,15 +77,6 @@ alias grep='grep --color=auto'
 alias vim=nvim
 alias vi=vim
 
-mathematica() {
-    for arg in "$@"; do
-        if [ ! -f "$arg" ]; then
-            cp Templates/template.nb "$arg"
-        fi
-    done
-    command mathematica "$@"
-}
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 

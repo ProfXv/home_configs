@@ -3,7 +3,7 @@ wolfram = [
 	{ run = 'mathematica "$@"', desc = "Wolfram Open" },
 ]
 euporie = [
-    { run = 'euporie notebook "$@"', block = true, desc = "Euporie Open" }
+    { run = 'euporie-notebook "$@"', block = true, desc = "Euporie Open" }
 ]
 
 [open]
@@ -18,5 +18,5 @@ prepend_rules = [
 # see https://yazi-rs.github.io/docs/plugins/overview#previewer
 # [plugin]
 # prepend_previewers = [
-# 	{ name = "*.ipynb", run = "euporie preview" },
+# 	{ name = "*.ipynb", run = "euporie-preview" },
 # ]

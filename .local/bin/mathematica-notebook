@@ -1,0 +1,6 @@
+for arg in "$@"; do
+    if [ ! -f "$arg" ]; then
+        cp Templates/template.nb "$arg"
+    fi
+done
+command mathematica "$@"
