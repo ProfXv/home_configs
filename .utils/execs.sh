@@ -2,7 +2,6 @@
 
 # Set programs that you use
 te=kitty
-eo=rifle
 al='pkill wofi || wofi'
 sw="[float; size 960 540] $te"
 

@@ -12,7 +12,7 @@ case $1 in
 	    echo $text > /tmp/clipboard
         script="`~/.utils/path.sh Documents/notes`"/`date +%s`_"$class".md
         echo -e "$text\n\n---\n" > "$script"
-        kitty rifle "$script"
+        kitty nvim "$script"
         ;;
     type)
         sleep 1; ydotool type "$text"
@@ -23,11 +23,11 @@ case $1 in
     open)
         if [ -f "$text" ]; then
             if [[ $(stat -c '%U' "$text") == "root" ]]; then sudo=sudo; fi
-            kitty $sudo rifle "$text"
+            kitty $sudo xdg-open "$text"
         else
             grep -E '^(https?://)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*/?$' <<< "$text" &&
             query="$text" || query="https://www.google.com/search?q=$text"
-            rifle "$query"
+            xdg-open "$query"
         fi
         ;;
     generate)
