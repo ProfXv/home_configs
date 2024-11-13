@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd "`~/.utils/path.sh`"
-
 # two functions below are adapted from https://github.com/Gustash/Hyprshot
 function slurp_window() {
     local name=`hyprctl -j monitors | jq -r 'map(.activeWorkspace.id) | join(",")'`
@@ -16,6 +14,7 @@ function slurp_active_window() {
     echo "$box"
 }
 
+source path.sh
 action=$1
 area=$2
 case $action in
