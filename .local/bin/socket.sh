@@ -4,9 +4,16 @@ IFS=">"
 handle() {
     echo -e `date +'%F %T'`\\t"$key"\\t"$value" >> ~/.socket_log
     case "$key" in
-        workspace|openwindow|closewindow|activespecial|fullscreen)
+        openwindow|closewindow|activespecial|fullscreen)
             if $submap; then hyprctl dispatch submap reset; submap=false; fi
             notify=1
+            ;;
+        workspacev2|renameworkspace)
+            workspace_id=`echo $value | cut -d, -f 1`
+            workspace_name=`echo $value | cut -d, -f 2-`
+            [ -z `echo $workspace_id | grep -` ] && [ "$workspace_id" != "$workspace_name" ] &&
+            path=~/Desktop/Projects/ours/$workspace_name && mkdir -p "$path" || path=~
+            echo $path > /tmp/path
             ;;
         activewindow)
             hyprctl keyword unbind ", pause"
@@ -45,4 +52,5 @@ handle() {
     if [ $notify -eq 1 ]; then hyprctl notify -1 1000 "rgb(ff1ea3)" "$key: $value"; fi
 }
 
-socat -U - UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock | while read -r key _ value; do handle; done
+socat -U - UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock |
+    while read -r key _ value; do handle; done

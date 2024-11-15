@@ -1,5 +1,6 @@
 #!/bin/bash
 
 unicode=`kitten unicode-input`
-hyprctl dispatch focuscurrentorlast
+windows=`hyprctl activeworkspace -j | jq .windows`
+if [ $windows != 1 ]; then hyprctl dispatch focuscurrentorlast; fi
 wtype $unicode

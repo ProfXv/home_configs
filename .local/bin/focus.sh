@@ -10,7 +10,8 @@ hyprctl notify -1 1000 "rgb(ff1ea3)" $1
 case $1 in
     paste)
 	    echo $text > /tmp/clipboard
-        source path.sh Documents/notes
+        source path.sh
+        mkdir -p Documents/notes
         script=`date +%s`_"$class".md
         echo -e "$text\n\n---\n" > "$script"
         kitty nvim "$script"
@@ -22,9 +23,9 @@ case $1 in
         wl-copy -p < "$text"
         ;;
     open)
-        if [ -f "$text" ]; then
-            if [[ $(stat -c '%U' "$text") == "root" ]]; then sudo=sudo; fi
-            kitty $sudo xdg-open "$text"
+        if [ -f $text ]; then
+            if [[ $(stat -c '%U' $text) == "root" ]]; then sudo=sudo; fi
+            kitty $sudo xdg-open $text
         else
             grep -E '^(https?://)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*/?$' <<< "$text" &&
             query="$text" || query="https://www.google.com/search?q=$text"
