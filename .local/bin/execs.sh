@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Set programs that you use
-te="source .python/bin/activate; source path.sh; kitty"
-sw="[float; size 960 540] $te"
+te="source path.sh; kitty"
+env="source .python/bin/activate; source path.sh;"
+sw="[float; size 960 540]"
 
 #@ later we could use built-in hyprctl binds -j to optimize this script
 operation=$(grep ^bind ~/.config/hypr/* | fzf | awk -F, '
