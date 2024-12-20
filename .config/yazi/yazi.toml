@@ -1,6 +1,6 @@
 [opener]
 wolfram = [
-	{ run = 'mathematica "$@"', desc = "Wolfram Open" },
+	{ run = 'wolframnb "$@"', desc = "Wolfram Open" },
 ]
 euporie = [
     { run = 'euporie-notebook "$@"', block = true, desc = "Euporie Open" }
