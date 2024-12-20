@@ -110,13 +110,13 @@ require("lazy").setup(
             lazy = false,
             version = false, -- set this if you want to always pull the latest change
             opts = {
-                provider = "zhipu",
+                provider = "grok",
                 vendors = {
                     ---@type AvanteProvider
-                    zhipu = {
-                        endpoint = "https://open.bigmodel.cn/api/paas/v4/chat/completions",
-                        model = "glm-4-plus",
-                        api_key_name = "ZHIPU_API_KEY",
+                    grok = {
+                        endpoint = "https://api.x.ai/v1/chat/completions",
+                        model = "grok-beta",
+                        api_key_name = "GROK_API_KEY",
                         parse_curl_args = function(opts, code_opts)
                             return {
                                 url = opts.endpoint,

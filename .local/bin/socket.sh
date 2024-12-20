@@ -4,7 +4,7 @@ IFS=">"
 handle() {
     echo -e `date +'%F %T'`\\t"$key"\\t"$value" >> ~/.socket_log
     case "$key" in
-        openwindow|closewindow|activespecial|fullscreen)
+        openwindow|closewindow|fullscreen)
             if $submap; then hyprctl dispatch submap reset; submap=false; fi
             notify=1
             ;;
