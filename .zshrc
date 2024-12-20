@@ -86,4 +86,4 @@ export FZF_COMPLETION_TRIGGER='~~'
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
 
-source ~/.chat.zsh
+source ~/.chat/chat.zsh
