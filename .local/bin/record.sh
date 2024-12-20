@@ -23,16 +23,16 @@ case $action in
         path=Pictures/`date +"%s.png"`
         case $area in
             "full")
-                grim $path
+                grim - | tee $path | wl-copy
                 ;;
             "window-active")
-                grim -g "`slurp_active_window`" $path
+                grim -g "`slurp_active_window`" - | tee $path | wl-copy
                 ;;
             "window-select")
-                grim -g "`slurp_window`" $path
+                grim -g "`slurp_window`" - | tee $path | wl-copy
                 ;;
             "select")
-                grim -g "`slurp`" $path
+                grim -g "`slurp`" - | tee $path | wl-copy
                 ;;
         esac
         ;;
