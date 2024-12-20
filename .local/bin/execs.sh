@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# Set programs that you use
-te="source path.sh; kitty"
-env="source .python/bin/activate; source path.sh;"
-sw="[float; size 960 540]"
-
 operation=$(
     hyprctl binds -j | jq -r '.[] | (
       (if .locked then " " else "" end) +
@@ -13,7 +8,9 @@ operation=$(
       (if .repeat then " " else "" end) +
       (if .non_consuming then "⦽ " else "" end) +
       (if .catch_all then "󰚾 " else "" end) +
-      "\(.modmask) \(.key) \(.keycode) 󱊨 \(.dispatcher) \(.arg)"
+      "\(.modmask) \(.key) \(.keycode) " +
+      (if .has_description then "󰂮 \(.description) " else "" end) +
+      "󱊨 \(.dispatcher) \(.arg)"
     )' | fzf | sed 's/.*󱊨 //'
 )
 
