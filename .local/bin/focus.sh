@@ -12,7 +12,7 @@ case $1 in
 	    echo $text > /tmp/clipboard
         source path.sh
         mkdir -p Documents/notes
-        script=`date +%s`_"$class".md
+        script=Documents/notes/`date +%s`_"$class".md
         echo -e "$text\n\n---\n" > "$script"
         kitty nvim "$script"
         ;;
