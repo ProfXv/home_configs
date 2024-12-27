@@ -1,10 +1,45 @@
 #!/bin/sh
 
+rebind() {
+    hyprctl keyword unbind ", pause"
+    class=`echo $value | cut -d, -f 1`
+    name=`echo $value | cut -d, -f 2-`
+    case $class in
+        kitty)
+            pid=`hyprctl activewindow -j | jq .pid`
+            name=`pstree -T $pid | grep -o '[^-]*$'`
+            case $name in
+                vi*|vim*|nvim*)
+                    hyprctl keyword bind ", pause, sendshortcut, , escape,"
+                    ;;
+                yazi*|btop*|man*|git\ diff*)
+                    hyprctl keyword bind ", pause, sendshortcut, , q,"
+                    ;;
+                *)
+                    hyprctl keyword bind ", pause, sendshortcut, CTRL, d,"
+                    ;;
+            esac
+            ;;
+        firefox)
+            hyprctl keyword bind ", pause, sendshortcut, CTRL, w,"
+            ;;
+        *)
+            hyprctl keyword bind ", pause, sendshortcut, , escape,"
+            ;;
+    esac
+}
+
 IFS=">"
 handle() {
     echo -e `date +'%F %T'`\\t"$key"\\t"$value" >> ~/.socket_log
     case "$key" in
-        openwindow|closewindow|fullscreen)
+        openwindow)
+            if $submap; then hyprctl dispatch submap reset; submap=false; fi
+            value=`echo $value | cut -d, -f 3-`
+            rebind
+            notify=1
+            ;;
+        closewindow|fullscreen)
             if $submap; then hyprctl dispatch submap reset; submap=false; fi
             notify=1
             ;;
@@ -16,30 +51,7 @@ handle() {
             echo $path > /tmp/path
             ;;
         activewindow)
-            hyprctl keyword unbind ", pause"
-            class=`echo $value | cut -d, -f 1`
-            name=`echo $value | cut -d, -f 2-`
-            case $class in
-                kitty)
-                    case $name in
-                        vi*|vim*|nvim*)
-                            hyprctl keyword bind ", pause, sendshortcut, , escape,"
-                            ;;
-                        Yazi*|btop*|man*|git\ diff*)
-                            hyprctl keyword bind ", pause, sendshortcut, , q,"
-                            ;;
-                        *)
-                            hyprctl keyword bind ", pause, sendshortcut, CTRL, d,"
-                            ;;
-                    esac
-                    ;;
-                firefox)
-                    hyprctl keyword bind ", pause, sendshortcut, CTRL, w,"
-                    ;;
-                *)
-                    hyprctl keyword bind ", pause, sendshortcut, , escape,"
-                    ;;
-            esac
+            rebind
             notify=0
             ;;
         submap)
