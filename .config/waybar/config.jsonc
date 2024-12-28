@@ -17,6 +17,7 @@
     "modules-right": [
         "mpd",
         "idle_inhibitor",
+        "custom/crypto_assets",
         "pulseaudio",
         "network",
         "power-profiles-daemon",
@@ -59,7 +60,7 @@
             "kitty ~": " ",
             "kitty Yazi(.*)": "󰙅 $1",
             "kitty euporie-notebook": "󰪚  ",
-            "com.wolfram.Mathematica.14.0 (.*) - Wolfram Mathematica": "󰪚 $1",
+            "com.wolfram.Wolfram.14.1 (.*) - Wolfram": "󰪚 $1",
         },
         "separate-outputs": true
     },
@@ -165,6 +166,11 @@
     "custom/count_words": {
         "format": "🗣️: {}",
         "exec": "grep $(date +%F) .words.txt | wc -l",
+        "interval": 60
+    },
+    "custom/crypto_assets": {
+        "format": "󰠓: {}",
+        "exec": "source .python/bin/activate; cd Desktop/Projects/ours/cryptos; python get_asset.py",
         "interval": 60
     }
 }
