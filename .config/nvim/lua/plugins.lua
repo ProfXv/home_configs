@@ -110,13 +110,13 @@ require("lazy").setup(
             lazy = false,
             version = false, -- set this if you want to always pull the latest change
             opts = {
-                provider = "grok",
+                provider = "deepseek",
                 vendors = {
                     ---@type AvanteProvider
-                    grok = {
-                        endpoint = "https://api.x.ai/v1/chat/completions",
-                        model = "grok-beta",
-                        api_key_name = "GROK_API_KEY",
+                    deepseek = {
+                        endpoint = "https://api.deepseek.com/chat/completions",
+                        model = "deepseek-chat",
+                        api_key_name = "DEEPSEEK_API_KEY",
                         parse_curl_args = function(opts, code_opts)
                             return {
                                 url = opts.endpoint,
