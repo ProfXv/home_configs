@@ -166,7 +166,9 @@
     "custom/count_words": {
         "format": "🗣️: {}",
         "exec": "grep $(date +%F) .words.txt | wc -l",
-        "interval": 60
+        "interval": 60,
+        "on-click": "speak.sh simple",
+        "on-click-right": "voice_commands.sh"
     },
     "custom/crypto_assets": {
         "format": "󰠓: {}",
