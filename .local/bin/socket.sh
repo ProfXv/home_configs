@@ -12,7 +12,7 @@ rebind() {
                 vi*|vim*|nvim*)
                     hyprctl keyword bind ", pause, sendshortcut, , escape,"
                     ;;
-                yazi*|btop*|man*|git\ diff*)
+                yazi*|btop*|man*|more*|less*|git\ diff*)
                     hyprctl keyword bind ", pause, sendshortcut, , q,"
                     ;;
                 *)
