@@ -8,6 +8,7 @@ slurp
 wf-recorder
 satty
 socat
+inotify-tools
 
 waybar
 hyprpaper
@@ -26,6 +27,7 @@ bluez
 bluez-utils
 rsync
 cronie
+at
 minidlna
 unzip
 
