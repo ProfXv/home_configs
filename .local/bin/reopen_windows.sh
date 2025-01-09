@@ -10,7 +10,9 @@ input_file=$(ls | fzf) && [ -n "$input_file" ] || {
     echo "Choose from the default path $input_file."
 }
 
+hyprctl dispatch togglegroup
 while IFS= read -r line; do
+    setsid $line &
     sleep 1
-    eval "$line" &
 done < "$input_file"
+kill $KITTY_PID
