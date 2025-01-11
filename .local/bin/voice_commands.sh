@@ -7,14 +7,12 @@ source ~/.chat/chat.zsh
 
 # 定义文件名常量
 CONVERSATION_FILE=/tmp/operations/operations.jsonl
-RESPONSE_FILE=/tmp/operations/operations.md
-RESPONSE_STATE=false
 
 operations=`hyprctl binds -j | jq '.[] | select(.has_description) | .description' | nl`
 content="Operation succeeded."
 
 mkdir -p /tmp/operations
-append_to_conversation -r system -c "选择最合适的操作:\n$operations"
+append_to_conversation -r system -c "候选操作:\n$operations"
 append_to_conversation -r user -c "`~/.asr/bin/iat_online_record_sample`"
 
 response=`send_request -t select_operation_number`
