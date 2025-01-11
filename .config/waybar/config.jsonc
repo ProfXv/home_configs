@@ -165,8 +165,8 @@
     },
     "custom/count_words": {
         "format": "🗣️: {}",
-        "exec": "grep $(date +%F) .words.txt | wc -l",
-        "interval": 60,
+        "exec": "cat .daily/speak_count",
+        "interval": 1,
         "on-click": "speak.sh simple",
         "on-click-right": "voice_commands.sh"
     },

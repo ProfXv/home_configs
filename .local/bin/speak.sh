@@ -1,5 +1,7 @@
 #!/bin/bash
 
+log_path=~/.daily/speak_count
+echo $(( $(cat $log_path) + 1 )) > $log_path
 hyprctl notify -1 1000 "rgb(ff1ea3)" "Start Recognition."
 cd ~/.asr/bin
 words=$(./iat_online_record_sample)
