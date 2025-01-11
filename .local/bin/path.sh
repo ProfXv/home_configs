@@ -2,5 +2,5 @@
 
 workspace_id=$(hyprctl activeworkspace -j | jq .id)
 workspace_name=$(hyprctl activeworkspace -j | jq -r .name)
-[ -z `echo $workspace_id | grep -` ] && [ "$workspace_id" != "$workspace_name" ] &&
-path=~/Desktop/Projects/ours/$workspace_name || path=~ && mkdir -p "$path" && cd "$path"
+echo $workspace_id | grep -v - && [ "$workspace_id" != "$workspace_name" ] &&
+path=~/Desktop/Projects/ours/$workspace_name && mkdir -p "$path" && cd "$path"
