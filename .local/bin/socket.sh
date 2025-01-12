@@ -29,14 +29,44 @@ rebind() {
     esac
 }
 
+visualize() {
+    local IFS=" "
+    addr=0x$1
+    infos=`hyprctl clients -j | jq '.[] | select(.address == "'$addr'")'`
+    `echo $infos | jq '.floating or .pseudo'` || {
+        pid=`echo $infos | jq '.pid'`
+        pids=`ps --ppid $pid --pid $pid -o pid --no-headers`
+        while true; do
+            read cpu mem <<< $(echo "$pids" | xargs -I{} top -b -n 1 -p {} | awk '
+            /^ *[0-9]+ / {
+                cpu += $9 + 0;
+                mem += $10 + 0;
+            }
+            END {
+                if (cpu != "" && mem != "") {
+                    if (cpu > 100) {cpu = 100}
+                    print int(cpu/100*255+.5), int(mem/100*255+.5);
+                }
+            }')
+            [ -z "$cpu$mem" ] && break
+            color="rgb(`printf "%02x" $cpu``printf "%02x" $mem`00)"
+            for var in '' in; do
+                hyprctl setprop -q address:$addr "$var"activebordercolor $color
+            done
+        done
+    }
+}
+
 IFS=">"
 handle() {
     echo -e `date +'%F %T'`\\t"$key"\\t"$value" >> ~/.socket_log
     case "$key" in
         openwindow)
             if $submap; then hyprctl dispatch submap reset; submap=false; fi
+            addr=`echo $value | cut -d, -f 1`
             value=`echo $value | cut -d, -f 3-`
             rebind
+            visualize $addr &
             notify=1
             ;;
         closewindow|fullscreen)
