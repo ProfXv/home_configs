@@ -44,11 +44,8 @@ handle() {
             notify=1
             ;;
         workspacev2|renameworkspace)
-            workspace_id=`echo $value | cut -d, -f 1`
-            workspace_name=`echo $value | cut -d, -f 2-`
-            [ -z `echo $workspace_id | grep -` ] && [ "$workspace_id" != "$workspace_name" ] &&
-            path=~/Desktop/Projects/ours/$workspace_name && mkdir -p "$path" || path=~
-            echo $path > /tmp/path
+            source path.sh
+            echo $PROJECT_HOME > /tmp/path
             ;;
         activewindow)
             rebind
