@@ -39,19 +39,22 @@ case $action in
     "record")
         mkdir -p Videos
         path=Videos/`date +"%s.mp4"`
-        case $area in
-            "full")
-                pkill wf-recorder || wf-recorder -f $path
-                ;;
-            "window-active")
-                pkill wf-recorder || wf-recorder -f $path -g "`slurp_active_window`"
-                ;;
-            "window-select")
-                pkill wf-recorder || wf-recorder -f $path -g "`slurp_window`"
-                ;;
-            "select")
-                pkill wf-recorder || wf-recorder -f $path -g "`slurp`"
-                ;;
-        esac
+        pkill wf-recorder && hyprctl notify -1 1000 "rgb(ff1ea3)" "End Recording." || {
+            hyprctl notify -1 1000 "rgb(ff1ea3)" "Start Recording."
+            case $area in
+                "full")
+                    wf-recorder -f $path
+                    ;;
+                "window-active")
+                    wf-recorder -f $path -g "`slurp_active_window`"
+                    ;;
+                "window-select")
+                    wf-recorder -f $path -g "`slurp_window`"
+                    ;;
+                "select")
+                    wf-recorder -f $path -g "`slurp`"
+                    ;;
+            esac
+        }
         ;;
 esac
