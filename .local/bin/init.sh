@@ -48,12 +48,13 @@ done
 
 chsh -s `which zsh`
 
-systemctl enable bluetooth.service
-systemctl enable iwd.service
-systemctl enable cronie.service
+systemctl enable bluetooth
+systemctl enable iwd
+systemctl enable cronie
+systemctl enable atd
 systemctl enable power-profiles-daemon
-sudo systemctl enable minidina.service
-systemctl enable runsunloginclient.service
+sudo systemctl enable minidina
+systemctl enable runsunloginclient
 
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do
 #     echo "Processing $DEVICE"
