@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# 文件路径
 state_file=".phone_state"
 
 secure_move() {
@@ -23,7 +22,6 @@ sync_directory() {
     done
 }
 
-# 定义连接和断开时的操作
 on_connect() {
     echo "手机已连接"
     hyprctl dispatch exec '[workspace name:🖧 silent] scrcpy'
@@ -31,12 +29,12 @@ on_connect() {
     sync_directory /sdcard/Pictures/Screenshots ~/Pictures/Screenshots jpg png
     sync_directory /sdcard/DCIM/Camera ~/Pictures/Camera gif heic jpeg jpg pic png webp
     sync_directory /sdcard/DCIM/Camera ~/Videos/Camera mov mp4
-    # 在这里添加连接时的操作，例如启动同步脚本
+    adb push ~/.daily/* storage/sdcard0/Download
+    for i in {1..9}; do adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/image_today_$i.png; done
 }
 
 off_connect() {
     echo "手机已断开"
-    # 在这里添加断开时的操作，例如停止同步脚本
 }
 
 # 初始状态
