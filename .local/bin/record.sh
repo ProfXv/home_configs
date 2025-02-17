@@ -14,12 +14,11 @@ function slurp_active_window() {
     echo "$box"
 }
 
-source path.sh
 action=$1
 area=$2
 case $action in
     "capture")
-        mkdir -p Pictures
+        mkdir -p "`readlink Pictures`"
         path=Pictures/`date +"%s.png"`
         case $area in
             "full")
@@ -37,7 +36,7 @@ case $action in
         esac
         ;;
     "record")
-        mkdir -p Videos
+        mkdir -p "`readlink Videos`"
         path=Videos/`date +"%s.mp4"`
         pkill wf-recorder && hyprctl notify -1 1000 "rgb(ff1ea3)" "End Recording." || {
             hyprctl notify -1 1000 "rgb(ff1ea3)" "Start Recording."

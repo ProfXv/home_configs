@@ -10,8 +10,7 @@ hyprctl notify -1 1000 "rgb(ff1ea3)" $1
 case $1 in
     paste)
 	    echo $text > /tmp/clipboard
-        source path.sh
-        mkdir -p Documents/notes
+        mkdir -p "`readlink Documents`/notes"
         script=Documents/notes/`date +%s`_"$class".md
         echo -e "$text\n\n---\n" > "$script"
         kitty nvim "$script"
