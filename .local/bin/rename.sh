@@ -25,6 +25,6 @@ echo "🌟 Hey there! Let's give your workspace a fresh new name! 🌟"
             mkdir -p "$new_name/$d"
         done
         ln -s . "$new_name/Desktop"
-    } || new_name=$(ls | fzf) && [ -n "$new_name" ] &&
+    } || new_name=$(ls | fzf --cycle) && [ -n "$new_name" ] &&
     hyprctl dispatch renameworkspace $old_id "$new_name"
 }

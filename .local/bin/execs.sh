@@ -11,7 +11,7 @@ operation=$(
       "\(.modmask) \(.key) \(.keycode) " +
       (if .has_description then "󰂮 \(.description) " else "" end) +
       "󱊨 \(.dispatcher) \(.arg)"
-    )' | fzf | sed 's/.*󱊨 //'
+    )' | fzf --cycle | sed 's/.*󱊨 //'
 )
 
 windows=`hyprctl activeworkspace -j | jq .windows`
