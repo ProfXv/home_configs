@@ -75,10 +75,8 @@ handle() {
             ;;
         workspacev2|renameworkspace)
             source path.sh
-            for path in Desktop Documents Downloads Music Pictures Public Templates Videos; do
-                rm ~/$path
-                ln -s $PROJECT_HOME/$path ~/$path
-            done
+            rm ~/PROJECT
+            ln -s $PROJECT_HOME ~/PROJECT
             ;;
         activewindow)
             rebind
