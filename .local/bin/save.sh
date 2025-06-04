@@ -33,7 +33,7 @@ case "$choice" in
             repo_path="${BASH_REMATCH[1]}"
             repo_name=$(basename "$repo_path")
             # 克隆到指定目录
-            clone_dir="$HOME/ORIGINAL/Desktop/Projects/$repo_name"
+            clone_dir="$HOME/Desktop/Projects/$repo_name"
             git clone "$url" "$clone_dir"
         else
             hyprctl notify -1 3000 "rgb(ff0000)" "不是有效的GitHub URL"

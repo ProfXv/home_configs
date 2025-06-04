@@ -5,7 +5,7 @@ shopt -s failglob
 
 old_id=$(hyprctl activewindow -j | jq .workspace.id)
 old_name=$(hyprctl activewindow -j | jq -r .workspace.name)
-cd ~/ORIGINAL/Desktop/Projects
+cd ~/Desktop/Projects
 
 echo "🌟 Hey there! Let's give your workspace a fresh new name! 🌟"
 [ -d "$old_name" ] && {
