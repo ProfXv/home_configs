@@ -29,6 +29,7 @@ rsync
 cronie
 at
 minidlna
+p7zip
 unzip
 
 jq
