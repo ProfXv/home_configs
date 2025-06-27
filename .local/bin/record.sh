@@ -18,8 +18,7 @@ action=$1
 area=$2
 case $action in
     "capture")
-        mkdir -p "`readlink Pictures`"
-        path=Pictures/`date +"%s.png"`
+        path=~/Pictures/`date +"%s.png"`
         case $area in
             "full")
                 grim - | tee $path | wl-copy
@@ -36,8 +35,7 @@ case $action in
         esac
         ;;
     "record")
-        mkdir -p "`readlink Videos`"
-        path=Videos/`date +"%s.mp4"`
+        path=~/Videos/`date +"%s.mp4"`
         pkill wf-recorder && hyprctl notify -1 1000 "rgb(ff1ea3)" "End Recording." || {
             hyprctl notify -1 1000 "rgb(ff1ea3)" "Start Recording."
             case $area in

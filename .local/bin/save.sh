@@ -24,7 +24,7 @@ case "$choice" in
         name=$(~/.asr/bin/iat_online_record_sample | sed 's/.$//')
         hyprctl notify -1 1000 "rgb(ff1ea3)" "名称已记录"
         # 保存到文件 (确保包含https://)
-        echo -e "${name}\t${url}" >> Sites.txt
+        echo -e "${name}\t${url}" >> ~/.sites/Sites.txt
         hyprctl notify -1 2000 "rgb(00ff00)" "链接已保存"
         ;;
     "克隆GitHub项目")
