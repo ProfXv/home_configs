@@ -11,7 +11,7 @@
 #define	BUFFER_SIZE	4096
 
 /* Upload User words */
-static int upload_userwords()
+static __attribute__((unused)) int upload_userwords()
 {
 	char*			userwords	=	NULL;
 	size_t			len			=	0;
