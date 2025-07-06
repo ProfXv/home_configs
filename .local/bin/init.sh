@@ -8,7 +8,7 @@ cd ~
 sudo sed -i 's/#zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
 sudo locale-gen
 
-sudo pacman -Sy git clash
+sudo pacman -Sy git github-cli clash
 
 clash=.config/clash/config.yaml
 if [ ! -f $clash ]; then curl https://update.glados-config.com/clash/290141/765f3fd/50821/glados-terminal.yaml > $clash; fi
