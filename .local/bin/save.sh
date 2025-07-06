@@ -6,7 +6,7 @@ sleep 0.5 && ydotool key -d 100 29:1 38:1 38:0 46:1 46:0 29:0 && sleep 0.5
 hyprctl dispatch focuscurrentorlast
 
 # 2. 获取链接
-url=$(xclip -o)
+url=$(wl-paste -p)
 
 # 3. 验证是否为有效URL
 if [[ ! "$url" =~ ^https?:// ]]; then

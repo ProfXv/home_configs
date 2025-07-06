@@ -4,7 +4,7 @@ info=`hyprctl activewindow -j`
 workspace=`echo $info | jq -r .workspace.name`
 class=`echo $info | jq -r .class`
 
-text=$(xclip -o)
+text=$(wl-paste -p)
 echo -e "$(date '+%F %T')\t$1\t$workspace\t$class\t\t$text" >> ~/.focus_log
 hyprctl notify -1 1000 "rgb(ff1ea3)" $1
 case $1 in
@@ -38,7 +38,7 @@ case $1 in
         ;;
     execute)
         script=/tmp/script
-        xclip -o > $script
+        wl-paste -p > $script
         chmod +x $script
         source ~/.python/bin/activate
         kitty --hold sh -c "if ! head -1 $script | grep -q '^#!'; then
