@@ -4,6 +4,7 @@ log_path=~/.daily/speak_count
 echo $(( $(cat $log_path) + 1 )) > $log_path
 hyprctl notify -1 1000 "rgb(ff1ea3)" "Just tell me what you wanna do!"
 source ~/.chat/chat.zsh
+MODEL_NAME=deepseek-chat
 
 # 定义文件名常量
 CONVERSATION_FILE=/tmp/operations/operations.jsonl
