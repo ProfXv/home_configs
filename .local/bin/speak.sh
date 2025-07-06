@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 log_path=~/.daily/speak_count
 echo $(( $(cat $log_path) + 1 )) > $log_path

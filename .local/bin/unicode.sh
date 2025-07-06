@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 unicode=`kitten unicode-input`
 windows=`hyprctl activeworkspace -j | jq .windows`

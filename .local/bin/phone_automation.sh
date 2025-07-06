@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 state_file=".phone_state"
 

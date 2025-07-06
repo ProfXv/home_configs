@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 operation=$(
     hyprctl binds -j | jq -r '.[] | (

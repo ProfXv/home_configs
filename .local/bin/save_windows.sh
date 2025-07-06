@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 hyprctl notify -1 1000 "rgb(ff1ea3)" "Saving the group."
 path=Documents/slides

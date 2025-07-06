@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 path=~
 workspace_id=$(hyprctl activeworkspace -j | jq .id)

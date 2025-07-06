@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if pkill wvkbd-mobintl; then m=m; f=1; else (wvkbd-mobintl -L 520 &); un=un; f=0; fi
 hyprctl keyword input:follow_mouse $f

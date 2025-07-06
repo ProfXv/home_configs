@@ -1,3 +1,3 @@
-#!/bin/bash
+#!/bin/sh
 
 less /tmp/info.json
