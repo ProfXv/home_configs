@@ -25,6 +25,7 @@ fcitx5-chinese-addons
 
 bluez
 bluez-utils
+vnstat
 rsync
 cronie
 at

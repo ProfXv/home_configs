@@ -50,6 +50,7 @@ chsh -s `which zsh`
 
 systemctl enable bluetooth
 systemctl enable iwd
+systemctl enable vnstat
 systemctl enable cronie
 systemctl enable atd
 systemctl enable power-profiles-daemon
