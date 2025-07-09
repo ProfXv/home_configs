@@ -1,6 +1,9 @@
 #!/bin/sh
 
-rebind() {
+refresh() {
+    hyprctl keyword decoration:rounding 10
+    hyprctl keyword decoration:inactive_opacity .5
+    hyprctl keyword decoration:blur:enabled true
     hyprctl keyword unbind ", pause"
     class=`echo $value | cut -d, -f 1`
     name=`echo $value | cut -d, -f 2-`
@@ -22,6 +25,12 @@ rebind() {
             ;;
         firefox-developer-edition)
             hyprctl keyword bind ", pause, sendshortcut, CTRL, w,"
+            ;;
+        CrystalBoard)
+            hyprctl keyword decoration:rounding 0
+            hyprctl keyword decoration:inactive_opacity 1
+            hyprctl keyword decoration:blur:enabled false
+            hyprctl keyword bind ", pause, sendshortcut, , escape,"
             ;;
         *)
             hyprctl keyword bind ", pause, sendshortcut, , escape,"
@@ -65,7 +74,7 @@ handle() {
             if $submap; then hyprctl dispatch submap reset; submap=false; fi
             addr=`echo $value | cut -d, -f 1`
             value=`echo $value | cut -d, -f 3-`
-            rebind
+            refresh
             visualize $addr &
             notify=1
             ;;
@@ -79,7 +88,7 @@ handle() {
             ln -s $PROJECT_HOME ~/PROJECT
             ;;
         activewindow)
-            rebind
+            refresh
             notify=0
             ;;
         submap)
