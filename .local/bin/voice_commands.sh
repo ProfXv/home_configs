@@ -14,7 +14,7 @@ content="Operation succeeded."
 
 mkdir -p /tmp/operations
 append_to_conversation -r system -c "候选操作:\n$operations"
-append_to_conversation -r user -c "`~/.asr/bin/iat_online_record_sample`"
+append_to_conversation -r user -c "`ASRCaption`"
 
 response=`send_request -t select_operation_number -t set_reminder`
 echo -E $response | jq

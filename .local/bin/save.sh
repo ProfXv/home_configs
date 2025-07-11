@@ -21,7 +21,7 @@ case "$choice" in
     "保存链接")
         # 获取链接名称
         hyprctl notify -1 1000 "rgb(ff1ea3)" "请说出链接名称"
-        name=$(~/.asr/bin/iat_online_record_sample | sed 's/.$//')
+        name=$(ASRCaption | sed 's/.$//')
         hyprctl notify -1 1000 "rgb(ff1ea3)" "名称已记录"
         # 保存到文件 (确保包含https://)
         echo -e "${name}\t${url}" >> ~/.sites/Sites.txt
