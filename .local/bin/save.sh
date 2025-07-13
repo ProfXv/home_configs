@@ -1,9 +1,7 @@
 #!/bin/bash
 
 # 1. 复制当前浏览器链接 (恢复最初版本)
-hyprctl dispatch focuscurrentorlast
 sleep 0.5 && ydotool key -d 100 29:1 38:1 38:0 46:1 46:0 29:0 && sleep 0.5
-hyprctl dispatch focuscurrentorlast
 
 # 2. 获取链接
 url=$(wl-paste -p)
