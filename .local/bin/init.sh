@@ -55,7 +55,7 @@ systemctl enable cronie
 systemctl enable atd
 systemctl enable power-profiles-daemon
 sudo systemctl enable minidina
-systemctl enable runsunloginclient
+sudo tailscale up
 
 # for device in D1:00:FF:11:15:5B 20:73:34:03:20:94; do
 #     echo "Processing $DEVICE"
