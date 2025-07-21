@@ -172,7 +172,7 @@
     },
     "custom/crypto_assets": {
         "format": "󰠓: {}",
-        "exec": "source .python/bin/activate; cd Desktop/Projects/cryptos; python get_asset.py",
+        "exec": "source .python/bin/activate; cd Desktop/Projects/QUANT; python get_asset.py",
         "interval": 60
     }
 }
