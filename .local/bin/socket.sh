@@ -84,8 +84,8 @@ handle() {
             ;;
         workspacev2|renameworkspace)
             source path.sh
-            rm ~/PROJECT
-            ln -s $PROJECT_HOME ~/PROJECT
+            rm ~/?
+            ln -s $PROJECT_HOME ~/?
             ;;
         activewindow)
             refresh
