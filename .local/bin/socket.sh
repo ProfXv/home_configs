@@ -30,7 +30,7 @@ refresh() {
         firefox-developer-edition)
             hyprctl keyword bind ", pause, sendshortcut, CTRL, w,"
             ;;
-        CrystalBoard)
+        crystal-board)
             hyprctl keyword decoration:rounding 0
             hyprctl keyword decoration:inactive_opacity 1
             hyprctl keyword decoration:blur:enabled false
