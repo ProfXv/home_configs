@@ -1,6 +1,7 @@
 #!/bin/sh
 
 refresh() {
+    hyprctl keyword input:follow_mouse 1
     hyprctl keyword decoration:rounding 10
     hyprctl keyword decoration:inactive_opacity .5
     hyprctl keyword decoration:blur:enabled true
@@ -22,6 +23,9 @@ refresh() {
                     hyprctl keyword bind ", pause, sendshortcut, CTRL, d,"
                     ;;
             esac
+            ;;
+        )
+            hyprctl keyword input:follow_mouse 0
             ;;
         firefox-developer-edition)
             hyprctl keyword bind ", pause, sendshortcut, CTRL, w,"
