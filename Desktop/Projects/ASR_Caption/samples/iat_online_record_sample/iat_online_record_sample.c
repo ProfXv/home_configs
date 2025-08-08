@@ -6,7 +6,7 @@
 #include "msp_cmn.h"
 #include "msp_errors.h"
 #include "speech_recognizer.h"
-#include "../../c_callbacks.h" // Include the new C callback header
+#include "../../gui.h" // Include the new GTK UI header
 
 // This C file is now part of a C/C++ project.
 // We need to ensure C linkage for the functions it exports.
@@ -21,16 +21,16 @@ static void demo_mic(const char* session_begin_params, void* user_data)
 
 	struct speech_rec iat;
 	
-	// The notifier now points to our C-wrapper functions.
-	// It also carries the `user_data` pointer, which points to our C++ Controller instance.
-	struct speech_rec_notifier recnotifier = {
-		c_on_result,
-		c_on_speech_begin,
-		c_on_speech_end,
+	// The notifier now points to our GTK-C-wrapper functions.
+	// It also carries the `user_data` pointer, which points to our GtkUi struct instance.
+	struct speech_rec_notifier recNotifier = {
+		on_result_gtk,
+		on_speech_begin_gtk,
+		on_speech_end_gtk,
 		user_data
 	};
 
-	errcode = sr_init(&iat, session_begin_params, SR_MIC, &recnotifier);
+	errcode = sr_init(&iat, session_begin_params, SR_MIC, &recNotifier);
 	if (errcode) {
 		fprintf(stderr, "speech recognizer init failed\n");
 		return;
@@ -57,12 +57,13 @@ static void demo_mic(const char* session_begin_params, void* user_data)
 }
 
 // The original `main` function is renamed to `run_asr_process`
-// and will be called from our C++ `main.cpp` in a separate thread.
-void run_asr_process(void* controller)
+// and will be called from our C `main.c` in a separate thread.
+void run_asr_process(void* user_data)
 {
 	int ret = MSP_SUCCESS;
-	/* login params, please do keep the appid correct */
-	const char* login_params = "appid = 3cda3e11, work_dir = .";
+	
+	char login_params[512];
+	snprintf(login_params, sizeof(login_params), "appid = 3cda3e11, work_dir = %s/.local/share/ASRCaption", getenv("HOME"));
 
 	/*
 	* See "iFlytek MSC Reference Manual"
@@ -81,10 +82,10 @@ void run_asr_process(void* controller)
 
 	fprintf(stderr, "ASR thread started. Demo recognizing the speech from microphone\n");
 
-	// Pass the controller pointer to the demo function
-	demo_mic(session_begin_params, controller);
+	// Pass the ui pointer to the demo function
+	demo_mic(session_begin_params, user_data);
 
-	MSPLogout(); // Logout...
+	MSPLogout(); // Logout... 
 }
 
 #ifdef __cplusplus
