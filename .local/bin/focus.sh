@@ -32,9 +32,7 @@ case $1 in
         fi
         ;;
     generate)
-        kitty --listen-on unix:@$$ &
-        sleep 1
-        kitten @ --to unix:@$$ send-text "$text"\\n
+        kitty gemini --allowed-mcp-server-names -m gemini-2.5-flash -i "$text"
         ;;
     execute)
         script=/tmp/script
