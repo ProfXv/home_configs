@@ -1,7 +1,8 @@
 // -*- mode: jsonc -*-
-{
+[
+    {
     // "layer": "top", // Waybar at top layer
-    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    "position": "top",
     "height": 30, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
@@ -17,7 +18,6 @@
     "modules-right": [
         "mpd",
         "idle_inhibitor",
-        "custom/crypto_assets",
         "pulseaudio",
         "network",
         "power-profiles-daemon",
@@ -30,7 +30,6 @@
         "battery",
         "battery#bat2",
         "clock",
-        "custom/count_words",
         "tray"
     ],
     "hyprland/workspaces": {
@@ -60,7 +59,7 @@
             "kitty ~": " ",
             "kitty Yazi(.*)": "󰙅 $1",
             "kitty euporie-notebook": "󰪚  ",
-            "com.wolfram.Wolfram.14.1 (.*) - Wolfram": "󰪚 $1",
+            "com.wolfram.Wolfram.14.1 (.*) - Wolfram": "󰪚 $1"
         },
         "separate-outputs": true
     },
@@ -124,15 +123,15 @@
         "bat": "BAT2"
     },
     "power-profiles-daemon": {
-      "format": "{icon}",
-      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-      "tooltip": true,
-      "format-icons": {
-        "default": "",
-        "performance": "",
-        "balanced": "",
-        "power-saver": ""
-      }
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+        "tooltip": true,
+        "format-icons": {
+            "default": "",
+            "performance": "",
+            "balanced": "",
+            "power-saver": ""
+        }
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
@@ -162,17 +161,65 @@
         },
         "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
         "on-click-right": "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
-    },
-    "custom/count_words": {
-        "format": "🗣️: {}",
-        "exec": "cat .daily/speak_count",
-        "interval": 1,
-        "on-click": "speak.sh simple",
-        "on-click-right": "voice_commands.sh"
-    },
-    "custom/crypto_assets": {
-        "format": "󰠓: {}",
-        "exec": "source .python/bin/activate; cd Desktop/Projects/QUANT; python get_asset.py",
-        "interval": 60
     }
-}
+    },
+    {
+        "position": "bottom",
+        "height": 20,
+        "spacing": 10,
+        "modules-left": [
+            "custom/count_words",
+            "custom/crypto_assets"
+        ],
+        "modules-center": [
+            "custom/body_temperature",
+            "custom/heart_rate",
+            "custom/blood_oxygen",
+            "custom/blood_pressure",
+            "custom/steps",
+            "custom/battery_level"
+        ],
+        "custom/crypto_assets": {
+            "format": "󰠓: {}",
+            "exec": "source .python/bin/activate; cd Desktop/Projects/QUANT; python get_asset.py",
+            "interval": 60
+        },
+        "custom/count_words": {
+            "format": "🗣️: {}",
+            "exec": "cat .daily/speak_count",
+            "interval": 1,
+            "on-click": "speak.sh simple",
+            "on-click-right": "voice_commands.sh"
+        },
+        "custom/body_temperature": {
+            "format": "🌡️ {}°C",
+            "exec": "cat /home/paradoxist/.carbon_vitals/body_temperature",
+            "signal": 1
+        },
+        "custom/heart_rate": {
+            "format": "❤️ {} bpm",
+            "exec": "cat /home/paradoxist/.carbon_vitals/heart_rate",
+            "signal": 1
+        },
+        "custom/blood_oxygen": {
+            "format": "💨 {}%",
+            "exec": "cat /home/paradoxist/.carbon_vitals/blood_oxygen",
+            "signal": 1
+        },
+        "custom/blood_pressure": {
+            "format": "🩸 {} mmHg",
+            "exec": "echo \"$(cat /home/paradoxist/.carbon_vitals/systolic_pressure)/$(cat /home/paradoxist/.carbon_vitals/diastolic_pressure)\"",
+            "signal": 1
+        },
+        "custom/steps": {
+            "format": "👣 {}",
+            "exec": "cat /home/paradoxist/.carbon_vitals/steps",
+            "signal": 1
+        },
+        "custom/battery_level": {
+            "format": "🔋 {}",
+            "exec": "cat /home/paradoxist/.carbon_vitals/battery_level",
+            "signal": 1
+        }
+    }
+]

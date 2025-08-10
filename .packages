@@ -24,6 +24,7 @@ fcitx5-chinese-addons
 
 bluez
 bluez-utils
+power-profiles-daemon
 vnstat
 rsync
 cronie
