@@ -33,6 +33,9 @@ minidlna
 p7zip
 unzip
 
+pass
+pass-otp
+
 jq
 
 fzf
@@ -46,7 +49,6 @@ tailscale
 scrcpy
 wayvnc
 freerdp
-remmina
 wine
 winetricks
 
