@@ -179,6 +179,14 @@
             "custom/steps",
             "custom/battery_level"
         ],
+        "modules-right": [
+            "custom/solar_status"
+        ],
+        "custom/solar_status": {
+            "format": "{}",
+            "exec": "cat .solar_status",
+            "interval": 1
+        },
         "custom/crypto_assets": {
             "format": "󰠓: {}",
             "exec": "source .python/bin/activate; cd Desktop/Projects/QUANT; python get_asset.py",
