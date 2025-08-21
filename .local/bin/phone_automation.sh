@@ -23,18 +23,18 @@ sync_directory() {
 }
 
 on_connect() {
-    echo "手机已连接"
-    hyprctl dispatch exec '[workspace name:🖧 silent] scrcpy'
+    echo "安卓系统机器已连接"
+    hyprctl dispatch exec '[workspace name:󰄜 silent] scrcpy'
     sync_directory /sdcard/Sounds/ ~/Music/Sounds wav
     sync_directory /sdcard/Pictures/Screenshots ~/Pictures/Screenshots jpg png
     sync_directory /sdcard/DCIM/Camera ~/Pictures/Camera gif heic jpeg jpg pic png webp
     sync_directory /sdcard/DCIM/Camera ~/Videos/Camera mov mp4
-    adb push ~/.daily/* storage/sdcard0/Download
+    adb push ~/.daily/* /sdcard/Download
     for i in {1..9}; do adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/image_today_$i.png; done
 }
 
 off_connect() {
-    echo "手机已断开"
+    echo "安卓系统机器已断开"
 }
 
 # 初始状态
