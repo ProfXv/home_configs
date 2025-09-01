@@ -18,13 +18,13 @@ for addr in $(hyprctl activewindow -j | jq -r '.grouped[]'); do
     pid=$(hyprctl clients -j | jq -r '.[] | select(.address == "'$addr'") | .pid')
     class=$(hyprctl clients -j | jq -r '.[] | select(.address == "'$addr'") | .class')
     hyprctl dispatch focuswindow address:$addr
-    if [[ "$class" == "firefox" ]]; then
+    if [[ "$class" == "nyxt" ]]; then
         ydotool key 29:1 38:1 38:0 29:0  # Ctrl+L
         sleep 0.5
         ydotool key 29:1 46:1 46:0 29:0  # Ctrl+C
         sleep 0.5
         url=$(wl-paste)
-        echo "firefox --new-window $url" >> "$output_file"
+        echo "nyxt -S $url" >> "$output_file"
     else
         process_cmd=$(ps -p $pid -o args=)
         echo "$process_cmd" >> "$output_file"

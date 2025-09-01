@@ -27,7 +27,7 @@ refresh() {
         )
             hyprctl keyword input:follow_mouse 0
             ;;
-        firefox-developer-edition)
+        nyxt)
             hyprctl keyword bind ", pause, sendshortcut, CTRL, w,"
             ;;
         crystal-board)
