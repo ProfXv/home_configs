@@ -1,0 +1,4 @@
+PATH=/home/paradoxist/.local/bin:/usr/bin:$PATH
+
+0 0 * * * echo 0 > ~/.daily/speak_count
+0 16 * * * echo > /home/paradoxist/.gemini_usage.tsv
