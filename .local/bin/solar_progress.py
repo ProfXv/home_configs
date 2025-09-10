@@ -80,5 +80,6 @@ if __name__ == "__main__":
 
         with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
             f.write(output)
+        os.system("pkill -SIGRTMIN+2 waybar")
 
         time.sleep(1 - (datetime.now().microsecond / 1_000_000.0))

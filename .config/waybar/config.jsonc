@@ -185,7 +185,7 @@
         "custom/solar_status": {
             "format": "{}",
             "exec": "cat .solar_status",
-            "interval": 1
+            "signal": 2
         },
         "custom/crypto_assets": {
             "format": "󰠓: {}",
