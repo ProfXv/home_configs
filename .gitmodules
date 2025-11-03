@@ -1,3 +1,3 @@
-[submodule ".chat"]
-	path = .chat
+[submodule "modules/local/chat"]
+	path = modules/local/chat
 	url = git@github.com:ProfXv/ShellSage.git
