@@ -9,7 +9,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-partlabel/lvm";
+  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-partlabel/charge";
 
   services.getty.autologinUser = "paradoxist";
 
@@ -24,7 +24,7 @@
     enable = true;
     type = "fcitx5";
     fcitx5.addons = with pkgs; [
-      fcitx5-chinese-addons
+      qt6Packages.fcitx5-chinese-addons
     ];
   };
 
@@ -100,10 +100,10 @@
     mathematica
     gnumake gcc
     (python3.withPackages (ps: with ps; [
-      astral dateutils bleak binance-connector selenium pip
+      astral dateutils bleak binance-connector selenium beautifulsoup4 euporie pip
     ]))
     nodejs
-    gemini-cli
+    claude-code codex gemini-cli qwen-code
     vial qq wechat
     (pass.withExtensions (ext: [ ext.pass-otp ]))
   ];
@@ -113,7 +113,7 @@
   };
 
   fonts.packages = with pkgs;[
-    noto-fonts-cjk-sans noto-fonts-emoji dejavu_fonts nerd-fonts.noto font-awesome
+    noto-fonts-cjk-sans noto-fonts-color-emoji dejavu_fonts nerd-fonts.noto font-awesome
   ];
 
   hardware.bluetooth.enable = true;
@@ -141,5 +141,5 @@
     ACTION=="remove", ATTRS{idVendor}=="339b", ATTRS{idProduct}=="107d", RUN+="${pkgs.coreutils}/bin/echo 0 > /home/paradoxist/.phone_state"
   '';
 
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 }

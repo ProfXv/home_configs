@@ -3,7 +3,7 @@
 {
   home.username = "paradoxist";
   home.homeDirectory = "/home/paradoxist";
-  home.stateVersion = "25.05";
+  home.stateVersion = "25.11";
 
   nixpkgs.config.allowUnfree = true;
 
@@ -12,8 +12,8 @@
 
   programs.git = {
     enable = true;
-    userName = "ProfXv";
-    userEmail = "849460963@qq.com";
+    settings.user.name = "ProfXv";
+    settings.user.email = "849460963@qq.com";
   };
 
   programs.zsh = {
