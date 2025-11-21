@@ -84,7 +84,7 @@ visualize() {
 
 IFS=">"
 handle() {
-    echo -e `date +'%F %T'`\\t"$key"\\t"$value" >> ~/.socket_log
+    sqlite3 ~/.log.db "INSERT INTO socket VALUES (NULL, datetime('now', 'localtime'), '$key', '$value')"
     case "$key" in
         openwindow)
             if $submap; then hyprctl dispatch submap reset; submap=false; fi

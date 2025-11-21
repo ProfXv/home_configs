@@ -103,6 +103,7 @@
       astral dateutils bleak binance-connector selenium beautifulsoup4 euporie pip
     ]))
     nodejs
+    sqlite
     claude-code codex gemini-cli qwen-code
     vial qq wechat
     (pass.withExtensions (ext: [ ext.pass-otp ]))

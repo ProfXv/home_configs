@@ -5,7 +5,7 @@ workspace=`echo $info | jq -r .workspace.name`
 class=`echo $info | jq -r .class`
 
 text=$(wl-paste -p)
-echo -e "$(date '+%F %T')\t$1\t$workspace\t$class\t\t$text" >> ~/.focus_log
+sqlite3 ~/.log.db "INSERT INTO focus VALUES (NULL, datetime('now', 'localtime'), '$1', '$workspace', '$class', '$text')"
 hyprctl notify -1 1000 "rgb(ff1ea3)" $1
 case $1 in
     paste)
