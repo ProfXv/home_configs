@@ -50,26 +50,6 @@
       nix-direnv.enable = true;
   };
 
-  systemd.user = {
-    timers = {
-      reset-speak-count = {
-        Timer = {
-          OnCalendar = "daily";
-          AccuracySec = "1us";
-        };
-        Install.WantedBy = [ "timers.target" ];
-      };
-      clear-gemini-usage = {
-        Timer.OnCalendar = "16:00:00";
-        Install.WantedBy = [ "timers.target" ];
-      };
-    };
-    services = {
-      reset-speak-count.Service.ExecStart = "/bin/sh -c 'echo 0 > ~/.daily/speak_count'";
-      clear-gemini-usage.Service.ExecStart = "/bin/sh -c 'echo > ~/.gemini_usage.tsv'";
-    };
-  };
-
   home.file.".config/hypr".source = ./modules/programs/hypr;
   home.file.".config/waybar".source = ./modules/programs/waybar;
   home.file.".config/kitty".source = ./modules/programs/kitty;

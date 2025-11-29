@@ -29,8 +29,6 @@ on_connect() {
     sync_directory /sdcard/Pictures/Screenshots ~/Pictures/Screenshots jpg png
     sync_directory /sdcard/DCIM/Camera ~/Pictures/Camera gif heic jpeg jpg pic png webp
     sync_directory /sdcard/DCIM/Camera ~/Videos/Camera mov mp4
-    adb push ~/.daily/* /sdcard/Download
-    for i in {1..9}; do adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/image_today_$i.png; done
 }
 
 off_connect() {

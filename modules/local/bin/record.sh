@@ -34,7 +34,7 @@ case $action in
                 ;;
         esac
         ln -sf $path /tmp/snapshot_picture
-        convert $path ~/.gemini/snapshot_picture.jpg
+        # convert $path ~/.gemini/snapshot_picture.jpg
         ;;
     "record")
         path=~/Videos/`date +"%s.mp4"`

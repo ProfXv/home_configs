@@ -19,10 +19,8 @@ for addr in $(hyprctl activewindow -j | jq -r '.grouped[]'); do
     class=$(hyprctl clients -j | jq -r '.[] | select(.address == "'$addr'") | .class')
     hyprctl dispatch focuswindow address:$addr
     if [[ "$class" == "nyxt" ]]; then
-        ydotool key 29:1 38:1 38:0 29:0  # Ctrl+L
-        sleep 0.5
-        ydotool key 29:1 46:1 46:0 29:0  # Ctrl+C
-        sleep 0.5
+        hyprctl dispatch sendshortcut CTRL, l,
+        hyprctl dispatch sendshortcut CTRL, c,
         url=$(wl-paste)
         echo "nyxt -S $url" >> "$output_file"
     else

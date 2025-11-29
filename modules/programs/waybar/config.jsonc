@@ -58,7 +58,7 @@
             "nyxt Nyxt - (.*)": "  $1",
             "kitty ~": " ",
             "kitty Yazi(.*)": "󰙅 $1",
-            "kitty euporie-notebook": "󰪚  ",
+            "kitty euporie-notebook": "  ",
             "com.wolfram.Wolfram.14.1 (.*) - Wolfram": "󰪚 $1"
         },
         "separate-outputs": true
@@ -159,8 +159,8 @@
             "car": "",
             "default": ["", "", ""]
         },
-        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-        "on-click-right": "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
     }
     },
     {
@@ -194,9 +194,9 @@
         },
         "custom/count_words": {
             "format": "🗣️: {}",
-            "exec": "cat .daily/speak_count",
+            "exec": "sqlite3 .log.db \"SELECT SUM(length(content)) FROM speech WHERE date(time_start) = date('now', 'localtime');\"",
             "interval": 1,
-            "on-click": "ASRCaption simple",
+            "on-click": "speech.sh simple",
             "on-click-right": "voice_commands.sh"
         },
         "custom/body_temperature": {

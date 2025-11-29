@@ -32,7 +32,7 @@ case $1 in
         fi
         ;;
     generate)
-        kitty gemini --allowed-mcp-server-names -m gemini-2.5-flash -i "$text"
+        kitty qwen -i "$text"
         ;;
     execute)
         script=/tmp/script

@@ -99,11 +99,13 @@
     docker-compose
     mathematica
     gnumake gcc
+    uv
     (python3.withPackages (ps: with ps; [
       astral dateutils bleak binance-connector selenium beautifulsoup4 euporie pip
     ]))
     nodejs
     sqlite
+    bubblewrap
     claude-code codex gemini-cli qwen-code
     vial qq wechat
     (pass.withExtensions (ext: [ ext.pass-otp ]))
