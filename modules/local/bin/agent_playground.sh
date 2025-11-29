@@ -46,8 +46,6 @@ BWOPTS="--unshare-all --share-net --ro-bind / /"
 BWOPTS="$BWOPTS --dev /dev"
 BWOPTS="$BWOPTS --proc /proc"
 BWOPTS="$BWOPTS --tmpfs /tmp"
-BWOPTS="$BWOPTS --bind \"$DIR\" \"$DIR\""
-
 case "$TYPE" in
     terminal)
         BWOPTS="$BWOPTS --bind /home/paradoxist/.zsh_history /home/paradoxist/.zsh_history"
@@ -56,10 +54,13 @@ case "$TYPE" in
         BWOPTS="$BWOPTS --bind /home/paradoxist/Documents/conversations /home/paradoxist/Documents/conversations"
         ;;
     claude)
-        BWOPTS="$BWOPTS --bind /home/paradoxist/.claude /home/paradoxist/.claude"
-        BWOPTS="$BWOPTS --bind /home/paradoxist/.claude.json /home/paradoxist/.claude.json"
-        BWOPTS="$BWOPTS --bind /home/paradoxist/.claude.json.backup /home/paradoxist/.claude.json.backup"
+        BWOPTS="$BWOPTS --bind /home/paradoxist /home/paradoxist"
+        for f in /home/paradoxist/* /home/paradoxist/.*; do
+            case `basename "$f"` in .claude*|.npm) continue ;; esac
+            [ ! -L "$f" ] && BWOPTS="$BWOPTS --ro-bind $f $f"
+        done
         ;;
 esac
+BWOPTS="$BWOPTS --bind \"$DIR\" \"$DIR\""
 
 eval "exec bwrap $BWOPTS --chdir \"$DIR\" $CMD"
