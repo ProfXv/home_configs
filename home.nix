@@ -36,7 +36,9 @@
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
       source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
-      source /home/paradoxist/.config/home-manager/modules/local/chat/chat.zsh
+      if [ $TERM = xterm-kitty ]; then
+        source /home/paradoxist/.config/home-manager/modules/local/chat/chat.zsh
+      fi
     '';
   };
 

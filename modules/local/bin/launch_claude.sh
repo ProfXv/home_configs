@@ -1,8 +1,11 @@
 #!/bin/sh
 
-SKIP=--dangerously-skip-permissions
-if [ "$PROJECT_HOME" = "$HOME" ]; then
-    claude -r || claude
-else
-    agent_playground.sh -C -c "claude -r $SKIP || claude $SKIP"
-fi
+AUTO="--permission-mode acceptEdits"
+case "$PROJECT_HOME" in
+    $HOME/Desktop/Projects/*)
+        claude -r $AUTO || claude $AUTO
+        ;;
+    *)
+        claude -r || claude
+        ;;
+esac

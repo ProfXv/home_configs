@@ -6,6 +6,7 @@
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelModules = [ "vkms" ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -79,7 +80,7 @@
     home-manager
     qt5.qtwayland qt6.qtwayland
     gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
-    wofi firefox-devedition mpv dunst
+    wofi firefox-devedition mpv libnotify dunst
     wl-clipboard cliphist ydotool wtype wev grim slurp wf-recorder socat
     waybar hyprpaper hyprlock hypridle
     inotify-tools smartmontools

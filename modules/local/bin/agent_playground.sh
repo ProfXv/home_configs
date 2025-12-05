@@ -10,10 +10,6 @@ while [ $# -gt 0 ]; do
             TYPE="termate"
             shift
             ;;
-        -C|--claude)
-            TYPE="claude"
-            shift
-            ;;
         -c|--command)
             CMD="$2"
             shift 2
@@ -52,13 +48,6 @@ case "$TYPE" in
         ;;
     termate)
         BWOPTS="$BWOPTS --bind /home/paradoxist/Documents/conversations /home/paradoxist/Documents/conversations"
-        ;;
-    claude)
-        BWOPTS="$BWOPTS --bind /home/paradoxist /home/paradoxist"
-        for f in /home/paradoxist/* /home/paradoxist/.*; do
-            case `basename "$f"` in .claude*|.npm) continue ;; esac
-            [ ! -L "$f" ] && BWOPTS="$BWOPTS --ro-bind $f $f"
-        done
         ;;
 esac
 BWOPTS="$BWOPTS --bind \"$DIR\" \"$DIR\""
