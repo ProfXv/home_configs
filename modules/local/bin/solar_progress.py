@@ -8,8 +8,8 @@ from astral import LocationInfo
 from astral.sun import sun
 
 TIMEZONE = "Asia/Shanghai"
-LATITUDE = 28.47
-LONGITUDE = 119.92
+LATITUDE = 22.817
+LONGITUDE = 108.366
 OUTPUT_FILE = os.path.expanduser("~/.solar_status")
 
 ICON_NOW = "󱩷"

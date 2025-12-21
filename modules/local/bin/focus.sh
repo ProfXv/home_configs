@@ -32,7 +32,7 @@ case $1 in
         fi
         ;;
     generate)
-        kitty qwen -i "$text"
+        kitty claude "$text"
         ;;
     execute)
         script=/tmp/script

@@ -1,5 +1,5 @@
 #!/bin/sh
 
-sudo cp ~/.config/home-manager/configuration.nix /etc/nixos/configuration.nix
-sudo chown root:root /etc/nixos/configuration.nix
-sudo nixos-rebuild switch
+cp /home/paradoxist/.config/home-manager/configuration.nix /etc/nixos/configuration.nix
+chown root:root /etc/nixos/configuration.nix
+nixos-rebuild switch

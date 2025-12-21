@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 set -euo pipefail
 
@@ -75,8 +75,8 @@ swapon "/dev/${LVM_VG_NAME}/air"
 ORIGINAL_IP=`cat ip.txt`
 ssh-keygen -t ed25519
 ssh-copy-id paradoxist@$ORIGINAL_IP
-scp paradoxist@$ORIGINAL_IP:Downloads/Wolfram_14.2.1_LIN_Bndl.sh .
-nix-store --add-fixed sha256 Wolfram_14.2.1_LIN_Bndl.sh
+scp paradoxist@$ORIGINAL_IP:Downloads/Wolfram_14.3.0_LIN_Bndl.sh .
+nix-store --add-fixed sha256 Wolfram_14.3.0_LIN_Bndl.sh
 scp paradoxist@$ORIGINAL_IP:Downloads/WeChatLinux_x86_64.AppImage .
 nix-store --add-fixed sha256 WeChatLinux_x86_64.AppImage
 nixos-generate-config --root /mnt

@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 # 检查数据库是否已存在
 cd ~
@@ -17,10 +17,41 @@ fi
 echo "正在创建日志数据库 .log.db..."
 
 # 创建数据库并建立表结构
-sqlite3 .log.db "CREATE TABLE socket (id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT NOT NULL, key TEXT NOT NULL, value TEXT NOT NULL);"
-sqlite3 .log.db "CREATE TABLE focus (id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT NOT NULL, type TEXT NOT NULL, workspace TEXT NOT NULL, class TEXT NOT NULL, text TEXT NOT NULL);"
+sqlite3 .log.db << 'EOF'
+CREATE TABLE IF NOT EXISTS socket (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time TEXT NOT NULL,
+    key TEXT NOT NULL,
+    value TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS focus (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time TEXT NOT NULL,
+    type TEXT NOT NULL,
+    workspace TEXT NOT NULL,
+    class TEXT NOT NULL,
+    text TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS speech (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time_start TEXT NOT NULL,
+    time_end TEXT NOT NULL,
+    speaker INTEGER,
+    content TEXT
+);
+
+CREATE TABLE IF NOT EXISTS intention (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    start_speech_id INTEGER NOT NULL,
+    end_speech_id INTEGER NOT NULL
+);
+EOF
 
 echo "数据库初始化完成！"
 echo "已创建表："
 echo "- socket (记录桌面界面操作事件)"
 echo "- focus (记录划取文字操作和划取的文字内容)"
+echo "- speech (记录局部语音片段)"
+echo "- intention (记录整体意图会话)"

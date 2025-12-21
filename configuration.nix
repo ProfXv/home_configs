@@ -7,10 +7,16 @@
 
   boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.kernelModules = [ "vkms" ];
+  boot.kernelParams = [ "iwlwifi.11n_disable=1" ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-partlabel/charge";
+  boot.initrd.luks.devices."cryptroot" = {
+    device = "/dev/disk/by-partlabel/charge";
+    keyFile = "/dev/disk/by-partlabel/primer";
+    keyFileSize = 4096;
+    fallbackToPassword = true;
+  };
 
   services.getty.autologinUser = "paradoxist";
 
@@ -34,7 +40,7 @@
   users.users.paradoxist = {
     isNormalUser = true;
     group = "paradoxist";
-    extraGroups = [ "wheel" "input" "uinput" "video" "docker"];
+    extraGroups = [ "wheel" "input" "uinput" "video" "docker" "disk" "dialout" "tty" ];
     shell = pkgs.zsh;
     initialPassword = "password";
   };
@@ -102,19 +108,26 @@
     gnumake gcc
     uv
     (python3.withPackages (ps: with ps; [
-      astral dateutils bleak binance-connector selenium beautifulsoup4 euporie pip
+      astral geopy timezonefinder dateutils bleak binance-connector selenium beautifulsoup4 euporie pip
     ]))
     nodejs
     sqlite
     bubblewrap
-    claude-code codex gemini-cli qwen-code
+    codex gemini-cli qwen-code
     vial qq wechat
     (pass.withExtensions (ext: [ ext.pass-otp ]))
+    hyprpolkitagent
   ];
 
   environment.sessionVariables = {
       LIBVA_DRIVERS_PATH = "${pkgs.intel-media-driver}/lib/dri";
+      PATH = "${pkgs.hyprpolkitagent}/libexec";
   };
+
+  systemd.tmpfiles.rules = [
+    "d /run/polkit-1/rules.d 0755 root root -"
+    "d /usr/local/share/polkit-1/rules.d 0755 root root -"
+  ];
 
   fonts.packages = with pkgs;[
     noto-fonts-cjk-sans noto-fonts-color-emoji dejavu_fonts nerd-fonts.noto font-awesome
