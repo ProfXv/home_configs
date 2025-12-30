@@ -18,30 +18,31 @@ key="escape"
 
 case "$class" in
     kitty)
-        hyprctl notify 1 3000 "rgb(ff1ea3)" "kitty"
         [ -n "$pid" ] && [ "$pid" -gt 0 ] && {
-            proc_name=$(pstree -T "$pid" 2>/dev/null | grep -o '[^-]*$')
-            proc_tree=$(pstree -T "$pid" 2>/dev/null | tr '\n' ' ' | head -c 200)
+            proc_tree=$(pstree -T "$pid" 2>/dev/null || pstree "$pid" 2>/dev/null)
+            [ -z "$proc_tree" ] && proc_tree="(no tree)"
+            proc_name=$(echo "$proc_tree" | grep -o '[^-]*$')
+            [ -z "$proc_name" ] && proc_name="(unknown)"
+            proc_tree_short=$(echo "$proc_tree" | tr '\n' ' ' | head -c 200)
+
             case "$proc_name" in
                 vi*|vim*|nvim*)
                     modifier=""
                     key="escape"
                     hyprctl notify 1 3000 "rgb(ff1ea3)" "vim/nvim"
-                    log "window: $class, pid: $pid, tree: $proc_tree, action: sendshortcut $modifier, $key"
                     ;;
                 yazi*|btop*|man*|more*|less*|git\ diff*)
                     modifier=""
                     key="q"
                     hyprctl notify 1 3000 "rgb(ff1ea3)" "yazi/btop/man"
-                    log "window: $class, pid: $pid, tree: $proc_tree, action: sendshortcut $modifier, $key"
                     ;;
                 *)
                     modifier="CTRL"
                     key="d"
                     hyprctl notify 1 3000 "rgb(ff1ea3)" "kitty default"
-                    log "window: $class, pid: $pid, tree: $proc_tree, action: sendshortcut $modifier, $key"
                     ;;
             esac
+            log "window: $class, pid: $pid, tree: $proc_tree_short, action: sendshortcut $modifier, $key"
         }
         ;;
     nyxt)
