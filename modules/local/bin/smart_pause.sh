@@ -75,9 +75,4 @@ case "$class" in
         ;;
 esac
 
-# Send the shortcut
-if [ -n "$modifier" ]; then
-    hyprctl dispatch sendshortcut $modifier, $key,
-else
-    hyprctl dispatch sendshortcut , $key,
-fi
+hyprctl dispatch sendshortcut $modifier, $key,
