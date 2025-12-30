@@ -201,32 +201,32 @@
         },
         "custom/body_temperature": {
             "format": "🌡️ {}°C",
-            "exec": "cat /home/paradoxist/.carbon_vitals/body_temperature",
+            "exec": "sqlite3 ~/.log.db 'SELECT body_temperature FROM vitals WHERE body_temperature IS NOT NULL ORDER BY time DESC LIMIT 1;'",
             "signal": 1
         },
         "custom/heart_rate": {
             "format": "❤️ {} bpm",
-            "exec": "cat /home/paradoxist/.carbon_vitals/heart_rate",
+            "exec": "sqlite3 ~/.log.db 'SELECT heart_rate FROM vitals WHERE heart_rate IS NOT NULL ORDER BY time DESC LIMIT 1;'",
             "signal": 1
         },
         "custom/blood_oxygen": {
             "format": "💨 {}%",
-            "exec": "cat /home/paradoxist/.carbon_vitals/blood_oxygen",
+            "exec": "sqlite3 ~/.log.db 'SELECT blood_oxygen FROM vitals WHERE blood_oxygen IS NOT NULL ORDER BY time DESC LIMIT 1;'",
             "signal": 1
         },
         "custom/blood_pressure": {
             "format": "🩸 {} mmHg",
-            "exec": "echo \"$(cat /home/paradoxist/.carbon_vitals/systolic_pressure)/$(cat /home/paradoxist/.carbon_vitals/diastolic_pressure)\"",
+            "exec": "sqlite3 -separator '/' ~/.log.db 'SELECT systolic_pressure, diastolic_pressure FROM vitals WHERE systolic_pressure IS NOT NULL AND diastolic_pressure IS NOT NULL ORDER BY time DESC LIMIT 1;'",
             "signal": 1
         },
         "custom/steps": {
             "format": "👣 {}",
-            "exec": "cat /home/paradoxist/.carbon_vitals/steps",
+            "exec": "sqlite3 ~/.log.db 'SELECT steps FROM vitals WHERE steps IS NOT NULL ORDER BY time DESC LIMIT 1;'",
             "signal": 1
         },
         "custom/battery_level": {
             "format": "🔋 {}",
-            "exec": "cat /home/paradoxist/.carbon_vitals/battery_level",
+            "exec": "sqlite3 ~/.log.db 'SELECT battery_level FROM vitals WHERE battery_level IS NOT NULL ORDER BY time DESC LIMIT 1;'",
             "signal": 1
         }
     }

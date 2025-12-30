@@ -28,7 +28,7 @@
       vi = "vim";
     };
     envExtra = ''
-      [ -z "$PS1" ] && [ -f .envrc ] && eval "$(${pkgs.direnv}/bin/direnv export zsh 2>/dev/null)"
+      [ -z "$PS1" ] && [ -f .envrc ] && eval "$(${pkgs.direnv}/bin/direnv export zsh)"
     '';
     loginExtra = ''
       if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then

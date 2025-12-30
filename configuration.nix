@@ -145,6 +145,18 @@
     alsa.enable = true;
     pulse.enable = true;
     jack.enable = true;
+    extraConfig.pipewire = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-echo-cancel";
+          args = {
+            "source_master" = "bluez_input.41:42:78:94:36:02";
+            "sink_master" = "alsa_output.pci-0000_00_1f.3.hdmi-stereo";
+            "aec_method" = "webrtc";
+          };
+        }
+      ];
+    };
   };
   services.gvfs.enable = true;
 

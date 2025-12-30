@@ -27,14 +27,6 @@ fi
     hyprctl dispatch workspace special:
     eval $claude_terminal send-text "$content"
     eval $claude_terminal send-key Return
-    current_text=$(eval $claude_terminal get-text)
-    while [ "$previous_text" != "$current_text" ]; do
-        sleep 1
-        previous_text=$current_text
-        current_text=$(eval $claude_terminal get-text)
-    done
-    hyprctl dispatch workspace special:
-    hyprctl dispatch focuscurrentorlast
 else
     wl-copy "$content"
     hyprctl dispatch sendshortcut CTRL, v,
