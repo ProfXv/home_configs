@@ -1,78 +1,61 @@
 #!/bin/sh
 
-# Smart pause handler
-# Detects the current active window and sends appropriate shortcut to quit/pause
-# Designed to be triggered by a keybinding (e.g., pause key)
-
-# Set default window manager settings (matching original socket.sh behavior)
-hyprctl keyword input:follow_mouse 1
-hyprctl keyword decoration:rounding 10
-hyprctl keyword decoration:inactive_opacity .5
-hyprctl keyword decoration:blur:enabled true
-
-# Get active window information as JSON
 window_json=$(hyprctl activewindow -j 2>/dev/null)
-if [ -z "$window_json" ]; then
-    exit 1
-fi
+[ -z "$window_json" ] && exit 1
 
-# Extract class and pid
 class=$(echo "$window_json" | jq -r '.class')
 pid=$(echo "$window_json" | jq -r '.pid')
 
-# Default to escape key
 modifier=""
 key="escape"
 
 case "$class" in
     kitty)
-        # For kitty terminal, analyze process tree to determine foreground program
-        if [ -n "$pid" ] && [ "$pid" -gt 0 ]; then
-            # Get process tree and extract the last process name
+        hyprctl notify 1 3000 "rgb(ff1ea3)" "kitty"
+        [ -n "$pid" ] && [ "$pid" -gt 0 ] && {
             proc_name=$(pstree -T "$pid" 2>/dev/null | grep -o '[^-]*$')
             case "$proc_name" in
                 vi*|vim*|nvim*)
-                    # vim/nvim: send escape
                     modifier=""
                     key="escape"
+                    hyprctl notify 1 3000 "rgb(ff1ea3)" "vim/nvim"
                     ;;
                 yazi*|btop*|man*|more*|less*|git\ diff*)
-                    # These programs quit with 'q'
                     modifier=""
                     key="q"
+                    hyprctl notify 1 3000 "rgb(ff1ea3)" "yazi/btop/man"
                     ;;
                 *)
-                    # Default for kitty: Ctrl+d (exit shell)
                     modifier="CTRL"
                     key="d"
+                    hyprctl notify 1 3000 "rgb(ff1ea3)" "kitty default"
                     ;;
             esac
-        fi
+        }
         ;;
     nyxt)
-        # Nyxt browser: Ctrl+w to close tab
         modifier="CTRL"
         key="w"
+        hyprctl notify 1 3000 "rgb(ff1ea3)" "nyxt"
         ;;
     )
-        # Special program: disable follow mouse, no shortcut sent
         hyprctl keyword input:follow_mouse 0
-        # Exit without sending a shortcut
+        hyprctl notify 1 3000 "rgb(ff1ea3)" ""
         exit 0
         ;;
     crystal-board)
-        # Crystal board: special decoration settings + escape
         hyprctl keyword decoration:rounding 0
         hyprctl keyword decoration:inactive_opacity 1
         hyprctl keyword decoration:blur:enabled false
         modifier=""
         key="escape"
+        hyprctl notify 1 3000 "rgb(ff1ea3)" "crystal-board"
         ;;
     *)
-        # Default for other windows: escape
         modifier=""
         key="escape"
+        hyprctl notify 1 3000 "rgb(ff1ea3)" "default ($class)"
         ;;
 esac
 
-hyprctl dispatch sendshortcut $modifier, $key,
+hyprctl dispatch sendshortcut "$modifier, $key,"
