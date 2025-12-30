@@ -1,5 +1,12 @@
 #!/bin/sh
 
+log_file="$HOME/.log/smart_pause.log"
+mkdir -p "$(dirname "$log_file")"
+
+log() {
+    printf '%s - %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*" >> "$log_file"
+}
+
 window_json=$(hyprctl activewindow -j 2>/dev/null)
 [ -z "$window_json" ] && exit 1
 
@@ -14,21 +21,25 @@ case "$class" in
         hyprctl notify 1 3000 "rgb(ff1ea3)" "kitty"
         [ -n "$pid" ] && [ "$pid" -gt 0 ] && {
             proc_name=$(pstree -T "$pid" 2>/dev/null | grep -o '[^-]*$')
+            proc_tree=$(pstree -T "$pid" 2>/dev/null | tr '\n' ' ' | head -c 200)
             case "$proc_name" in
                 vi*|vim*|nvim*)
                     modifier=""
                     key="escape"
                     hyprctl notify 1 3000 "rgb(ff1ea3)" "vim/nvim"
+                    log "window: $class, pid: $pid, tree: $proc_tree, action: sendshortcut $modifier, $key"
                     ;;
                 yazi*|btop*|man*|more*|less*|git\ diff*)
                     modifier=""
                     key="q"
                     hyprctl notify 1 3000 "rgb(ff1ea3)" "yazi/btop/man"
+                    log "window: $class, pid: $pid, tree: $proc_tree, action: sendshortcut $modifier, $key"
                     ;;
                 *)
                     modifier="CTRL"
                     key="d"
                     hyprctl notify 1 3000 "rgb(ff1ea3)" "kitty default"
+                    log "window: $class, pid: $pid, tree: $proc_tree, action: sendshortcut $modifier, $key"
                     ;;
             esac
         }
@@ -37,10 +48,12 @@ case "$class" in
         modifier="CTRL"
         key="w"
         hyprctl notify 1 3000 "rgb(ff1ea3)" "nyxt"
+        log "window: $class, pid: $pid, action: sendshortcut $modifier, $key"
         ;;
     )
         hyprctl keyword input:follow_mouse 0
         hyprctl notify 1 3000 "rgb(ff1ea3)" ""
+        log "window: $class, pid: $pid, action: set input:follow_mouse 0"
         exit 0
         ;;
     crystal-board)
@@ -50,11 +63,13 @@ case "$class" in
         modifier=""
         key="escape"
         hyprctl notify 1 3000 "rgb(ff1ea3)" "crystal-board"
+        log "window: $class, pid: $pid, action: sendshortcut $modifier, $key + decoration changes"
         ;;
     *)
         modifier=""
         key="escape"
         hyprctl notify 1 3000 "rgb(ff1ea3)" "default ($class)"
+        log "window: $class, pid: $pid, action: sendshortcut $modifier, $key"
         ;;
 esac
 
