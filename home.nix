@@ -27,6 +27,9 @@
       vim = "nvim";
       vi = "vim";
     };
+    envExtra = ''
+      [ -z "$PS1" ] && [ -f .envrc ] && eval "$(${pkgs.direnv}/bin/direnv export zsh 2>/dev/null)"
+    '';
     loginExtra = ''
       if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
         Hyprland
@@ -59,7 +62,6 @@
   home.file.".config/yazi".source = ./modules/programs/yazi;
   home.file.".config/nvim".source = ./modules/programs/nvim;
   home.file.".config/btop".source = ./modules/programs/btop;
-  home.file.".config/mihomo".source = ./modules/programs/mihomo;
   home.file.".ssh/config".source = ./modules/services/ssh/config;
   home.file.".local/bin" = {
     source = ./modules/local/bin;

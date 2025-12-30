@@ -47,6 +47,18 @@ CREATE TABLE IF NOT EXISTS intention (
     start_speech_id INTEGER NOT NULL,
     end_speech_id INTEGER NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS vitals (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    heart_rate INTEGER,
+    blood_oxygen INTEGER,
+    body_temperature REAL,
+    systolic_pressure INTEGER,
+    diastolic_pressure INTEGER,
+    steps INTEGER,
+    battery_level INTEGER
+);
 EOF
 
 echo "数据库初始化完成！"
@@ -55,3 +67,4 @@ echo "- socket (记录桌面界面操作事件)"
 echo "- focus (记录划取文字操作和划取的文字内容)"
 echo "- speech (记录局部语音片段)"
 echo "- intention (记录整体意图会话)"
+echo "- vitals (记录健康参数数据)"

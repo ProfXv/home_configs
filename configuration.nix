@@ -7,7 +7,7 @@
 
   boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.kernelModules = [ "vkms" ];
-  boot.kernelParams = [ "iwlwifi.11n_disable=1" ];
+  boot.kernelParams = [ "iwlwifi.11n_disable=1" "btintel.enable_llp=0" "btintel.enable_sleep=0" ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 

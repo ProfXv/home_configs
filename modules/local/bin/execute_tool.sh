@@ -3,15 +3,16 @@
 TOOL_NAME=$1
 
 case "$TOOL_NAME" in
-    get_operation_list)
-        hyprctl binds -j | jq '.[] | select(.has_description) | .description' | nl -v 0 | sed 's/^ *//g'
-        ;;
-    select_operation_number)
-        number="$2"
-        operation=`hyprctl binds -j | jq "([.[] | select(.has_description) | .description])[$number]"`
-        script=`hyprctl binds -j | jq -r '.[] | select(.description == '"$operation"') | ("\(.dispatcher) \(.arg)")'`
-        notify-send Operation "$script"
-        eval hyprctl dispatch "\"$script\""
+    desktop_operation)
+        if [ -z "$2" ]; then
+            hyprctl binds -j | jq '.[] | select(.has_description) | .description' | nl -v 0 | sed 's/^ *//g'
+        else
+            number="$2"
+            operation=`hyprctl binds -j | jq "([.[] | select(.has_description) | .description])[$number]"`
+            script=`hyprctl binds -j | jq -r '.[] | select(.description == '"$operation"') | ("\(.dispatcher) \(.arg)")'`
+            notify-send Operation "$script"
+            eval hyprctl dispatch "\"$script\""
+        fi
         ;;
     set_reminder)
         time="$2"

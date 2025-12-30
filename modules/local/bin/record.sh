@@ -33,7 +33,7 @@ case $action in
                 grim -g "`slurp`" - | tee $path | wl-copy
                 ;;
         esac
-        ln -sf $path /tmp/snapshot_picture
+        ln -sf $path /tmp/snapshot_picture.png
         ;;
     "record")
         path=~/Videos/`date +"%s.mp4"`
