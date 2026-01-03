@@ -68,4 +68,8 @@
     recursive = true;
     executable = true;
   };
+  home.file.".claude" = {
+    source = ./modules/claude;
+    recursive = true;
+  };
 }
