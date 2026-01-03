@@ -34,58 +34,8 @@
         ]
       }
     ],
-    "PreToolUse": [
-      {
-        "matcher": "Read",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "play_raid_sound.sh \"airplanes/air_gunner*.ars\""
-          }
-        ]
-      },
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "play_raid_sound.sh \"airplanes/airplane_dive*.ars\""
-          }
-        ]
-      },
-      {
-        "matcher": "Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "play_raid_sound.sh \"airplanes/air_torpedo01.ars\""
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "play_raid_sound.sh \"airplanes/air_bomber01.ars\""
-          }
-        ]
-      }
-    ],
+    "PreToolUse": [],
     "PostToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "play_raid_sound.sh \"efx/bombfall.ars\""
-          },
-          {
-            "type": "command",
-            "command": "play_raid_sound.sh \"efx/explode*.ars\""
-          }
-        ]
-      },
       {
         "matcher": "Write",
         "hooks": [
