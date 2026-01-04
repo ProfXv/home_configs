@@ -15,20 +15,12 @@ done
 
 DB="$HOME/.log.db"
 
-if [ -z "$T_TIME" ] && [ -z "$SEARCH_STR" ] && [ -z "$START_TIME" ] && [ -z "$END_TIME" ]; then
+if [ -z "$T_TIME" ] && [ -z "$SEARCH_STR" ] && [ -z "$START_TIME" ] && [ -z "$END_TIME" ] && [ "$N_COUNT" = "1" ]; then
     sqlite3 "$DB" "SELECT COUNT(*) FROM intention;"
     exit 0
 fi
 
-QUERY="WITH targets AS (
-    SELECT DISTINCT i.id, i.start_speech_id, i.end_speech_id
-    FROM intention i
-    JOIN speech s1 ON i.start_speech_id = s1.id
-    JOIN speech s2 ON i.end_speech_id = s2.id"
-
 WHERE=""
-ORDER=""
-
 if [ -n "$SEARCH_STR" ]; then
     WHERE="$WHERE (s1.content LIKE '%$SEARCH_STR%' OR s2.content LIKE '%$SEARCH_STR%') AND"
 fi
@@ -39,20 +31,32 @@ fi
 
 WHERE="${WHERE% AND}"
 
-if [ -n "$WHERE" ]; then
-    QUERY="$QUERY WHERE $WHERE"
-fi
-
+ORDER=""
 if [ -n "$T_TIME" ]; then
     ORDER="ORDER BY ABS(strftime('%s', s1.time_start) - strftime('%s', '$T_TIME'))"
 elif [ -z "$WHERE" ]; then
     ORDER="ORDER BY s1.time_start DESC"
 fi
 
-QUERY="$QUERY $ORDER LIMIT $N_COUNT)
-SELECT s.content
-FROM speech s, targets
-WHERE s.id IN (targets.start_speech_id, targets.end_speech_id)
-ORDER BY s.id;"
+LIMIT=""
+if [ -n "$N_COUNT" ] && [ "$N_COUNT" != "0" ]; then
+    LIMIT="LIMIT $N_COUNT"
+fi
 
-sqlite3 "$DB" "$QUERY"
+if [ -z "$WHERE" ]; then
+    ID_QUERY="SELECT i.id FROM intention i JOIN speech s1 ON i.start_speech_id = s1.id $ORDER $LIMIT"
+else
+    ID_QUERY="SELECT DISTINCT i.id FROM intention i JOIN speech s1 ON i.start_speech_id = s1.id JOIN speech s2 ON i.end_speech_id = s2.id WHERE $WHERE $ORDER $LIMIT"
+fi
+
+FIRST=1
+for ID in $(sqlite3 "$DB" "$ID_QUERY"); do
+    [ $FIRST -eq 0 ] && echo ""
+    sqlite3 "$DB" "
+        SELECT s.content
+        FROM speech s, intention i
+        WHERE i.id = $ID
+          AND s.id BETWEEN i.start_speech_id AND i.end_speech_id
+        ORDER BY s.id;"
+    FIRST=0
+done
