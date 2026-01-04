@@ -104,7 +104,7 @@
     android-tools
     github-cli mihomo
     docker-compose
-    mathematica
+    # mathematica
     gnumake gcc
     uv
     (python3.withPackages (ps: with ps; [
@@ -114,7 +114,8 @@
     sqlite
     bubblewrap
     codex gemini-cli qwen-code
-    vial qq wechat
+    vial qq
+    # vial qq wechat
     (pass.withExtensions (ext: [ ext.pass-otp ]))
     hyprpolkitagent
   ];
