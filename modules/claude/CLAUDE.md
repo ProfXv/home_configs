@@ -22,10 +22,31 @@
 ### Core Workflow
 **Core Philosophy**: Developers focus on business logic, environment follows automatically.
 
-**Three-Step Workflow**:
-1. **Discovery**: Runtime reveals missing command or library
-2. **Declaration**: Add `pkgs.<package-name>` to `myPackages` list in `shell.nix`
-3. **Automatic Activation**: Environment reloads automatically after save, new package immediately available
+**Three-Step Workflow (Pseudocode)**:
+```
+PROCESS DeveloperWorkflow:
+  // Runtime environment automatically manages dependencies
+
+  WHILE developing DO:
+    // Step 1: Discovery - Runtime reveals missing dependency
+    TRY execute command
+    IF command_not_found THEN
+      missing_package ← identify_missing_package(command)
+
+      // Step 2: Declaration - Edit shell.nix
+      EDIT shell.nix:
+        ADD pkgs.missing_package TO myPackages list
+      SAVE shell.nix
+
+      // Step 3: Automatic Activation - Environment reloads
+      environment ← reload_environment()
+      ASSERT environment.contains(missing_package)
+
+      CONTINUE development
+    ENDIF
+  ENDWHILE
+ENDPROCESS
+```
 
 **Key Advantages**:
 - **Zero-Command Operation**: No `install`, `update`, or `remove` commands needed
@@ -107,55 +128,60 @@ This pattern reduces complex package management to **text editing**, truly achie
 - **Primary Project Repository**: `~/Desktop/Projects/` - Centralized storage for all project repositories
 - **User-Level Cron Jobs**: `~/.cron` - Source file for user-level scheduled tasks
 
-### Key File Descriptions
+### Document Management (Declarative Configuration)
+Each project maintains exactly two declarative documentation files, akin to operating system configuration files:
 
-#### 1. CLAUDE.md (Strategic Configuration Document)
-- **Purpose**: The authoritative specification of project objectives and high-level goals
-- **Status Declaration**: Represents the "desired state" for the entire project
-- **Update Policy**: Modified only when strategic goals or architecture fundamentally change (by designated developers only)
-- **Authority**: Source of truth for project vision and scope
-- **Location**: Both at system level (`~/.config/home-manager/modules/claude/CLAUDE.md`) and project level (`~/Desktop/Projects/[project-name]/CLAUDE.md`)
+1. **CLAUDE.md**: Strategic planning and declarative configuration for the entire project
+   - **Purpose**: Describes what the entire project aims to achieve and its high-level goals
+   - **Declaration**: This is the "desired state" - the authoritative specification of project objectives
+   - **Update Policy**: Modified only when strategic goals or architecture fundamentally change (by designated developers only)
+   - **Authority**: Source of truth for project vision and scope
 
-#### 2. main (Mandatory Entry Point Script)
-- **Purpose**: Unified interface for all project functionality
-- **Requirements**:
-  - Must support running without any parameters to execute primary functionality
-  - Must display complete usage documentation in English via `main --help` or `main -h`
-  - Must support test execution: `main --test` (run all tests) and `main --test <path>` (run tests in specific directory)
-  - Must use `#!/usr/bin/env <interpreter>` shebang for portability, never hardcode interpreter paths
-- **Implementation Pattern**:
-  ```bash
-  #!/usr/bin/env bash
-  # Project Summary: Brief description of the project
-  #
-  # Usage:
-  #   main [options]
-  #
-  # Options:
-  #   -h, --help              Show this help message
-  #   [additional project-specific options...]
-  #
-  # Examples:
-  #   main                 Run the primary functionality (no parameters required)
-  #   main --run-tests
-  #   main --build
-  #
-  # For more details, run: main --help
-  ```
+2. **README.md**: Current state declaration and progress tracking document
+   - **Purpose**: Tracks actual progress after each development cycle compared to the strategic plan
+   - **Declaration**: This is the "current state" - a explicit comparison with CLAUDE.md declarations
+   - **Update Requirement**: Must be updated at the END of every development session
+   - **Comparison Mandate**: MUST clearly compare current progress against the strategic goals in CLAUDE.md
+   - **Format**: Explicitly show what has been completed, what's in progress, and what's pending
 
-#### 3. shell.nix (Dependency Management)
-- **Purpose**: Defines all project dependencies in a reproducible Nix environment
-- **Mandatory Requirement**: All dependencies must be declared and managed through this file
-- **Core Philosophy**: Environment-as-code with zero-command operation (edit → save → test immediately)
+**Development Cycle Definition (Pseudocode)**:
+```
+PROCESS DevelopmentSession:
+  // Iterative cycle for working on projects
 
-#### 4. .envrc (Direnv Integration)
-- **Purpose**: Automatically activates the Nix environment when entering the project directory
+  // Phase 1: Session Start - Assess current state
+  desired_state ← READ(CLAUDE.md)
+  current_state ← READ(README.md)
+  gap ← CALCULATE_GAP(desired_state, current_state)
 
-#### 5. README.md (Current State Declaration)
-- **Purpose**: Tracks actual progress after each development cycle compared to the strategic plan
-- **Update Requirement**: Must be updated at the END of every development session
-- **Comparison Mandate**: MUST clearly compare current progress against the strategic goals in CLAUDE.md
-- **Format**: Explicitly show what has been completed, what's in progress, and what's pending
+  // Phase 2: During Development - Close the gap
+  WHILE session_active AND gap > 0 DO:
+    work_result ← EXECUTE_WORK(gap.priority_item)
+    gap ← UPDATE_GAP(gap, work_result)
+  ENDWHILE
+
+  // Phase 3: Session End - Update documentation
+  new_current_state ← GENERATE_STATE(work_results)
+  WRITE(README.md, new_current_state)
+  ASSERT STATE_MATCHES_WORK(new_current_state, work_results)
+
+  // Completion check
+  session_complete ← VERIFY_COMPLETION(new_current_state)
+  RETURN session_complete
+ENDPROCESS
+```
+
+**Document Update Triggers**:
+- **CLAUDE.md**: Updated when project scope, goals, or architecture fundamentally change (strategic changes only, by designated developers)
+- **README.md**: Updated at the END of every development session to declare actual progress
+
+**Declaration Principles**:
+- **Clarity**: Both documents should be declarative statements, not procedural instructions
+- **Contrast**: README.md must explicitly show the delta - what changed, what's been added, what's been removed
+- **Alignment**: README.md progress should always be traceable back to specific goals in CLAUDE.md
+- **Immutability**: Once declared in CLAUDE.md, strategic goals remain until formally updated
+
+**Rule**: No additional documentation files should be created unless explicitly required.
 
 ## Development Constraints and Best Practices
 
@@ -245,22 +271,34 @@ esac
 9. **Test Automation**: Both automated and manual tests are executed as part of the development workflow
 
 ### Test-Driven Development (TDD) Process
-Follow the Red-Green-Refactor cycle:
+**Follow the Red-Green-Refactor cycle (Pseudocode)**:
 
-#### 1. Red Phase: Write a Failing Test
-- Define expected behavior before implementation
-- Run test to confirm failure
-- Clear indication of what needs to be built
+```
+PROCESS TDD_Cycle(feature):
+  // Iterative development with test-first approach
 
-#### 2. Green Phase: Minimal Implementation
-- Write the smallest code to make the test pass
-- Focus on functionality over code quality
-- Get to green as quickly as possible
+  REPEAT UNTIL feature_complete:
+    // Phase 1: Red - Write failing test
+    test_case ← CREATE_TEST(feature.requirements)
+    RUN test_case
+    ASSERT test_case.fails()  // Must fail before implementation
 
-#### 3. Refactor Phase: Improve Code Structure
-- Optimize code while maintaining test pass
-- Remove duplication, improve naming
-- Tests provide safety net for changes
+    // Phase 2: Green - Minimal implementation
+    implementation ← MINIMAL_CODE(test_case)
+    RUN test_case
+    ASSERT test_case.passes()  // Test must now pass
+
+    // Phase 3: Refactor - Improve without changing behavior
+    REPEAT UNTIL code_quality_acceptable:
+      optimized_code ← REFACTOR(implementation)
+      RUN test_case
+      ASSERT test_case.passes()  // Safety net
+    ENDREPEAT
+
+    feature_complete ← EVALUATE(feature, implementation)
+  ENDREPEAT
+ENDPROCESS
+```
 
 **Loop**: Repeat for each feature or functionality
 
@@ -325,6 +363,42 @@ def test_login():
 - Validate expected outcomes
 - Check for edge cases
 - Confirm property assumptions
+
+### Mandatory Main Entry Point
+Each project MUST have a `main` script as the unified entry point:
+
+1. **Unified Interface**: All projects must use `main` as the primary interface
+2. **Help Documentation**: `main --help` or `main -h` must display complete usage documentation in English
+3. **Self-Documenting**: The script should contain all usage instructions and project summary in English
+4. **No Additional Docs**: Do not maintain separate documentation files by default
+5. **Flexible Parameters**: Script may include project-specific parameters and flags
+6. **Test Integration**: The script MUST support these test-related options:
+   - `main --test`: Run all tests and show detailed report with success rate
+   - `main --test <path>`: Run tests in specific directory
+   - Individual test results plus overall summary report
+7. **Default Run**: The script MUST support running without any parameters to execute the project's primary functionality
+
+**Note**: The main script MUST use `#!/usr/bin/env <interpreter>` shebang for portability and flexibility, never hardcode interpreter paths.
+
+#### Implementation Pattern:
+```bash
+#!/usr/bin/env bash
+# Project Summary: Brief description of the project
+#
+# Usage:
+#   main [options]
+#
+# Options:
+#   -h, --help              Show this help message
+#   [additional project-specific options...]
+#
+# Examples:
+#   main                 Run the primary functionality (no parameters required)
+#   main --run-tests
+#   main --build
+#
+# For more details, run: main --help
+```
 
 
 ## System Tools Usage Guide
