@@ -1,23 +1,4 @@
-## System Memories and Instructions
-- 我需要记住三个生物化学反应数据库网站：
-1. KEGG PATHWAY: https://www.genome.jp/kegg/pathway.html
-2. Reactome: https://reactome.org/
-3. BioCyc: https://biocyc.org/
-- 当需要管理或修改 .claude/CLAUDE.md 中已存在的记忆时，应采用“读取文件内容，然后使用 Edit 工具进行修改”的方式。
-- 对于新项目，如果性能是关键考量，优先选择使用 Rust 语言；但在选择前，需优先评估项目生态的成熟度和对开发速度的要求。
-- The user's primary project *root* directory, where all individual projects are located, is /home/paradoxist/Desktop/Projects. This is the default location for creating new projects, finding existing ones, or cloning repositories.
-- Commit message preference: Use single-line messages, start with a type indicator (e.g., 'feat:', 'fix:', 'refactor:'), and the first word after the type indicator should not be capitalized.
-- 灵感：文件管理 - 探索双曲（hyperbolic）文件浏览器。
-- 灵感：浏览器定制 - 尝试使用Common Lisp定制Nyxt浏览器。
-- 灵感：系统能力测试 - 卸载字体包并用此示例测试动态修改系统能力。
-- 不要添加任何代码注释。
-- 管理定时任务（cron jobs，包括每日提醒）的标准流程是：首先，直接修改位于 `/home/paradoxist/.cron` 的源文件；然后，通过执行 `crontab /home/paradoxist/.cron` 命令，将修改后的内容同步并应用到系统中。
-- 待办事项应统一在 ~/README.md 文件中进行管理。
-- 当用户要求检查当前情况时，应读取 /tmp/snapshot_picture.png 文件来获取截图信息。
-- 今天解了一个“鸡鸡毛结”。
-- 用户自己养了猫。
-- 所有项目的开发都在沙箱环境中进行。只能访问当前工作目录及其子目录，但对当前目录下的所有内容拥有完全的读写和执行权限。
-
+# 开发环境与最佳实践
 
 ## Development Environment Configuration
 
@@ -72,6 +53,7 @@ This pattern reduces complex package management to **text editing**, truly achie
 - **Default Approach**: Prioritize the most concise and suitable programming language for the task
 - **Native Development**: Default to developing native software optimized for this machine's architecture (x86_64)
 - **Consider**: Performance requirements, development speed, and maintenance cost
+- **Performance-First Projects**: For new projects where performance is critical, prioritize Rust language; however, first evaluate the maturity of the project ecosystem and development speed requirements
 
 **Code Implementation Rules**
 1. **Minimal Prototype First**: Always implement the smallest possible viable prototype
@@ -80,6 +62,7 @@ This pattern reduces complex package management to **text editing**, truly achie
 4. **Native Optimization**: Leverage the native environment (NixOS + Intel/AMD x86_64) for optimal performance
 5. **Reproducible Builds**: Use Nix for build processes to ensure reproducibility
 6. **Requirement Discovery Through Questioning**: When starting a project without existing documentation and requirements are unclear, **always prioritize multiple-choice questions and yes/no questions** before asking open-ended questions. This approach accelerates requirement gathering and reduces ambiguity:
+7. **No Code Comments**: Do not add any code comments. Code comments should only be inserted in dedicated places to indicate where future functionality can be added
    - **Question Format Priority**:
      1. **Yes/No Questions** (e.g., "Does it need to be web-based? [y/n]")
      2. **Multiple Choice Questions** (e.g., "Which option best describes your preference? A) CLI tool B) Web app C) Desktop app")
@@ -123,6 +106,10 @@ For each new project:
 - **Default Path**: All new projects should be created within this directory unless specified otherwise
 - **Reference**: When looking for a project or creating a new one, start from this location
 
+##### Primary Project Root Directory
+- **Default Location**: `/home/paradoxist/Desktop/Projects` is the primary project root directory
+- **Usage**: This is the default location for creating new projects, finding existing ones, or cloning repositories
+
 ## 系统工具使用指南
 
 该系统包含一个持续运行的数据库日志系统（~/.log.db），在机器开启时自动记录各类交互数据，包括语音记录、意图识别、生理数据和焦点变化。使用 `get_intent.sh` 脚本可以查询这些记录：不加参数返回记录总数，`-t` 按时间搜索，`-s` 按文本搜索，`-n` 限制返回条数，`--start/--end` 按时间范围筛选。
@@ -165,6 +152,14 @@ execute_tool.sh desktop_operation [<操作序号>]
 - 打开终端：`execute_tool.sh desktop_operation 0`
 - 打开浏览器：`execute_tool.sh desktop_operation 13`
 
+### 3. 管理定时任务的方式
+管理定时任务（cron jobs，包括每日提醒）的标准流程是：
+1. **直接修改源文件**：编辑位于 `/home/paradoxist/.cron` 的源文件
+2. **同步到系统**：执行 `crontab /home/paradoxist/.cron` 命令将修改后的内容应用到系统中
+
+### 4. 检查当前情况的方式
+当用户要求检查当前情况时，应读取 `/tmp/snapshot_picture.png` 文件来获取截图信息。
+
 ---
 
 - 回复用户的时候，尽可能不要使用 echo 操作，而是直接使用文字。
@@ -205,6 +200,11 @@ Each project maintains exactly two declarative documentation files, akin to oper
 
 **Rule**: No additional documentation files should be created unless explicitly required.
 
+#### Document Management Practices
+- **Modifying Existing Instructions**: When managing or modifying existing memories in `.claude/CLAUDE.md`, use the "read file content, then use Edit tool for modification" approach
+- **Commit Message Format**: Use single-line messages starting with a type indicator (e.g., 'feat:', 'fix:', 'refactor:'), with the first word after the type indicator not capitalized
+- **Task Management**: All todos should be uniformly managed in the `~/README.md` file
+
 ### Development Environment Philosophy
 
 #### Sandbox Exploration Principle
@@ -214,6 +214,7 @@ Each project maintains exactly two declarative documentation files, akin to oper
 4. **Encouraged Iteration**: Multiple iterations and refinements are welcomed and expected
 5. **Creative Freedom**: Leverage this safety to discover optimal solutions through experimentation
 6. **Documentation of Discoveries**: Document interesting findings and alternatives discovered during exploration
+7. **Project Isolation**: All project development occurs in sandbox environments with access limited to the current working directory and its subdirectories, but with complete read/write/execute permissions for all content within the current directory
 
 ### Dependency Minimization Principle
 1. **Limit Dependencies**: Restrict project dependencies to only absolutely necessary packages
@@ -407,3 +408,17 @@ Each project MUST have a `main` script as the unified entry point:
 # For more details, run: main --help
 ```
 - 写脚本的时候，在有可能的地方尽量使用短路表达式。
+
+# 散碎要求与记录
+
+- 我需要记住三个生物化学反应数据库网站：
+  1. KEGG PATHWAY: https://www.genome.jp/kegg/pathway.html
+  2. Reactome: https://reactome.org/
+  3. BioCyc: https://biocyc.org/
+
+- 灵感：文件管理 - 探索双曲（hyperbolic）文件浏览器。
+- 灵感：浏览器定制 - 尝试使用Common Lisp定制Nyxt浏览器。
+- 灵感：系统能力测试 - 卸载字体包并用此示例测试动态修改系统能力。
+
+- 今天解了一个“鸡鸡毛结”。
+- 用户自己养了猫。
