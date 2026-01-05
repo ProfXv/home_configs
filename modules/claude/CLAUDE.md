@@ -1,9 +1,6 @@
-# Development Environment and Best Practices
+# Environment Overview
 
-
-## Part 1: Environment Definition (What This System Is)
-
-### 1.1 System Information
+## System Information
 **Environment**: NixOS 25.11pre888552.b3d51a0365f6 (Xantusia) x86_64
 **Host**: Khadas Mind-K1014-PCB
 **Kernel**: 6.176-zen1
@@ -14,9 +11,9 @@
 **Shell**: zsh 5.9
 **Terminal**: claude
 
-### 1.2 Directory Structure
+## Project Structure
 
-#### Standard Project Directory Structure
+### Standard Project Directory Structure
 ```
 [project-name]/
 ├── main                    # Mandatory entry point script
@@ -30,106 +27,83 @@
     └── hybrid/          # Tests with both automated and manual components
 ```
 
-#### System-Level Directories
+### System-Level Directories
 - **Configuration Management**: `~/.config/home-manager/` - System-wide configuration managed as code (NixOS home-manager)
 - **System Tools**: `~/.config/home-manager/modules/local/bin/` - System tool scripts directory
 - **Primary Project Repository**: `~/Desktop/Projects/` - Centralized storage for all project repositories
 - **User-Level Cron Jobs**: `~/.cron` - Source file for user-level scheduled tasks
 
-### 1.3 Key Files and Their Purposes
+## Document Management (Declarative Configuration)
+Each project maintains exactly two declarative documentation files:
 
-#### CLAUDE.md (Strategic Configuration Document)
-- **Purpose**: The authoritative specification of project objectives and high-level goals
-- **Status Declaration**: Represents the "desired state" for the entire project
-- **Update Policy**: Modified only when strategic goals or architecture fundamentally change (by designated developers only)
-- **Authority**: Source of truth for project vision and scope
+1. **CLAUDE.md**: Strategic planning and declarative configuration
+   - **Purpose**: Describes what the entire project aims to achieve
+   - **Declaration**: The "desired state" - authoritative specification
+   - **Update Policy**: Modified only when strategic goals fundamentally change
+   - **Authority**: Source of truth for project vision and scope
 
-#### README.md (Current State Declaration)
-- **Purpose**: Tracks actual progress after each development cycle compared to the strategic plan
-- **Update Requirement**: Must be updated at the END of every development session
-- **Comparison Mandate**: MUST clearly compare current progress against the strategic goals in CLAUDE.md
-- **Format**: Explicitly show what has been completed, what's in progress, and what's pending
+2. **README.md**: Current state declaration and progress tracking
+   - **Purpose**: Tracks actual progress after each development cycle
+   - **Declaration**: The "current state" - explicit comparison with CLAUDE.md
+   - **Update Requirement**: Must be updated at the END of every development session
+   - **Format**: Explicitly show completed, in-progress, and pending items
 
-#### shell.nix (Dependency Management)
-- **Purpose**: Defines all project dependencies in a reproducible Nix environment
-- **Mandatory Requirement**: All dependencies must be declared and managed through this file
-- **Core Philosophy**: Environment-as-code with zero-command operation (edit → save → test immediately)
+**Rule**: No additional documentation files should be created unless explicitly required.
 
-#### .envrc (Direnv Integration)
-- **Purpose**: Automatically activates the Nix environment when entering the project directory
+## Development Environment Philosophy
 
-#### main (Mandatory Entry Point Script)
-- **Purpose**: Unified interface for all project functionality
-- **Requirements**:
-  - Must support running without any parameters to execute primary functionality
-  - Must display complete usage documentation in English via `main --help` or `main -h`
-  - Must support test execution: `main --test` (run all tests) and `main --test <path>` (run tests in specific directory)
-  - Must use `#!/usr/bin/env <interpreter>` shebang for portability, never hardcode interpreter paths
+### Sandbox Exploration Principle
+1. **Safe to Experiment**: Operate within a completely safe sandbox environment
+2. **Free to Explore**: Explore different approaches, technologies, and solutions
+3. **No Risk Environment**: Experiments performed without fear of breaking production
+4. **Encouraged Iteration**: Multiple iterations and refinements welcomed
+5. **Creative Freedom**: Discover optimal solutions through experimentation
+6. **Documentation of Discoveries**: Document interesting findings and alternatives
+7. **Project Isolation**: Development occurs in sandbox environments with access limited to current directory and subdirectories
 
-### 1.4 System Tools
-
-#### Database Log System Overview
-The system includes a continuously running database log system (`~/.log.db`) that automatically records various interaction data while the machine is powered on, including voice recordings, intent recognition, physiological data, and focus changes. Use the `get_intent.sh` script to query these records: without parameters returns total record count, `-t` for time-based search, `-s` for text search, `-n` to limit number of results, `--start/--end` for time range filtering.
-
-#### System Tools Directory
-- **Script directory**: `/home/paradoxist/.config/home-manager/modules/local/bin/`
-
-
-## Development Constraints and Best Practices
-
-### Development Environment Philosophy
-
-#### Sandbox Exploration Principle
-1. **Safe to Experiment**: You operate within a completely safe sandbox environment
-2. **Free to Explore**: Feel free to explore different approaches, technologies, and solutions
-3. **No Risk Environment**: All experiments and trials can be performed without fear of breaking production systems
-4. **Encouraged Iteration**: Multiple iterations and refinements are welcomed and expected
-5. **Creative Freedom**: Leverage this safety to discover optimal solutions through experimentation
-6. **Documentation of Discoveries**: Document interesting findings and alternatives discovered during exploration
-7. **Project Isolation**: All project development occurs in sandbox environments with access limited to the current working directory and its subdirectories, but with complete read/write/execute permissions for all content within the current directory
+## Development Constraints
 
 ### Dependency Minimization Principle
-1. **Limit Dependencies**: Restrict project dependencies to only absolutely necessary packages
-2. **Standard Library First**: Prefer using standard libraries over external dependencies
-3. **Critical Evaluation**: Every new dependency must be critically evaluated for necessity
-4. **Centralized Management**: All dependencies must be declared and managed through `shell.nix`
+1. **Limit Dependencies**: Restrict to only absolutely necessary packages
+2. **Standard Library First**: Prefer standard libraries over external dependencies
+3. **Critical Evaluation**: Every new dependency critically evaluated for necessity
+4. **Centralized Management**: All dependencies declared and managed through `shell.nix`
 5. **Regular Review**: Periodically review dependencies to identify and remove unused ones
-6. **Justification Required**: Major dependencies should have clear justification documented in development notes
+6. **Justification Required**: Major dependencies require clear justification
 
 ### Testing Requirements
-1. **Mandatory Testing**: Tests are required for all project features
-2. **Coverage Standard**: Maintain minimum 80% test coverage for critical functionality
+1. **Mandatory Testing**: Tests required for all project features
+2. **Coverage Standard**: Minimum 80% test coverage for critical functionality
 3. **Test Types**:
-   - **Automated Tests**: Unit tests and integration tests that run without human intervention
-   - **Manual Tests**: Scripts that require human input/interaction (stored in `tests/manual/`)
-   - **Hybrid Tests**: Automated core logic + manual UI/UX validation via interactive prompts
+   - **Automated Tests**: Unit tests and integration tests
+   - **Manual Tests**: Scripts requiring human input (stored in `tests/manual/`)
+   - **Hybrid Tests**: Automated core logic + manual UI/UX validation
 4. **Test Directory Structure**:
    ```
    tests/
-   ├── automated/          # Automated tests (unit, integration)
+   ├── automated/          # Automated tests
    ├── manual/            # Manual interaction tests
    └── hybrid/            # Tests with both automated and manual components
    ```
 
 #### Manual Test Design
-**Manual tests are also scripts** that run via `main --test` but require human interaction:
+**Manual tests are scripts** that run via `main --test` but require human interaction:
 
 **Structure:**
-- Script presents test scenario (e.g., "Test login UI at 4K resolution")
-- Displays expected outcome
-- Prompts user for validation via interactive choice or input
-- Records user response for test history
-- Provides clear pass/fail criteria
+- Present test scenario
+- Display expected outcome
+- Prompt user for validation
+- Record user response for test history
+- Provide clear pass/fail criteria
 
 **Interaction Methods:**
-- **Choice-based**: "Does the button look correct? [y/n/q]" (y=pass, n=fail, q=skip)
+- **Choice-based**: "Does the button look correct? [y/n/q]"
 - **Score-based**: "Rate UI clarity from 1-10: ___"
 - **Input-based**: "Enter the text you see: ___"
 
 **Test Data Collection:**
-- User responses should be logged to `tests/manual_results.log`
-- Format: `TIMESTAMP | Test Name | Result | User Rating (if applicable)`
-- Results integrated into overall test summary report
+- Log to `tests/manual_results.log`
+- Format: `TIMESTAMP | Test Name | Result | User Rating`
 
 **Example Manual Test Script:**
 ```bash
@@ -148,43 +122,148 @@ case $response in
     q) echo "SKIP: UI clarity test" >> /tmp/manual_results.log ;;
 esac
 ```
-5. **Test Execution**:
-   - Run all tests: `main --test` (includes both automated and manual tests)
-   - Run tests in specific directory: `main --test tests/path/to/tests/`
-   - Manual tests will pause for user interaction, automated tests run silently
-   - Results from all tests consolidated into unified report
-6. **Test Report**:
-   - Each test reports its individual result
-   - Summary shows overall success rate and failure count
-   - Test history tracks pass/fail status for regression detection
-   - Manual test results included in summary (pass/fail/skip counts)
-7. **Pre-commit Testing**: All tests must pass before considering a development session complete
-8. **Test Documentation**: Test cases should clearly demonstrate expected behavior
-9. **Test Automation**: Both automated and manual tests are executed as part of the development workflow
 
-### Test-Driven Development (TDD) Process
-**Follow the Red-Green-Refactor cycle (Pseudocode)**:
+## System Tools Usage Guide
+
+### Database Log System Overview
+The system includes a continuously running database log system (`~/.log.db`) that automatically records various interaction data while the machine is powered on, including voice recordings, intent recognition, physiological data, and focus changes. Use the `get_intent.sh` script to query these records: without parameters returns total record count, `-t` for time-based search, `-s` for text search, `-n` to limit number of results, `--start/--end` for time range filtering.
+
+### System Tools Directory
+- **Script directory**: `/home/paradoxist/.config/home-manager/modules/local/bin/`
+
+### 1. Setting Reminders
+Use `execute_tool.sh set_reminder <reminder_time> <reminder_content>`
+
+**Examples:**
+- `execute_tool.sh set_reminder "now + 5 minutes" "Drink water"`
+- `execute_tool.sh set_reminder "3:00 PM tomorrow" "Meeting"`
+
+### 2. Performing Desktop Operations
+Use `execute_tool.sh desktop_operation [<operation_number>]`
+
+**Instructions:**
+- No number: display operation list
+- With number: execute corresponding operation
+
+**Output example:**
+```
+0	"open terminal"
+1	"open editor"
+2	"open file manager"
+...
+```
+
+### 3. Managing User-Level Scheduled Tasks
+Standard workflow:
+1. Edit source file at `/home/paradoxist/.cron`
+2. Execute `crontab /home/paradoxist/.cron`
+
+### 4. Checking Current Situation
+Read `/tmp/snapshot_picture.png` for screenshot information.
+
+# Operational Procedures
+
+## Core Development Workflow
+
+```
+PROCESS DeveloperWorkflow:
+  WHILE developing DO:
+    TRY execute command
+    IF command_not_found THEN
+      missing_package ← identify_missing_package(command)
+      EDIT shell.nix: ADD pkgs.missing_package TO myPackages list
+      SAVE shell.nix
+      environment ← reload_environment()
+      ASSERT environment.contains(missing_package)
+      CONTINUE development
+    ENDIF
+  ENDWHILE
+ENDPROCESS
+```
+
+**Real-World Example:**
+```bash
+# 1. Discover missing screenfetch command
+$ screenfetch
+zsh: command not found: screenfetch
+
+# 2. Edit shell.nix, add one line:
+#    pkgs.screenfetch
+
+# 3. After environment auto-reloads:
+$ screenfetch
+[Successfully displays system information]
+```
+
+This pattern reduces complex package management to **text editing**, truly achieving "environment-as-code".
+
+## Implementation Guidelines
+
+```
+PROCESS LanguageSelection:
+  default_approach ← "Prioritize most concise suitable language"
+  native_development ← "Default to native x86_64 optimization"
+  performance_first ← "Evaluate Rust for critical performance projects"
+  RETURN {default_approach, native_development, performance_first}
+ENDPROCESS
+
+PROCESS CodeImplementation:
+  RULE minimal_prototype_first
+  RULE no_feature_bloat
+  RULE simplicity_over_complexity
+  RULE native_optimization
+  RULE reproducible_builds
+  RULE no_code_comments
+ENDPROCESS
+
+PROCESS RequirementDiscovery:
+  // Question format priority
+  question_flow ← [
+    "Yes/No questions first",
+    "Multiple choice questions second",
+    "Limited options questions third",
+    "Open-ended questions last (only after options exhausted)"
+  ]
+  goal ← "Transform vague ideas into clear, actionable requirements"
+  RETURN {question_flow, goal}
+ENDPROCESS
+
+PROCESS ScriptWriting:
+  PRINCIPLE simplicity_first
+  PRINCIPLE intent_driven
+  TECHNIQUE use_short_circuit_over_if_then_fi
+  TECHNIQUE one_logic_per_line
+  TECHNIQUE remove_unnecessary_output
+ENDPROCESS
+
+PROCESS KeyPrinciples:
+  PRINCIPLE ask_clarifying_questions_before_over_engineering
+  PRINCIPLE prefer_standard_library_over_dependencies
+  PRINCIPLE document_trade_offs
+  PRINCIPLE ensure_nix_build_compatibility
+ENDPROCESS
+```
+
+## Test-Driven Development Process
 
 ```
 PROCESS TDD_Cycle(feature):
-  // Iterative development with test-first approach
-
   REPEAT UNTIL feature_complete:
     // Phase 1: Red - Write failing test
     test_case ← CREATE_TEST(feature.requirements)
     RUN test_case
-    ASSERT test_case.fails()  // Must fail before implementation
+    ASSERT test_case.fails()
 
     // Phase 2: Green - Minimal implementation
     implementation ← MINIMAL_CODE(test_case)
     RUN test_case
-    ASSERT test_case.passes()  // Test must now pass
+    ASSERT test_case.passes()
 
     // Phase 3: Refactor - Improve without changing behavior
     REPEAT UNTIL code_quality_acceptable:
       optimized_code ← REFACTOR(implementation)
       RUN test_case
-      ASSERT test_case.passes()  // Safety net
+      ASSERT test_case.passes()
     ENDREPEAT
 
     feature_complete ← EVALUATE(feature, implementation)
@@ -192,85 +271,86 @@ PROCESS TDD_Cycle(feature):
 ENDPROCESS
 ```
 
-**Loop**: Repeat for each feature or functionality
+## Development Cycle Definition
 
-**Benefits**:
-- Ensures all code has tests
-- Prevents regressions
-- Creates clear documentation of expected behavior
-- Enables confident refactoring
+```
+PROCESS DevelopmentSession:
+  desired_state ← READ(CLAUDE.md)
+  current_state ← READ(README.md)
+  gap ← CALCULATE_GAP(desired_state, current_state)
 
-### Test Correctness Assurance
-**How to ensure tests themselves are correct:**
+  WHILE session_active AND gap > 0 DO:
+    work_result ← EXECUTE_WORK(gap.priority_item)
+    gap ← UPDATE_GAP(gap, work_result)
+  ENDWHILE
 
-#### 1. Red Phase Validation
+  new_current_state ← GENERATE_STATE(work_results)
+  WRITE(README.md, new_current_state)
+  ASSERT STATE_MATCHES_WORK(new_current_state, work_results)
+
+  session_complete ← VERIFY_COMPLETION(new_current_state)
+  RETURN session_complete
+ENDPROCESS
+```
+
+## Test Correctness Assurance
+
+### 1. Red Phase Validation
 **Critical Rule**: A test MUST fail before implementation
 - Write test first
-- Run test to confirm it fails (Red)
-- If test passes before implementation, the test is incorrect
-- This is your first validation that test logic is sound
+- Run test to confirm failure
+- If test passes before implementation, test is incorrect
 
-#### 2. Positive and Negative Examples
-**Test both successful and failing cases:**
+### 2. Positive and Negative Examples
+Test both successful and failing cases:
 ```python
 def test_login():
-    # Positive: correct credentials should succeed
     result = login("alice", "correctpass")
     assert result.is_success == True
 
-    # Negative: wrong password should fail
     result = login("alice", "wrongpass")
     assert result.is_success == False
 
-    # Negative: empty credentials should fail
     result = login("", "")
     assert result.is_success == False
 ```
 
-**Why**: If test logic is wrong, it's unlikely to handle both positive and negative cases correctly.
-
-#### 3. Property-Based Testing
-**Use properties instead of specific values when applicable:**
+### 3. Property-Based Testing
+Use properties instead of specific values:
 ```python
 # Instead of: assert add(2, 3) == 5
 # Use: For any a, b, add(a, b) must equal add(b, a)
 ```
 
-#### 4. Independent Tests
-**Each test must be independent and self-contained**:
+### 4. Independent Tests
 - No dependency on other tests' execution order
 - Each test sets up its own data
-- Tests can run in any order or parallel
+- Tests run in any order or parallel
 
-#### 5. Proven Test Frameworks
-**Use mature, established testing frameworks**:
+### 5. Proven Test Frameworks
 - Python: pytest
 - Go: go test
 - Rust: cargo test
 - Never write custom testing infrastructure
 
-#### 6. Code Review for Tests
-**Tests require the same scrutiny as production code**:
+### 6. Code Review for Tests
 - Review test logic
 - Validate expected outcomes
 - Check for edge cases
 - Confirm property assumptions
 
-### Mandatory Main Entry Point
-Each project MUST have a `main` script as the unified entry point:
+## Mandatory Main Entry Point
+Each project MUST have a `main` script as unified entry point:
 
-1. **Unified Interface**: All projects must use `main` as the primary interface
-2. **Help Documentation**: `main --help` or `main -h` must display complete usage documentation in English
-3. **Self-Documenting**: The script should contain all usage instructions and project summary in English
-4. **No Additional Docs**: Do not maintain separate documentation files by default
-5. **Flexible Parameters**: Script may include project-specific parameters and flags
-6. **Test Integration**: The script MUST support these test-related options:
-   - `main --test`: Run all tests and show detailed report with success rate
-   - `main --test <path>`: Run tests in specific directory
-   - Individual test results plus overall summary report
-7. **Default Run**: The script MUST support running without any parameters to execute the project's primary functionality
+1. **Unified Interface**: Use `main` as primary interface
+2. **Help Documentation**: `main --help` displays complete usage documentation
+3. **Self-Documenting**: Script contains all usage instructions in English
+4. **No Additional Docs**: No separate documentation files by default
+5. **Flexible Parameters**: Project-specific parameters and flags allowed
+6. **Test Integration**: Support `main --test` and `main --test <path>`
+7. **Default Run**: Run without parameters executes primary functionality
 
-**Note**: The main script MUST use `#!/usr/bin/env <interpreter>` shebang for portability and flexibility, never hardcode interpreter paths.
+**Note**: Use `#!/usr/bin/env <interpreter>` shebang, never hardcode interpreter paths.
 
 #### Implementation Pattern:
 ```bash
@@ -292,59 +372,6 @@ Each project MUST have a `main` script as the unified entry point:
 # For more details, run: main --help
 ```
 
-
-## System Tools Usage Guide
-
-### Database Log System Overview
-The system includes a continuously running database log system (`~/.log.db`) that automatically records various interaction data while the machine is powered on, including voice recordings, intent recognition, physiological data, and focus changes. Use the `get_intent.sh` script to query these records: without parameters returns total record count, `-t` for time-based search, `-s` for text search, `-n` to limit number of results, `--start/--end` for time range filtering.
-
-### System Tools Directory
-- **Script directory**: `/home/paradoxist/.config/home-manager/modules/local/bin/`
-
-### 1. Setting Reminders
-Use the `execute_tool.sh` command with `at` command format to set desktop reminders:
-
-**Command format:**
-```bash
-execute_tool.sh set_reminder <reminder_time> <reminder_content>
-```
-
-**Examples:**
-- Reminder to drink water in 5 minutes: `execute_tool.sh set_reminder "now + 5 minutes" "Drink water"`
-- Meeting reminder tomorrow at 3 PM: `execute_tool.sh set_reminder "3:00 PM tomorrow" "Meeting"`
-
-### 2. Performing Desktop Operations
-Use the `execute_tool.sh` command to execute various desktop shortcut operations:
-
-**Command format:**
-```bash
-execute_tool.sh desktop_operation [<operation_number>]
-```
-
-**Instructions:**
-- When `<operation_number>` is not provided, displays all available desktop operation list
-- When `<operation_number>` is provided, executes the corresponding numbered operation
-
-**Output example (showing operation list):**
-```
-0	"open terminal"
-1	"open editor"
-2	"open file manager"
-...
-```
-
-**Execution examples:**
-- Open terminal: `execute_tool.sh desktop_operation 0`
-- Open browser: `execute_tool.sh desktop_operation 13`
-
-### 3. Managing User-Level Scheduled Tasks
-The standard workflow for managing scheduled tasks (cron jobs, including daily reminders) is:
-1. **Directly modify source file**: Edit the source file located at `/home/paradoxist/.cron`
-2. **Synchronize to system**: Execute `crontab /home/paradoxist/.cron` command to apply the modified content to the system
-
-### 4. Checking Current Situation
-When the user requests to check the current situation, read the `/tmp/snapshot_picture.png` file to obtain screenshot information.
-
 # Ad-hoc Requirements and Notes
 
 - 我需要记住三个生物化学反应数据库网站：
@@ -356,5 +383,5 @@ When the user requests to check the current situation, read the `/tmp/snapshot_p
 - 灵感：浏览器定制 - 尝试使用Common Lisp定制Nyxt浏览器。
 - 灵感：系统能力测试 - 卸载字体包并用此示例测试动态修改系统能力。
 
-- 今天解了一个“鸡鸡毛结”。
+- 今天解了一个"鸡鸡毛结"。
 - 用户自己养了猫。
