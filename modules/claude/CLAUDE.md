@@ -86,31 +86,25 @@ This pattern reduces complex package management to **text editing**, truly achie
 
 ## Project and File Structure
 
-### Directory Hierarchy
+### Standard Project Directory Structure
 ```
-~
-├── .config/
-│   └── home-manager/
-│       ├── modules/
-│       │   ├── claude/
-│       │   │   └── CLAUDE.md (this file)
-│       │   └── local/
-│       │       └── bin/ (system tool scripts)
-│       └── (other home-manager configuration files)
-├── Desktop/
-│   └── Projects/ (primary project repository directory)
-│       └── [project-name]/
-│           ├── shell.nix (project dependencies)
-│           ├── .envrc (direnv integration)
-│           ├── main (mandatory entry point)
-│           ├── CLAUDE.md (project strategic configuration)
-│           ├── README.md (current state and progress)
-│           └── tests/ (test directory structure)
-│               ├── automated/
-│               ├── manual/
-│               └── hybrid/
-└── .cron (user-level cron job source file)
+[project-name]/
+├── main                    # Mandatory entry point script
+├── shell.nix              # Project dependencies (Nix environment)
+├── .envrc                 # Direnv integration
+├── CLAUDE.md             # Strategic configuration document
+├── README.md             # Current state and progress tracking
+└── tests/                # Test directory structure
+    ├── automated/        # Automated tests (unit, integration)
+    ├── manual/          # Manual interaction tests
+    └── hybrid/          # Tests with both automated and manual components
 ```
+
+### System-Level Directories
+- **Configuration Management**: `~/.config/home-manager/` - System-wide configuration managed as code (NixOS home-manager)
+- **System Tools**: `~/.config/home-manager/modules/local/bin/` - System tool scripts directory
+- **Primary Project Repository**: `~/Desktop/Projects/` - Centralized storage for all project repositories
+- **User-Level Cron Jobs**: `~/.cron` - Source file for user-level scheduled tasks
 
 ### Key File Descriptions
 
@@ -162,97 +156,7 @@ This pattern reduces complex package management to **text editing**, truly achie
 - **Comparison Mandate**: MUST clearly compare current progress against the strategic goals in CLAUDE.md
 - **Format**: Explicitly show what has been completed, what's in progress, and what's pending
 
-## System Tools Usage Guide
-
-### Database Log System Overview
-The system includes a continuously running database log system (`~/.log.db`) that automatically records various interaction data while the machine is powered on, including voice recordings, intent recognition, physiological data, and focus changes. Use the `get_intent.sh` script to query these records: without parameters returns total record count, `-t` for time-based search, `-s` for text search, `-n` to limit number of results, `--start/--end` for time range filtering.
-
-### System Tools Directory
-- **Script directory**: `/home/paradoxist/.config/home-manager/modules/local/bin/`
-
-### 1. Setting Reminders
-Use the `execute_tool.sh` command with `at` command format to set desktop reminders:
-
-**Command format:**
-```bash
-execute_tool.sh set_reminder <reminder_time> <reminder_content>
-```
-
-**Examples:**
-- Reminder to drink water in 5 minutes: `execute_tool.sh set_reminder "now + 5 minutes" "Drink water"`
-- Meeting reminder tomorrow at 3 PM: `execute_tool.sh set_reminder "3:00 PM tomorrow" "Meeting"`
-
-### 2. Performing Desktop Operations
-Use the `execute_tool.sh` command to execute various desktop shortcut operations:
-
-**Command format:**
-```bash
-execute_tool.sh desktop_operation [<operation_number>]
-```
-
-**Instructions:**
-- When `<operation_number>` is not provided, displays all available desktop operation list
-- When `<operation_number>` is provided, executes the corresponding numbered operation
-
-**Output example (showing operation list):**
-```
-0	"open terminal"
-1	"open editor"
-2	"open file manager"
-...
-```
-
-**Execution examples:**
-- Open terminal: `execute_tool.sh desktop_operation 0`
-- Open browser: `execute_tool.sh desktop_operation 13`
-
-### 3. Managing User-Level Scheduled Tasks
-The standard workflow for managing scheduled tasks (cron jobs, including daily reminders) is:
-1. **Directly modify source file**: Edit the source file located at `/home/paradoxist/.cron`
-2. **Synchronize to system**: Execute `crontab /home/paradoxist/.cron` command to apply the modified content to the system
-
-### 4. Checking Current Situation
-When the user requests to check the current situation, read the `/tmp/snapshot_picture.png` file to obtain screenshot information.
-
 ## Development Constraints and Best Practices
-
-### Document Management (Declarative Configuration)
-Each project maintains exactly two declarative documentation files, akin to operating system configuration files:
-
-1. **CLAUDE.md**: Strategic planning and declarative configuration for the entire project
-   - **Purpose**: Describes what the entire project aims to achieve and its high-level goals
-   - **Declaration**: This is the "desired state" - the authoritative specification of project objectives
-   - **Authority**: Source of truth for project vision and scope
-
-2. **README.md**: Current state declaration and progress tracking document
-   - **Purpose**: Tracks actual progress after each development cycle compared to the strategic plan
-   - **Declaration**: This is the "current state" - a explicit comparison with CLAUDE.md declarations
-   - **Update Frequency**: Must be updated at the END of every development session
-   - **Comparison Requirement**: MUST clearly compare current progress against the strategic goals in CLAUDE.md
-   - **Format**: Explicitly show what has been completed, what's in progress, and what's pending
-
-**Development Cycle Definition**:
-- **Session Start**: Developer reads both documents to understand the gap between desired state (CLAUDE.md) and current state (README.md)
-- **During Development**: Work toward closing the gap
-- **Session End**: Developer MUST update README.md to declare new current state with explicit comparison to CLAUDE.md declarations
-- **Completion Criteria**: Session is complete when README.md accurately reflects what was accomplished
-
-**Document Update Triggers**:
-- **CLAUDE.md**: Updated when project scope, goals, or architecture fundamentally changes (strategic changes only, by designated developers)
-- **README.md**: Updated at the END of every development session to declare actual progress
-
-**Declaration Principles**:
-- **Clarity**: Both documents should be declarative statements, not procedural instructions
-- **Contrast**: README.md must explicitly show the delta - what changed, what's been added, what's been removed
-- **Alignment**: README.md progress should always be traceable back to specific goals in CLAUDE.md
-- **Immutability**: Once declared in CLAUDE.md, strategic goals remain until formally updated
-
-**Rule**: No additional documentation files should be created unless explicitly required.
-
-#### Document Management Practices
-- **Modifying Existing Instructions**: When managing or modifying existing memories in `.claude/CLAUDE.md`, use the "read file content, then use Edit tool for modification" approach
-- **Commit Message Format**: Use single-line messages starting with a type indicator (e.g., 'feat:', 'fix:', 'refactor:'), with the first word after the type indicator not capitalized
-- **Task Management**: All todos should be uniformly managed in the `~/README.md` file
 
 ### Development Environment Philosophy
 
@@ -402,60 +306,77 @@ def test_login():
 ```
 
 #### 4. Independent Tests
-**Each test must be independent and self-contained:**
+**Each test must be independent and self-contained**:
 - No dependency on other tests' execution order
 - Each test sets up its own data
 - Tests can run in any order or parallel
 
 #### 5. Proven Test Frameworks
-**Use mature, established testing frameworks:**
+**Use mature, established testing frameworks**:
 - Python: pytest
 - Go: go test
 - Rust: cargo test
 - Never write custom testing infrastructure
 
 #### 6. Code Review for Tests
-**Tests require the same scrutiny as production code:**
+**Tests require the same scrutiny as production code**:
 - Review test logic
 - Validate expected outcomes
 - Check for edge cases
 - Confirm property assumptions
 
-### Mandatory Main Entry Point
-Each project MUST have a `main` script as the unified entry point:
 
-1. **Unified Interface**: All projects must use `main` as the primary interface
-2. **Help Documentation**: `main --help` or `main -h` must display complete usage documentation in English
-3. **Self-Documenting**: The script should contain all usage instructions and project summary in English
-4. **No Additional Docs**: Do not maintain separate documentation files by default
-5. **Flexible Parameters**: Script may include project-specific parameters and flags
-6. **Test Integration**: The script MUST support these test-related options:
-   - `main --test`: Run all tests and show detailed report with success rate
-   - `main --test <path>`: Run tests in specific directory
-   - Individual test results plus overall summary report
-7. **Default Run**: The script MUST support running without any parameters to execute the project's primary functionality
+## System Tools Usage Guide
 
-**Note**: The main script MUST use `#!/usr/bin/env < interpreter >` shebang for portability and flexibility, never hardcode interpreter paths.
+### Database Log System Overview
+The system includes a continuously running database log system (`~/.log.db`) that automatically records various interaction data while the machine is powered on, including voice recordings, intent recognition, physiological data, and focus changes. Use the `get_intent.sh` script to query these records: without parameters returns total record count, `-t` for time-based search, `-s` for text search, `-n` to limit number of results, `--start/--end` for time range filtering.
 
-#### Implementation Pattern:
+### System Tools Directory
+- **Script directory**: `/home/paradoxist/.config/home-manager/modules/local/bin/`
+
+### 1. Setting Reminders
+Use the `execute_tool.sh` command with `at` command format to set desktop reminders:
+
+**Command format:**
 ```bash
-#!/usr/bin/env bash
-# Project Summary: Brief description of the project
-#
-# Usage:
-#   main [options]
-#
-# Options:
-#   -h, --help              Show this help message
-#   [additional project-specific options...]
-#
-# Examples:
-#   main                 Run the primary functionality (no parameters required)
-#   main --run-tests
-#   main --build
-#
-# For more details, run: main --help
+execute_tool.sh set_reminder <reminder_time> <reminder_content>
 ```
+
+**Examples:**
+- Reminder to drink water in 5 minutes: `execute_tool.sh set_reminder "now + 5 minutes" "Drink water"`
+- Meeting reminder tomorrow at 3 PM: `execute_tool.sh set_reminder "3:00 PM tomorrow" "Meeting"`
+
+### 2. Performing Desktop Operations
+Use the `execute_tool.sh` command to execute various desktop shortcut operations:
+
+**Command format:**
+```bash
+execute_tool.sh desktop_operation [<operation_number>]
+```
+
+**Instructions:**
+- When `<operation_number>` is not provided, displays all available desktop operation list
+- When `<operation_number>` is provided, executes the corresponding numbered operation
+
+**Output example (showing operation list):**
+```
+0	"open terminal"
+1	"open editor"
+2	"open file manager"
+...
+```
+
+**Execution examples:**
+- Open terminal: `execute_tool.sh desktop_operation 0`
+- Open browser: `execute_tool.sh desktop_operation 13`
+
+### 3. Managing User-Level Scheduled Tasks
+The standard workflow for managing scheduled tasks (cron jobs, including daily reminders) is:
+1. **Directly modify source file**: Edit the source file located at `/home/paradoxist/.cron`
+2. **Synchronize to system**: Execute `crontab /home/paradoxist/.cron` command to apply the modified content to the system
+
+### 4. Checking Current Situation
+When the user requests to check the current situation, read the `/tmp/snapshot_picture.png` file to obtain screenshot information.
 
 # 散碎要求与记录
 
@@ -470,4 +391,3 @@ Each project MUST have a `main` script as the unified entry point:
 
 - 今天解了一个“鸡鸡毛结”。
 - 用户自己养了猫。
-- 写脚本的时候，在有可能的地方尽量使用短路表达式。
