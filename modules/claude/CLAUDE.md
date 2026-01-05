@@ -1,9 +1,9 @@
 # Development Environment and Best Practices
 
 
-## Development Environment Configuration
+## Part 1: Environment Definition (What This System Is)
 
-### System Information
+### 1.1 System Information
 **Environment**: NixOS 25.11pre888552.b3d51a0365f6 (Xantusia) x86_64
 **Host**: Khadas Mind-K1014-PCB
 **Kernel**: 6.176-zen1
@@ -14,101 +14,9 @@
 **Shell**: zsh 5.9
 **Terminal**: claude
 
-### Mandatory Requirements
-1. **Environment Isolation**: Maintain strict project isolation through Nix environments
-2. **Dependency Management**: Centralize all dependencies in `shell.nix` for reproducibility
-3. **No Global Dependencies**: Avoid global installations; all dependencies must be project-contained
+### 1.2 Directory Structure
 
-### Core Workflow
-**Core Philosophy**: Developers focus on business logic, environment follows automatically.
-
-**Three-Step Workflow (Pseudocode)**:
-```
-PROCESS DeveloperWorkflow:
-  // Runtime environment automatically manages dependencies
-
-  WHILE developing DO:
-    // Step 1: Discovery - Runtime reveals missing dependency
-    TRY execute command
-    IF command_not_found THEN
-      missing_package ← identify_missing_package(command)
-
-      // Step 2: Declaration - Edit shell.nix
-      EDIT shell.nix:
-        ADD pkgs.missing_package TO myPackages list
-      SAVE shell.nix
-
-      // Step 3: Automatic Activation - Environment reloads
-      environment ← reload_environment()
-      ASSERT environment.contains(missing_package)
-
-      CONTINUE development
-    ENDIF
-  ENDWHILE
-ENDPROCESS
-```
-
-**Key Advantages**:
-- **Zero-Command Operation**: No `install`, `update`, or `remove` commands needed
-- **Immediate Feedback**: Edit → Save → Test immediately
-- **Environment-as-Code**: Dependency declarations stay perfectly synchronized with actual environment
-- **Full Reproducibility**: Any developer, any machine gets identical environment
-
-**Real-World Example**:
-```bash
-# 1. Discover missing screenfetch command
-$ screenfetch
-zsh: command not found: screenfetch
-
-# 2. Edit shell.nix, add one line:
-#    pkgs.screenfetch
-
-# 3. After environment auto-reloads:
-$ screenfetch
-[Successfully displays system information]
-```
-
-This pattern reduces complex package management to **text editing**, truly achieving "environment-as-code".
-
-### Implementation Guidelines
-**Language Selection**
-- **Default Approach**: Prioritize the most concise and suitable programming language for the task
-- **Native Development**: Default to developing native software optimized for this machine's architecture (x86_64)
-- **Consider**: Performance requirements, development speed, and maintenance cost
-- **Performance-First Projects**: For new projects where performance is critical, prioritize Rust language; however, first evaluate the maturity of the project ecosystem and development speed requirements
-
-**Code Implementation Rules**
-1. **Minimal Prototype First**: Always implement the smallest possible viable prototype
-2. **No Feature Bloat**: Absolutely do not add any features that were not explicitly requested
-3. **Simplicity Over Complexity**: Choose the simplest implementation that meets the requirements
-4. **Native Optimization**: Leverage the native environment (NixOS + Intel/AMD x86_64) for optimal performance
-5. **Reproducible Builds**: Use Nix for build processes to ensure reproducibility
-6. **Requirement Discovery Through Questioning**: When starting a project without existing documentation and requirements are unclear, **always prioritize multiple-choice questions and yes/no questions** before asking open-ended questions. This approach accelerates requirement gathering and reduces ambiguity:
-7. **No Code Comments**: Do not add any code comments. Code comments should only be inserted in dedicated places to indicate where future functionality can be added
-   - **Question Format Priority**:
-     1. **Yes/No Questions** (e.g., "Does it need to be web-based? [y/n]")
-     2. **Multiple Choice Questions** (e.g., "Which option best describes your preference? A) CLI tool B) Web app C) Desktop app")
-     3. **Limited Options Questions** (e.g., "Pick the top 3 priorities from: [A] Speed [B] Ease of use [C] Features [D] Cost")
-     4. **Open-ended Questions** (only after options are exhausted)
-   - **Example Question Flow**: "Is this for personal use or business? → If business, is it for: A) Internal team B) External clients C) Public use → ..."
-   - **Goal**: Quickly narrow down to 2-3 clear directions before deep-diving into details
-   The goal is to transform vague ideas into clear, actionable requirements through iterative questioning, then document the agreed-upon scope in CLAUDE.md and track progress in README.md.
-
-**Script Writing Principles**
-**Core**: Simplicity first, intent-driven.
-- Use short-circuit expressions (`&&`) over `if-then-fi`
-- One logic per line, no deep nesting
-- Remove all unnecessary comments and output
-
-**Key Principles**
-- Ask clarifying questions before over-engineering
-- Prefer standard library solutions over heavy dependencies
-- Document trade-offs when choosing between multiple valid approaches
-- Ensure all code can be built and run in the Nix environment defined by `shell.nix`
-
-## Project and File Structure
-
-### Standard Project Directory Structure
+#### Standard Project Directory Structure
 ```
 [project-name]/
 ├── main                    # Mandatory entry point script
@@ -122,66 +30,50 @@ This pattern reduces complex package management to **text editing**, truly achie
     └── hybrid/          # Tests with both automated and manual components
 ```
 
-### System-Level Directories
+#### System-Level Directories
 - **Configuration Management**: `~/.config/home-manager/` - System-wide configuration managed as code (NixOS home-manager)
 - **System Tools**: `~/.config/home-manager/modules/local/bin/` - System tool scripts directory
 - **Primary Project Repository**: `~/Desktop/Projects/` - Centralized storage for all project repositories
 - **User-Level Cron Jobs**: `~/.cron` - Source file for user-level scheduled tasks
 
-### Document Management (Declarative Configuration)
-Each project maintains exactly two declarative documentation files, akin to operating system configuration files:
+### 1.3 Key Files and Their Purposes
 
-1. **CLAUDE.md**: Strategic planning and declarative configuration for the entire project
-   - **Purpose**: Describes what the entire project aims to achieve and its high-level goals
-   - **Declaration**: This is the "desired state" - the authoritative specification of project objectives
-   - **Update Policy**: Modified only when strategic goals or architecture fundamentally change (by designated developers only)
-   - **Authority**: Source of truth for project vision and scope
+#### CLAUDE.md (Strategic Configuration Document)
+- **Purpose**: The authoritative specification of project objectives and high-level goals
+- **Status Declaration**: Represents the "desired state" for the entire project
+- **Update Policy**: Modified only when strategic goals or architecture fundamentally change (by designated developers only)
+- **Authority**: Source of truth for project vision and scope
 
-2. **README.md**: Current state declaration and progress tracking document
-   - **Purpose**: Tracks actual progress after each development cycle compared to the strategic plan
-   - **Declaration**: This is the "current state" - a explicit comparison with CLAUDE.md declarations
-   - **Update Requirement**: Must be updated at the END of every development session
-   - **Comparison Mandate**: MUST clearly compare current progress against the strategic goals in CLAUDE.md
-   - **Format**: Explicitly show what has been completed, what's in progress, and what's pending
+#### README.md (Current State Declaration)
+- **Purpose**: Tracks actual progress after each development cycle compared to the strategic plan
+- **Update Requirement**: Must be updated at the END of every development session
+- **Comparison Mandate**: MUST clearly compare current progress against the strategic goals in CLAUDE.md
+- **Format**: Explicitly show what has been completed, what's in progress, and what's pending
 
-**Development Cycle Definition (Pseudocode)**:
-```
-PROCESS DevelopmentSession:
-  // Iterative cycle for working on projects
+#### shell.nix (Dependency Management)
+- **Purpose**: Defines all project dependencies in a reproducible Nix environment
+- **Mandatory Requirement**: All dependencies must be declared and managed through this file
+- **Core Philosophy**: Environment-as-code with zero-command operation (edit → save → test immediately)
 
-  // Phase 1: Session Start - Assess current state
-  desired_state ← READ(CLAUDE.md)
-  current_state ← READ(README.md)
-  gap ← CALCULATE_GAP(desired_state, current_state)
+#### .envrc (Direnv Integration)
+- **Purpose**: Automatically activates the Nix environment when entering the project directory
 
-  // Phase 2: During Development - Close the gap
-  WHILE session_active AND gap > 0 DO:
-    work_result ← EXECUTE_WORK(gap.priority_item)
-    gap ← UPDATE_GAP(gap, work_result)
-  ENDWHILE
+#### main (Mandatory Entry Point Script)
+- **Purpose**: Unified interface for all project functionality
+- **Requirements**:
+  - Must support running without any parameters to execute primary functionality
+  - Must display complete usage documentation in English via `main --help` or `main -h`
+  - Must support test execution: `main --test` (run all tests) and `main --test <path>` (run tests in specific directory)
+  - Must use `#!/usr/bin/env <interpreter>` shebang for portability, never hardcode interpreter paths
 
-  // Phase 3: Session End - Update documentation
-  new_current_state ← GENERATE_STATE(work_results)
-  WRITE(README.md, new_current_state)
-  ASSERT STATE_MATCHES_WORK(new_current_state, work_results)
+### 1.4 System Tools
 
-  // Completion check
-  session_complete ← VERIFY_COMPLETION(new_current_state)
-  RETURN session_complete
-ENDPROCESS
-```
+#### Database Log System Overview
+The system includes a continuously running database log system (`~/.log.db`) that automatically records various interaction data while the machine is powered on, including voice recordings, intent recognition, physiological data, and focus changes. Use the `get_intent.sh` script to query these records: without parameters returns total record count, `-t` for time-based search, `-s` for text search, `-n` to limit number of results, `--start/--end` for time range filtering.
 
-**Document Update Triggers**:
-- **CLAUDE.md**: Updated when project scope, goals, or architecture fundamentally change (strategic changes only, by designated developers)
-- **README.md**: Updated at the END of every development session to declare actual progress
+#### System Tools Directory
+- **Script directory**: `/home/paradoxist/.config/home-manager/modules/local/bin/`
 
-**Declaration Principles**:
-- **Clarity**: Both documents should be declarative statements, not procedural instructions
-- **Contrast**: README.md must explicitly show the delta - what changed, what's been added, what's been removed
-- **Alignment**: README.md progress should always be traceable back to specific goals in CLAUDE.md
-- **Immutability**: Once declared in CLAUDE.md, strategic goals remain until formally updated
-
-**Rule**: No additional documentation files should be created unless explicitly required.
 
 ## Development Constraints and Best Practices
 
