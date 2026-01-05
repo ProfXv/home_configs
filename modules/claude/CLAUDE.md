@@ -1,5 +1,55 @@
 # Development Environment and Best Practices
 
+## Document Structure Overview
+
+```
+# Development Environment and Best Practices
+├── ## Development Environment Configuration
+│   ├── ### System Information
+│   ├── ### Mandatory Requirements
+│   ├── ### Core Workflow
+│   └── ### Implementation Guidelines
+│       ├── **Language Selection**
+│       ├── **Code Implementation Rules**
+│       ├── **Script Writing Principles**
+│       └── **Key Principles**
+├── ## Project and File Structure
+│   ├── ### Standard Project Directory Structure
+│   ├── ### System-Level Directories
+│   └── ### Key File Descriptions
+│       ├── #### 1. CLAUDE.md (Strategic Configuration Document)
+│       ├── #### 2. main (Mandatory Entry Point Script)
+│       ├── #### 3. shell.nix (Dependency Management)
+│       ├── #### 4. .envrc (Direnv Integration)
+│       └── #### 5. README.md (Current State Declaration)
+├── ## Development Constraints and Best Practices
+│   ├── ### Development Environment Philosophy
+│   │   └── #### Sandbox Exploration Principle
+│   ├── ### Dependency Minimization Principle
+│   ├── ### Testing Requirements
+│   │   └── #### Manual Test Design
+│   ├── ### Test-Driven Development (TDD) Process
+│   │   ├── #### 1. Red Phase: Write a Failing Test
+│   │   ├── #### 2. Green Phase: Minimal Implementation
+│   │   └── #### 3. Refactor Phase: Improve Code Structure
+│   └── ### Test Correctness Assurance
+│       ├── #### 1. Red Phase Validation
+│       ├── #### 2. Positive and Negative Examples
+│       ├── #### 3. Property-Based Testing
+│       ├── #### 4. Independent Tests
+│       ├── #### 5. Proven Test Frameworks
+│       └── #### 6. Code Review for Tests
+├── ## System Tools Usage Guide
+│   ├── ### Database Log System Overview
+│   ├── ### System Tools Directory
+│   ├── ### 1. Setting Reminders
+│   ├── ### 2. Performing Desktop Operations
+│   ├── ### 3. Managing User-Level Scheduled Tasks
+│   └── ### 4. Checking Current Situation
+└── # Miscellaneous Requirements and Notes
+    └── - Various Chinese notes and inspirations
+```
+
 ## Development Environment Configuration
 
 ### System Information
@@ -378,7 +428,7 @@ The standard workflow for managing scheduled tasks (cron jobs, including daily r
 ### 4. Checking Current Situation
 When the user requests to check the current situation, read the `/tmp/snapshot_picture.png` file to obtain screenshot information.
 
-# 散碎要求与记录
+# Miscellaneous Requirements and Notes
 
 - 我需要记住三个生物化学反应数据库网站：
   1. KEGG PATHWAY: https://www.genome.jp/kegg/pathway.html
