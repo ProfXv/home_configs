@@ -15,9 +15,9 @@
 **Terminal**: claude
 
 ### Mandatory Requirements
-1. **Environment Isolation**: Always use `shell.nix` to manage project virtual environments
-2. **Dependency Management**: When new dependencies are needed, maintain them through `shell.nix` to ensure environment reproducibility
-3. **No Global Dependencies**: Never install dependencies globally; everything must be contained within the project's Nix environment
+1. **Environment Isolation**: Maintain strict project isolation through Nix environments
+2. **Dependency Management**: Centralize all dependencies in `shell.nix` for reproducibility
+3. **No Global Dependencies**: Avoid global installations; all dependencies must be project-contained
 
 ### Core Workflow
 **Core Philosophy**: Developers focus on business logic, environment follows automatically.
