@@ -1,4 +1,4 @@
-# 开发环境与最佳实践
+# Development Environment and Best Practices
 
 ## Development Environment Configuration
 
@@ -84,63 +84,117 @@ This pattern reduces complex package management to **text editing**, truly achie
 - Document trade-offs when choosing between multiple valid approaches
 - Ensure all code can be built and run in the Nix environment defined by `shell.nix`
 
-### Project Structure Expectations
-For each new project:
-1. Create a `shell.nix` defining all dependencies
-2. Set up `.envrc` for direnv integration
-3. Implement the minimal viable solution first
-4. Iterate based on feedback and requirements
+## Project and File Structure
 
-#### Special Directory Locations
-
-##### Configuration Management Directory
-- **Location**: `~/.config/home-manager`
-- **Purpose**: System-wide configuration managed as code (NixOS home-manager)
-- **Repository**: This is itself a git repository containing all system configurations
-- **Usage**: When adjusting environment settings or dependencies, update this configuration directory
-
-##### Project Repository Directory
-- **Location**: `~/Desktop/Projects`
-- **Purpose**: Centralized storage for all project repositories
-- **Structure**: Each subdirectory represents one project (can be cloned from open-source or newly created)
-- **Default Path**: All new projects should be created within this directory unless specified otherwise
-- **Reference**: When looking for a project or creating a new one, start from this location
-
-##### Primary Project Root Directory
-- **Default Location**: `/home/paradoxist/Desktop/Projects` is the primary project root directory
-- **Usage**: This is the default location for creating new projects, finding existing ones, or cloning repositories
-
-## 系统工具使用指南
-
-该系统包含一个持续运行的数据库日志系统（~/.log.db），在机器开启时自动记录各类交互数据，包括语音记录、意图识别、生理数据和焦点变化。使用 `get_intent.sh` 脚本可以查询这些记录：不加参数返回记录总数，`-t` 按时间搜索，`-s` 按文本搜索，`-n` 限制返回条数，`--start/--end` 按时间范围筛选。
-
-- 脚本目录：/home/paradoxist/.config/home-manager/modules/local/bin/
-
-### 1. 设置提醒的方式
-使用 `execute_tool.sh` 命令结合 `at` 命令格式设置桌面提醒：
-
-**命令格式：**
-```bash
-execute_tool.sh set_reminder <提醒时间> <提醒内容>
+### Directory Hierarchy
+```
+~
+├── .config/
+│   └── home-manager/
+│       ├── modules/
+│       │   ├── claude/
+│       │   │   └── CLAUDE.md (this file)
+│       │   └── local/
+│       │       └── bin/ (system tool scripts)
+│       └── (other home-manager configuration files)
+├── Desktop/
+│   └── Projects/ (primary project repository directory)
+│       └── [project-name]/
+│           ├── shell.nix (project dependencies)
+│           ├── .envrc (direnv integration)
+│           ├── main (mandatory entry point)
+│           ├── CLAUDE.md (project strategic configuration)
+│           ├── README.md (current state and progress)
+│           └── tests/ (test directory structure)
+│               ├── automated/
+│               ├── manual/
+│               └── hybrid/
+└── .cron (user-level cron job source file)
 ```
 
-**示例：**
-- 5分钟后提醒喝水：`execute_tool.sh set_reminder "now + 5 minutes" "喝水"`
-- 明天下午3点提醒开会：`execute_tool.sh set_reminder "3:00 PM tomorrow" "开会"`
+### Key File Descriptions
 
-### 2. 进行桌面操作的方式
-使用 `execute_tool.sh` 命令可以执行各种桌面快捷操作：
+#### 1. CLAUDE.md (Strategic Configuration Document)
+- **Purpose**: The authoritative specification of project objectives and high-level goals
+- **Status Declaration**: Represents the "desired state" for the entire project
+- **Update Policy**: Modified only when strategic goals or architecture fundamentally change (by designated developers only)
+- **Authority**: Source of truth for project vision and scope
+- **Location**: Both at system level (`~/.config/home-manager/modules/claude/CLAUDE.md`) and project level (`~/Desktop/Projects/[project-name]/CLAUDE.md`)
 
-**命令格式：**
+#### 2. main (Mandatory Entry Point Script)
+- **Purpose**: Unified interface for all project functionality
+- **Requirements**:
+  - Must support running without any parameters to execute primary functionality
+  - Must display complete usage documentation in English via `main --help` or `main -h`
+  - Must support test execution: `main --test` (run all tests) and `main --test <path>` (run tests in specific directory)
+  - Must use `#!/usr/bin/env <interpreter>` shebang for portability, never hardcode interpreter paths
+- **Implementation Pattern**:
+  ```bash
+  #!/usr/bin/env bash
+  # Project Summary: Brief description of the project
+  #
+  # Usage:
+  #   main [options]
+  #
+  # Options:
+  #   -h, --help              Show this help message
+  #   [additional project-specific options...]
+  #
+  # Examples:
+  #   main                 Run the primary functionality (no parameters required)
+  #   main --run-tests
+  #   main --build
+  #
+  # For more details, run: main --help
+  ```
+
+#### 3. shell.nix (Dependency Management)
+- **Purpose**: Defines all project dependencies in a reproducible Nix environment
+- **Mandatory Requirement**: All dependencies must be declared and managed through this file
+- **Core Philosophy**: Environment-as-code with zero-command operation (edit → save → test immediately)
+
+#### 4. .envrc (Direnv Integration)
+- **Purpose**: Automatically activates the Nix environment when entering the project directory
+
+#### 5. README.md (Current State Declaration)
+- **Purpose**: Tracks actual progress after each development cycle compared to the strategic plan
+- **Update Requirement**: Must be updated at the END of every development session
+- **Comparison Mandate**: MUST clearly compare current progress against the strategic goals in CLAUDE.md
+- **Format**: Explicitly show what has been completed, what's in progress, and what's pending
+
+## System Tools Usage Guide
+
+### Database Log System Overview
+The system includes a continuously running database log system (`~/.log.db`) that automatically records various interaction data while the machine is powered on, including voice recordings, intent recognition, physiological data, and focus changes. Use the `get_intent.sh` script to query these records: without parameters returns total record count, `-t` for time-based search, `-s` for text search, `-n` to limit number of results, `--start/--end` for time range filtering.
+
+### System Tools Directory
+- **Script directory**: `/home/paradoxist/.config/home-manager/modules/local/bin/`
+
+### 1. Setting Reminders
+Use the `execute_tool.sh` command with `at` command format to set desktop reminders:
+
+**Command format:**
 ```bash
-execute_tool.sh desktop_operation [<操作序号>]
+execute_tool.sh set_reminder <reminder_time> <reminder_content>
 ```
 
-**说明：**
-- 当不提供 `<操作序号>` 时，会显示所有可用的桌面操作列表
-- 当提供 `<操作序号>` 时，会执行对应序号的操作
+**Examples:**
+- Reminder to drink water in 5 minutes: `execute_tool.sh set_reminder "now + 5 minutes" "Drink water"`
+- Meeting reminder tomorrow at 3 PM: `execute_tool.sh set_reminder "3:00 PM tomorrow" "Meeting"`
 
-**输出示例（显示操作列表）：**
+### 2. Performing Desktop Operations
+Use the `execute_tool.sh` command to execute various desktop shortcut operations:
+
+**Command format:**
+```bash
+execute_tool.sh desktop_operation [<operation_number>]
+```
+
+**Instructions:**
+- When `<operation_number>` is not provided, displays all available desktop operation list
+- When `<operation_number>` is provided, executes the corresponding numbered operation
+
+**Output example (showing operation list):**
 ```
 0	"open terminal"
 1	"open editor"
@@ -148,21 +202,17 @@ execute_tool.sh desktop_operation [<操作序号>]
 ...
 ```
 
-**执行操作示例：**
-- 打开终端：`execute_tool.sh desktop_operation 0`
-- 打开浏览器：`execute_tool.sh desktop_operation 13`
+**Execution examples:**
+- Open terminal: `execute_tool.sh desktop_operation 0`
+- Open browser: `execute_tool.sh desktop_operation 13`
 
-### 3. 管理定时任务的方式
-管理定时任务（cron jobs，包括每日提醒）的标准流程是：
-1. **直接修改源文件**：编辑位于 `/home/paradoxist/.cron` 的源文件
-2. **同步到系统**：执行 `crontab /home/paradoxist/.cron` 命令将修改后的内容应用到系统中
+### 3. Managing User-Level Scheduled Tasks
+The standard workflow for managing scheduled tasks (cron jobs, including daily reminders) is:
+1. **Directly modify source file**: Edit the source file located at `/home/paradoxist/.cron`
+2. **Synchronize to system**: Execute `crontab /home/paradoxist/.cron` command to apply the modified content to the system
 
-### 4. 检查当前情况的方式
-当用户要求检查当前情况时，应读取 `/tmp/snapshot_picture.png` 文件来获取截图信息。
-
----
-
-- 回复用户的时候，尽可能不要使用 echo 操作，而是直接使用文字。
+### 4. Checking Current Situation
+When the user requests to check the current situation, read the `/tmp/snapshot_picture.png` file to obtain screenshot information.
 
 ## Development Constraints and Best Practices
 
@@ -172,7 +222,6 @@ Each project maintains exactly two declarative documentation files, akin to oper
 1. **CLAUDE.md**: Strategic planning and declarative configuration for the entire project
    - **Purpose**: Describes what the entire project aims to achieve and its high-level goals
    - **Declaration**: This is the "desired state" - the authoritative specification of project objectives
-   - **Update Frequency**: Modified only when strategic goals or architecture fundamentally change (by designated developers only)
    - **Authority**: Source of truth for project vision and scope
 
 2. **README.md**: Current state declaration and progress tracking document
@@ -407,7 +456,6 @@ Each project MUST have a `main` script as the unified entry point:
 #
 # For more details, run: main --help
 ```
-- 写脚本的时候，在有可能的地方尽量使用短路表达式。
 
 # 散碎要求与记录
 
@@ -422,3 +470,4 @@ Each project MUST have a `main` script as the unified entry point:
 
 - 今天解了一个“鸡鸡毛结”。
 - 用户自己养了猫。
+- 写脚本的时候，在有可能的地方尽量使用短路表达式。
