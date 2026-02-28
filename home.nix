@@ -11,6 +11,13 @@ let
                     then ./private/user-private.nix
                     else ./templates/private/user-private.nix;
   baseImports = [ userPrivatePath ];
+  hyprImports = [
+    ./modules/hyprland.nix
+    ./modules/hyprlock.nix
+    ./modules/hyprpaper.nix
+    ./modules/hypridle.nix
+  ];
+  waybarImports = [ ./modules/waybar.nix ];
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -487,5 +494,5 @@ in
     };
   };
 
-  imports = baseImports;
+  imports = baseImports ++ hyprImports ++ waybarImports;
 }

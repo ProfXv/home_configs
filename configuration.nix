@@ -139,7 +139,6 @@ in
     { uinput = {}; }
   ]);
 
-  nixpkgs.config.allowUnfree = true;
   nix = {
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
@@ -156,12 +155,28 @@ in
     extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
   };
 
-  programs.hyprland.enable = true;
-  programs.zsh.enable = true;
-
-  programs.gnupg.agent = {
-    enable = true;
-    pinentryPackage = pkgs.pinentry-qt;
+  programs = {
+    hyprland.enable = true;
+    hyprlock.enable = true;
+    niri.enable = true;
+    zsh.enable = true;
+    neovim.enable = true;
+    yazi.enable = true;
+    firefox = {
+      enable = true;
+      package = pkgs.firefox-devedition;
+    };
+    waybar.enable = true;
+    gnupg.agent = {
+      enable = true;
+      pinentryPackage = pkgs.pinentry-qt;
+    };
+    bat.enable = true;
+    wayvnc.enable = true;
+    ydotool = {
+      enable = true;
+      group = "uinput";
+    };
   };
 
   virtualisation.docker.enable = true;
@@ -171,38 +186,38 @@ in
     home-manager
     qt5.qtwayland qt6.qtwayland
     gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
-    wofi firefox-devedition mpv libnotify dunst
-    wl-clipboard cliphist ydotool wtype wev grim slurp wf-recorder socat
-    waybar hyprpaper hyprlock hypridle
-    inotify-tools smartmontools
+    mpv libnotify
+    wl-clipboard cliphist wtype wev grim slurp wf-recorder socat
+    hyprpaper swaybg
+    inotify-tools smartmontools brightnessctl
     rsync p7zip unzip
     jq
-    eza bat tree pstree tldr
-    scrcpy wayvnc freerdp sunshine wine winetricks
-    kitty neovim yazi btop
-    ffmpeg imagemagick
-    nyxt texliveBasic
-    steam
+    eza tree pstree tldr
+    sshfs scrcpy tigervnc freerdp wine winetricks
+    ffmpeg mediainfo chafa glow
+    nyxt brave texliveBasic
     cmatrix lolcat neofetch
-    wvkbd woomer
-    feishu wemeet qqmusic
+    woomer
     android-tools
-    github-cli mihomo
-    docker-compose
-    # mathematica
+    github-cli
     gnumake gcc
+    gcc-unwrapped.lib
     uv
     (python3.withPackages (ps: with ps; [
-      astral geopy timezonefinder dateutils bleak binance-connector selenium beautifulsoup4 euporie pip
+      astral geopy timezonefinder dateutils bleak binance-connector euporie
     ]))
     nodejs
     sqlite
+    nushell
     bubblewrap
-    codex gemini-cli qwen-code
-    vial qq
-    # vial qq wechat
+    blender
+    telegram-desktop
+    vial
+    netease-cloud-music-gtk
     (pass.withExtensions (ext: [ ext.pass-otp ]))
     hyprpolkitagent
+    lua-language-server
+    shellcheck
   ];
 
   systemd.tmpfiles.rules = [
@@ -231,6 +246,7 @@ in
     maxretry = 1;
     bantime-increment.enable = true;
   };
+  services.hypridle.enable = true;
   services.vnstat.enable = true;
   services.atd.enable = true;
   services.minidlna.enable = true;
