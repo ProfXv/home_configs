@@ -28,6 +28,8 @@ in
     stateVersion = "25.11";
 
     packages = with pkgs; [
+      sops
+      age
       alacritty-theme
     ];
 
@@ -58,6 +60,7 @@ in
     };
     loginExtra = ''
       PATH=$HOME/.local/bin:$PATH
+      eval $(load-secrets.sh)
       if [ -z "$DISPLAY" ] && [ -z "$WAYLAND_DISPLAY" ] && tty >/dev/null; then
         case $(tty) in
           /dev/tty6) exec journalctl -f ;;
@@ -494,5 +497,15 @@ in
     };
   };
 
-  imports = baseImports ++ hyprImports ++ waybarImports;
+  sops = {
+    age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+    defaultSopsFile = ./private/secrets.enc.yaml;
+    secrets = {
+      GITHUB_TOKEN = {};
+    };
+  };
+
+  imports = baseImports ++ hyprImports ++ waybarImports ++ [
+    <sops-nix/modules/home-manager/sops.nix>
+  ];
 }
