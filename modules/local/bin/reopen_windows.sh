@@ -15,4 +15,3 @@ while IFS= read -r line; do
     setsid $line &
     sleep 1
 done < "$input_file"
-kill $KITTY_PID

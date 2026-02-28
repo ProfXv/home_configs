@@ -13,7 +13,7 @@ case $1 in
         mkdir -p ~/Documents/notes
         script=Documents/notes/`date +%s`_"$class".md
         echo -e "$text\n\n---\n" > "$script"
-        kitty nvim "$script"
+        alacritty -e nvim "$script"
         ;;
     type)
         sleep 1; ydotool type "$text"
@@ -22,23 +22,16 @@ case $1 in
         wl-copy -p < "$text"
         ;;
     open)
-        if [ -f $text ]; then
-            if [[ $(stat -c '%U' $text) == "root" ]]; then sudo=sudo; fi
-            kitty $sudo xdg-open $text
-        else
-            grep -E '^(https?://)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*/?$' <<< "$text" &&
-            query="$text" || query="https://www.google.com/search?q=$text"
-            xdg-open "$query"
-        fi
+        eval xdg-open $text
         ;;
     generate)
-        kitty claude "$text"
+        alacritty -e claude "$text"
         ;;
     execute)
         script=/tmp/script
         wl-paste -p > $script
         chmod +x $script
-        kitty --hold sh -c "if ! head -1 $script | grep -q '^#!'; then
+        alacritty --hold -e sh -c "if ! head -1 $script | grep -q '^#!'; then
             echo 'Please enter interpreter (e.g. sh, python, wolframscript):'
             read interpreter
         fi

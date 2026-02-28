@@ -24,12 +24,10 @@ fi
 
 [ -n "$content" ] && if $c; then
     claude_terminal='kitten @ --to unix:/tmp/agent'
-    hyprctl dispatch workspace special:
+    hyprctl dispatch workspace special:
     eval $claude_terminal send-text "$content"
     eval $claude_terminal send-key Return
 else
     wl-copy "$content"
     hyprctl dispatch sendshortcut CTRL, v,
 fi
-
-if $k; then kill $KITTY_PID; fi

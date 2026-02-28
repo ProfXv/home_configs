@@ -17,28 +17,30 @@ if [[ ! "$url" =~ ^https?:// ]]; then
     exit 1
 fi
 
-choice=$(echo -e "保存链接\n克隆GitHub项目" | fzf --prompt="选择操作:")
+alacritty --class save.sh bash -c "
+choice=\$(echo -e '保存链接\\n克隆GitHub项目' | fzf --prompt='选择操作:')
 
-case "$choice" in
-    "保存链接")
-        hyprctl notify -1 1000 "rgb(ff1ea3)" "请说出链接名称"
-        name=$(ASRCaption | sed 's/.$//')
-        hyprctl notify -1 1000 "rgb(ff1ea3)" "名称已记录"
-        echo -e "${name}\t${url}" >> ~/.sites/Sites.txt
-        hyprctl notify -1 2000 "rgb(00ff00)" "链接已保存"
+case \"\$choice\" in
+    '保存链接')
+        hyprctl notify -1 1000 'rgb(ff1ea3)' '请说出链接名称'
+        name=\$(ASRCaption | sed 's/.\$//')
+        hyprctl notify -1 1000 'rgb(ff1ea3)' '名称已记录'
+        echo -e \"\${name}\\t$url\" >> ~/.sites/Sites.txt
+        hyprctl notify -1 2000 'rgb(00ff00)' '链接已保存'
         ;;
-    "克隆GitHub项目")
-        if [[ "$url" =~ github.com/([^/]+/[^/]+) ]]; then
-            repo_path="${BASH_REMATCH[1]}"
-            repo_name=$(basename "$repo_path")
-            clone_dir="$HOME/Desktop/Projects/$repo_name"
-            git clone "$url" "$clone_dir"
+    '克隆GitHub项目')
+        if [[ '$url' =~ github.com/([^/]+/[^/]+) ]]; then
+            repo_path=\"\${BASH_REMATCH[1]}\"
+            repo_name=\$(basename \"\$repo_path\")
+            clone_dir=\"\$HOME/Desktop/Projects/\$repo_name\"
+            git clone '$url' \"\$clone_dir\"
         else
-            hyprctl notify -1 3000 "rgb(ff0000)" "不是有效的GitHub URL"
+            hyprctl notify -1 3000 'rgb(ff0000)' '不是有效的GitHub URL'
         fi
         ;;
     *)
-        hyprctl notify -1 2000 "rgb(ff1ea3)" "操作已取消"
+        hyprctl notify -1 2000 'rgb(ff1ea3)' '操作已取消'
         exit 0
         ;;
 esac
+"
