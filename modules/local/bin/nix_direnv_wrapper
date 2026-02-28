@@ -1,0 +1,4 @@
+#!/bin/sh
+
+SHELL=`which bash`
+DIRENV_LOG_FORMAT="" direnv exec . bash -c "$@"
