@@ -65,5 +65,3 @@ function RenameFile(operation)
     vim.cmd('bdelete ' .. old)
   end
 end
-
-vim.api.nvim_set_keymap('n', '<leader>s', ':e ~/Documents/Obsidian/tmp.md<CR>', opts)

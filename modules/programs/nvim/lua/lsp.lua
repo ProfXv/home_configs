@@ -10,15 +10,14 @@ require('mason').setup({
 
 require('mason-lspconfig').setup({
     -- A list of servers to automatically install if they're not already installed
-    ensure_installed = { 'bashls', 'pylsp', 'lua_ls' },
+    ensure_installed = { 'bashls', 'pylsp' },
 })
 
 -- Set different settings for different languages' LSP
 -- LSP list: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
--- How to use setup({}): https://github.com/neovim/nvim-lspconfig/wiki/Understanding-setup-%7B%7D
+-- How to use vim.lsp.config(): see :help lsp-config
 --     - the settings table is sent to the LSP
---     - on_attach: a lua callback function to run after LSP atteches to a given buffer
-local lspconfig = require('lspconfig')
+--     - on_attach: a lua callback function to run after LSP attaches to a given buffer
 
 -- Customized on_attach function
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -58,7 +57,34 @@ end
 -- Configure each language
 -- How to add LSP for a specific language?
 -- 1. use `:Mason` to install corresponding LSP
--- 2. add configuration below
-lspconfig.pylsp.setup({
+-- 2. add configuration below using vim.lsp.config() and vim.lsp.enable()
+vim.lsp.config('pylsp', {
 	on_attach = on_attach,
 })
+vim.lsp.enable('pylsp')
+
+vim.lsp.config('bashls', {
+	on_attach = on_attach,
+})
+vim.lsp.enable('bashls')
+
+vim.lsp.config('lua_ls', {
+	on_attach = on_attach,
+	settings = {
+		Lua = {
+			runtime = {
+				version = 'LuaJIT',
+			},
+			diagnostics = {
+				globals = {'vim'},
+			},
+			workspace = {
+				library = vim.api.nvim_get_runtime_file("", true),
+			},
+			telemetry = {
+				enable = false,
+			},
+		},
+	},
+})
+vim.lsp.enable('lua_ls')
