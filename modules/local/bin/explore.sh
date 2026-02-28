@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sites="$(for f in `ls Sites.txt ~/.sites/*`; do cat $f; done | fzf -m --cycle | cut -f 2)"
-if [ -n "$sites" ]; then for site in $sites; do nohup nyxt -S $site > /dev/null & done fi
+sites="$(for f in `ls ~/.sites/*`; do cat $f; done | fzf -m | cut -f 2)"
+if [ -n "$sites" ]; then for site in $sites; do setsid xdg-open $site & done; fi
 sleep .1
 kill $KITTY_PID
