@@ -7,12 +7,12 @@ let
   privateConfig = builtins.fromJSON (builtins.readFile privateConfigPath);
   usernames = privateConfig.username;
   reverseString = str: pkgs.lib.concatStrings (pkgs.lib.reverseList (pkgs.lib.stringToCharacters str));
-  
+
   userPairs = map (user: {
     positive = user;
     negative = reverseString user;
   }) usernames;
-  
+
   positiveUser = (builtins.head userPairs).positive;
   negativeUser = (builtins.head userPairs).negative;
 
@@ -78,7 +78,6 @@ in
     webui = pkgs.metacubexd;
     extraOpts = "-d /etc/mihomo";
   };
-  services.sunshine.enable = true;
   services.samba = {
     enable = true;
     settings = {
@@ -96,6 +95,24 @@ in
       };
     };
   };
+  services.sunshine.enable = true;
+  services.jupyter = {
+    enable = true;
+    ip = "127.0.0.1";
+    port = 8642;
+    user = "jupyter";
+    notebookDir = "/var/lib/jupyter";
+    command = "jupyter notebook";
+    password = "";
+    notebookConfig = ''
+      c.ServerApp.token = ""
+      c.ServerApp.password = ""
+      c.ServerApp.disable_check_xsrf = True
+    '';
+  };
+
+
+
 
   users.users = pkgs.lib.mkMerge (map (pair: {
     ${pair.positive} = {

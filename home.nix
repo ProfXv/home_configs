@@ -31,6 +31,7 @@ in
       XMODIFIERS = "@im=fcitx";
       NIX_PATH = "home-manager=${pkgs.home-manager.src}:$NIX_PATH";
       SDL_RENDER_DRIVER = "opengles2";
+      JUPYTER_SERVER_URL = "http://127.0.0.1:8642";
     };
   };
 
