@@ -1,0 +1,3 @@
+#!/bin/sh
+
+command -p xdg-open "$@" || command -p xdg-open "https://www.perplexity.ai/search?q=$(printf %s "$*" | jq -sRr @uri)"

@@ -22,7 +22,7 @@ for addr in $(hyprctl activewindow -j | jq -r '.grouped[]'); do
         hyprctl dispatch sendshortcut CTRL, l,
         hyprctl dispatch sendshortcut CTRL, c,
         url=$(wl-paste)
-        echo "nyxt -S $url" >> "$output_file"
+        echo "xdg-open $url" >> "$output_file"
     else
         process_cmd=$(ps -p $pid -o args=)
         echo "$process_cmd" >> "$output_file"
