@@ -29,7 +29,7 @@ in
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
     kernelModules = [ "vkms" ];
-    kernelParams = [ "iwlwifi.11n_disable=1" "btintel.enable_llp=0" "btintel.enable_sleep=0" ];
+    enableContainers = true;
     loader = if builtins.pathExists /sys/firmware/efi then {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
