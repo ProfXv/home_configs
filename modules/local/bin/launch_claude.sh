@@ -1,7 +1,8 @@
 #!/bin/sh
 
+SHELL='which bash'
 AUTO="--permission-mode acceptEdits"
-BETA="--betas interleaved-thinking"
+BASIC="--chrome --betas interleaved-thinking --allow-dangerously-skip-permissions"
 
 has_claude_conversation() {
     cwd="$(pwd -P)" || return 1
@@ -36,9 +37,9 @@ has_claude_conversation() {
 
 case "$PROJECT_HOME" in
     $HOME/Desktop/Projects/*)
-        has_claude_conversation && claude -r $AUTO $BETA || claude $AUTO $BETA
+        has_claude_conversation && claude -r $AUTO $BASIC || claude $AUTO $BASIC
         ;;
     *)
-        has_claude_conversation && claude -r $BETA || claude $BETA
+        has_claude_conversation && claude -r $BASIC || claude $BASIC
         ;;
 esac
