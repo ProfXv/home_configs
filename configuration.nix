@@ -1,21 +1,33 @@
 { config, pkgs, ... }:
 
+let
+  systemPrivatePath = if builtins.pathExists ./private/system-private.nix
+                      then ./private/system-private.nix
+                      else ./templates/private/system-private.nix;
+in
 {
   imports = [
     ./hardware-configuration.nix
+    systemPrivatePath
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-  boot.kernelModules = [ "vkms" ];
-  boot.kernelParams = [ "iwlwifi.11n_disable=1" "btintel.enable_llp=0" "btintel.enable_sleep=0" ];
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  boot.initrd.luks.devices."cryptroot" = {
-    device = "/dev/disk/by-partlabel/charge";
-    keyFile = "/dev/disk/by-partlabel/primer";
-    keyFileSize = 4096;
-    fallbackToPassword = true;
+  boot = {
+    kernelPackages = pkgs.linuxPackages_zen;
+    kernelModules = [ "vkms" ];
+    kernelParams = [ "iwlwifi.11n_disable=1" "btintel.enable_llp=0" "btintel.enable_sleep=0" ];
+    loader = if builtins.pathExists /sys/firmware/efi then {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    } else {
+      grub.enable = true;
+      grub.device = builtins.readFile ./private/disk.txt;
+    };
+    initrd.luks.devices."cryptroot" = {
+      device = "/dev/disk/by-partlabel/charge";
+      keyFile = "/dev/disk/by-partlabel/primer";
+      keyFileSize = 4096;
+      fallbackToPassword = true;
+    };
   };
 
   services.getty.autologinUser = "paradoxist";

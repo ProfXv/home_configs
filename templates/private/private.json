@@ -1,0 +1,8 @@
+{
+  "username": ["your-username"],
+  "screen": {
+    "width": 1920,
+    "height": 1080
+  },
+  "desktops": ["start-hyprland", "niri"]
+}

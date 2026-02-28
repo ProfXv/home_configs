@@ -1,6 +1,2 @@
-modules/programs/btop/btop.log
-modules/programs/hypr/keys.conf
-modules/programs/hypr/test.conf
 modules/programs/nvim/lazy-lock.json
-modules/programs/mihomo/
-
+/private/

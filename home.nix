@@ -1,5 +1,12 @@
 { config, pkgs, ... }:
 
+let
+  privatePath = if builtins.pathExists ./private/private.json
+                then ./private/private.json
+                else ./templates/private/private.json;
+  private = builtins.fromJSON (builtins.readFile privatePath);
+  fontSize = 12 * private.screen.width / 1920;
+in
 {
   home.username = "paradoxist";
   home.homeDirectory = "/home/paradoxist";
