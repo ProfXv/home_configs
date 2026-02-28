@@ -62,9 +62,33 @@ in
     }
   ) [ 1 2 3 4 5 6 ]);
 
-  networking.wireless.iwd.enable = true;
-  networking.firewall.enable = true;
+  networking = {
+    wireless.iwd.enable = true;
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 445 139 ];
+      allowedUDPPorts = [ 137 138 ];
+    };
+  };
+
   services.tailscale.enable = true;
+  services.samba = {
+    enable = true;
+    settings = {
+      global = {
+        workgroup = "WORKGROUP";
+        "netbios name" = config.networking.hostName;
+        "map to guest" = "bad user";
+        "guest account" = positiveUser;
+        "server min protocol" = "NT1";
+      };
+      Public = {
+        path = "${config.users.users.${positiveUser}.home}/Public";
+        "read only" = false;
+        "public" = true;
+      };
+    };
+  };
 
   users.users = pkgs.lib.mkMerge (map (pair: {
     ${pair.positive} = {
