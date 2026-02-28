@@ -1,0 +1,49 @@
+{
+  "mcpServers": {
+    "crypto-market": {
+      "type": "http",
+      "url": "https://mcp.crypto.com/market-data/mcp"
+    },
+    "alphavantage": {
+      "type": "http",
+      "url": "https://mcp.alphavantage.co/mcp?apikey=${ALPHAVANTAGE_API_KEY}"
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {}
+    },
+    "searxng": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "mcp-searxng"],
+      "env": {
+        "SEARXNG_URL": "https://searxng.site",
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0"
+      }
+    },
+    "mcp-nixos": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["mcp-nixos"],
+      "env": {}
+    },
+    "exa": {
+      "type": "http",
+      "url": "https://mcp.exa.ai/mcp?exaApiKey=af0f9ab0-a338-4139-82a0-1a2512945144"
+    },
+    "jupyter-mcp-server": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["jupyter-mcp-server@latest"],
+      "env": {
+        "LD_LIBRARY_PATH": "/nix/store/j2kgllgds4w7na8zqv1msi0mpvpjxda8-gcc-15.2.0-lib/lib"
+      }
+    }
+  }
+}
