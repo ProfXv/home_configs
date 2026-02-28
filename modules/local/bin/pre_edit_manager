@@ -1,0 +1,15 @@
+#!/bin/sh
+
+read -r file_path
+cd "$(dirname "$file_path")"
+file="$(basename "$file_path")"
+
+mkdir -p "$XDG_RUNTIME_DIR/claude/edit-backups"
+[ -f "$file_path" ] && cp "$file_path" "$XDG_RUNTIME_DIR/claude/$(echo "$file_path" | tr '/' ':')"
+
+case "$file_path" in
+    $PROJECT_HOME/package.json|$PROJECT_HOME/pyproject.toml|$PROJECT_HOME/Cargo.toml)
+        echo "This file must be created in a subdirectory, not in project root: $file_path"
+        exit 2
+        ;;
+esac

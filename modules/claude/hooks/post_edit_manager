@@ -1,0 +1,77 @@
+#!/bin/sh
+
+read -r file_path
+cd "$(dirname "$file_path")"
+file="$(basename "$file_path")"
+ensure() { command -v "$1" >/dev/null 2>&1 && "$@" || true; }
+
+
+case "$file" in
+    Makefile|makefile|GNUmakefile)
+        ensure make -n -f "$file" ;;
+    *)
+        case "${file##*.}" in
+            sh)        sh -n "$file" &&
+                       ensure shellcheck -x "$file" >&2 ;;
+            bash)      bash -n "$file" &&
+                       ensure shellcheck -x "$file" >&2 ;;
+            zsh)       zsh -n "$file" &&
+                       ensure shellcheck -x "$file" >&2 ;;
+            nix)       nix-instantiate --parse "$file" >/dev/null ;;
+            rs)        ensure rustc --emit=dep-info -o /dev/null "$file" ;;
+            make|mk)   ensure make -n -f "$file" ;;
+            c)         ensure gcc -fsyntax-only "$file" &&
+                       ensure clang-tidy "$file" -- -std=c11 >&2 &&
+                       ensure cppcheck --enable=all --inconclusive "$file" >&2 2>/dev/null ;;
+            cpp|cc|cxx)ensure g++ -fsyntax-only "$file" &&
+                       ensure clang-tidy "$file" -- -std=c++17 >&2 &&
+                       ensure cppcheck --enable=all --inconclusive "$file" >&2 2>/dev/null ;;
+            py)        ensure python3 -m py_compile "$file" &&
+                       ensure pylint --errors-only "$file" >&2 2>/dev/null &&
+                       ensure flake8 "$file" >&2 2>/dev/null &&
+                       ensure mypy --no-error-summary "$file" >&2 2>/dev/null &&
+                       ensure bandit -f txt -q "$file" >&2 2>/dev/null ;;
+            jl)        ensure julia --check-bounds=no --startup-file=no -e "include(\"$file\")" ;;
+            js)        ensure node -c "$file" &&
+                       ensure eslint -f compact "$file" >&2 2>/dev/null ;;
+            lua)       ensure luac -p "$file" ;;
+            lisp|cl)   ensure sbcl --script "$file" 2>/dev/null ;;
+            pl)        ensure perl -c "$file" ;;
+            php)       ensure php -l "$file" ;;
+            rb)        ensure ruby -c "$file" ;;
+            yaml|yml)  ensure yq e 'true' "$file" >/dev/null &&
+                       ensure yamllint "$file" >&2 2>/dev/null ;;
+            toml)      ensure taplo validate "$file" >/dev/null &&
+                       ensure taplo lint "$file" >&2 2>/dev/null ;;
+            tex)       ensure chktex -q "$file" ;;
+            json)      ensure jq . "$file" >/dev/null ;;
+            *)
+                shebang=$(head -1 "$file" 2>/dev/null)
+                case "$shebang" in
+                    *bash*)   ensure bash -n "$file" &&
+                              ensure shellcheck -x "$file" >&2 ;;
+                    *zsh*)    ensure zsh -n "$file" &&
+                              ensure shellcheck -x "$file" >&2 ;;
+                    *python*) ensure python3 -m py_compile "$file" &&
+                              ensure pylint --errors-only "$file" >&2 2>/dev/null &&
+                              ensure flake8 "$file" >&2 2>/dev/null &&
+                              ensure mypy --no-error-summary "$file" >&2 2>/dev/null &&
+                              ensure bandit -f txt -q "$file" >&2 2>/dev/null ;;
+                    *node*)   ensure node -c "$file" &&
+                              ensure eslint -f compact "$file" >&2 2>/dev/null ;;
+                    *perl*)   ensure perl -c "$file" ;;
+                    *ruby*)   ensure ruby -c "$file" ;;
+                    *)         : ;;
+                esac
+                ;;
+        esac
+        ;;
+esac || exit 2
+
+case "$file_path" in
+    */package.json) npm install --package-lock-only ;;
+    */pyproject.toml) nix-shell -p pdm --run 'env -u all_proxy PDM_USE_VENV=0 pdm lock' ;;
+    */Cargo.toml) [ ! -f Cargo.lock ] && cargo generate-lockfile || cargo update ;;
+    $PROJECT_HOME/tests/*) chmod +x "$file_path"; exit ;;
+    *) exit ;;
+esac || exit 2

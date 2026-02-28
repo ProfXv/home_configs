@@ -13,42 +13,30 @@
 
 ## Project Structure
 
-### Standard Project Directory Structure
+### Standard Project Layout
+Every project maintains this consistent structure:
 ```
 [project-name]/
-├── main                    # Mandatory entry point script
-├── shell.nix              # Project dependencies (Nix environment)
-├── .envrc                 # Direnv integration
-├── CLAUDE.md             # Strategic configuration document
-├── README.md             # Current state and progress tracking
-└── tests/                # Test directory structure
-    ├── automated/        # Automated tests (unit, integration)
-    ├── manual/          # Manual interaction tests
-    └── hybrid/          # Tests with both automated and manual components
+├── main
+│   Unified entry point script (requires --help documentation, default run without parameters)
+├── flake.nix
+│   Primary Nix Flakes build system with automatic language detection
+├── shell.nix
+│   System-level dependencies (optional, for tools not in language packages)
+├── .envrc
+│   Direnv integration (auto-activates environment on directory entry)
+├── CLAUDE.md
+│   Strategic configuration document (desired state declaration, updated only for fundamental changes)
+└── README.md
+    Current state and progress tracking (explicit comparison to CLAUDE.md, updated every session)
 ```
 
 ### System-Level Directories
-- **Configuration Management**: `~/.config/home-manager/` - System-wide configuration managed as code (NixOS home-manager)
-- **System Tools**: `~/.config/home-manager/modules/local/bin/` - System tool scripts directory
-- **Primary Project Repository**: `~/Desktop/Projects/` - Centralized storage for all project repositories
-- **User-Level Cron Jobs**: `~/.cron` - Source file for user-level scheduled tasks
-
-## Document Management (Declarative Configuration)
-Each project maintains exactly two declarative documentation files:
-
-1. **CLAUDE.md**: Strategic planning and declarative configuration
-   - **Purpose**: Describes what the entire project aims to achieve
-   - **Declaration**: The "desired state" - authoritative specification
-   - **Update Policy**: Modified only when strategic goals fundamentally change
-   - **Authority**: Source of truth for project vision and scope
-
-2. **README.md**: Current state declaration and progress tracking
-   - **Purpose**: Tracks actual progress after each development cycle
-   - **Declaration**: The "current state" - explicit comparison with CLAUDE.md
-   - **Update Requirement**: Must be updated at the END of every development session
-   - **Format**: Explicitly show completed, in-progress, and pending items
-
-**Rule**: No additional documentation files should be created unless explicitly required.
+```
+~/.config/home-manager/         System-wide configuration managed as code (NixOS home-manager)
+~/.cron                         User-level scheduled tasks source file (apply with crontab)
+~/Desktop/Projects/             Primary project repository directory (centralized storage)
+```
 
 ## Development Environment Philosophy
 
@@ -67,66 +55,26 @@ Each project maintains exactly two declarative documentation files:
 1. **Limit Dependencies**: Restrict to only absolutely necessary packages
 2. **Standard Library First**: Prefer standard libraries over external dependencies
 3. **Critical Evaluation**: Every new dependency critically evaluated for necessity
-4. **Centralized Management**: All dependencies declared and managed through `shell.nix`
+4. **Centralized Management**: All dependencies declared and managed through appropriate project files
 5. **Regular Review**: Periodically review dependencies to identify and remove unused ones
 6. **Justification Required**: Major dependencies require clear justification
 
 ### Testing Requirements
-1. **Mandatory Testing**: Tests required for all project features
-2. **Coverage Standard**: Minimum 80% test coverage for critical functionality
-3. **Test Types**:
-   - **Automated Tests**: Unit tests and integration tests
-   - **Manual Tests**: Scripts requiring human input (stored in `tests/manual/`)
-   - **Hybrid Tests**: Automated core logic + manual UI/UX validation
-4. **Test Directory Structure**:
-   ```
-   tests/
-   ├── automated/          # Automated tests
-   ├── manual/            # Manual interaction tests
-   └── hybrid/            # Tests with both automated and manual components
-   ```
-
-#### Manual Test Design
-**Manual tests are scripts** that run via `main --test` but require human interaction:
-
-**Structure:**
-- Present test scenario
-- Display expected outcome
-- Prompt user for validation
-- Record user response for test history
-- Provide clear pass/fail criteria
-
-**Interaction Methods:**
-- **Choice-based**: "Does the button look correct? [y/n/q]"
-- **Score-based**: "Rate UI clarity from 1-10: ___"
-- **Input-based**: "Enter the text you see: ___"
-
-**Test Data Collection:**
-- Log to `tests/manual_results.log`
-- Format: `TIMESTAMP | Test Name | Result | User Rating`
-
-**Example Manual Test Script:**
-```bash
-#!/usr/bin/env bash
-# tests/manual/test_ui_clarity.sh
-
-echo "=== Testing UI Clarity at 4K Resolution ==="
-echo "Expected: All text should be sharp, buttons clearly visible"
-echo ""
-echo "Please manually verify the login screen at 4K resolution"
-echo ""
-read -p "Is the text sharp and readable? (y/n/q): " response
-case $response in
-    y) echo "PASS: UI clarity test" >> /tmp/manual_results.log ;;
-    n) echo "FAIL: UI clarity test" >> /tmp/manual_results.log ;;
-    q) echo "SKIP: UI clarity test" >> /tmp/manual_results.log ;;
-esac
-```
+1. **Native Frameworks Only**: Use each language's built-in test framework, never custom test scripts
+   - Rust: `cargo test` (unit tests in `#[cfg(test)]` modules, integration tests in `tests/`)
+   - Python: `pytest` (auto-discovers `test_*.py` files)
+   - Node.js: `npm test` (configured in `package.json`)
+   - Go: `go test ./...` (discovers `*_test.go` files)
+   - Nix: `nix-instantiate --parse` for syntax validation
+2. **Unit Tests**: Test individual functions in source files, co-located with implementation
+3. **Integration Tests**: Test module interactions, placed in language-standard locations
+4. **Property-Based Testing**: Prefer testing mathematical invariants over specific values
+5. **Session End Auto-Test**: Stop hook automatically runs native tests and commits only if all pass
 
 ## System Tools Usage Guide
 
 ### Database Log System Overview
-The system includes a continuously running database log system (`~/.log.db`) that automatically records various interaction data while the machine is powered on, including voice recordings, intent recognition, physiological data, and focus changes. Use the `get_intent.sh` script to query these records: without parameters returns total record count, `-t` for time-based search, `-s` for text search, `-n` to limit number of results, `--start/--end` for time range filtering.
+A continuously running database log system (`~/.log.db`) automatically records interaction data while powered on: voice recordings, intent recognition, physiological data, and focus changes. Use the `get_intent.sh` script to query these records: without parameters returns total record count, `-t` for time-based search, `-s` for text search, `-n` to limit number of results, `--start/--end` for time range filtering.
 
 ### System Tools Directory
 - **Script directory**: `/home/paradoxist/.config/home-manager/modules/local/bin/`
@@ -153,28 +101,86 @@ Use `execute_tool.sh desktop_operation [<operation_number>]`
 ...
 ```
 
-### 3. Managing User-Level Scheduled Tasks
-Standard workflow:
-1. Edit source file at `/home/paradoxist/.cron`
-2. Execute `crontab /home/paradoxist/.cron`
-
-### 4. Checking Current Situation
+### 3. Checking Current Situation
 Read `/tmp/snapshot_picture.png` for screenshot information.
 
 # Operational Procedures
 
+```
+PROCESS DevelopmentDecision(requirement):
+  IF IS_TEMPORARY_REQUIREMENT(requirement) THEN
+    CALL TemporaryRequirementHandling(requirement)
+  ELSE
+    CALL CoreDevelopmentWorkflow(requirement)
+  ENDIF
+ENDPROCESS
+
+FUNCTION IS_TEMPORARY_REQUIREMENT(requirement):
+  criteria ← [
+    "Appears one-time only (not recurring)",
+    "Can be expressed as single command (with possible pipelines)",
+    "No file creation or modification required",
+    "Leverages existing system tools rather than new logic",
+    "No persistent state or configuration needed"
+  ]
+  score ← EVALUATE_CRITERIA(requirement, criteria)
+  THRESHOLD ← 3
+  RETURN score > THRESHOLD
+ENDFUNCTION
+```
+
+## Temporary Requirement Handling
+
+```
+PROCESS TemporaryRequirementHandling(requirement):
+  command ← FORMULATE_COMPLETE_COMMAND(requirement)
+  result ← EXECUTE(command)
+  output ← GET_OUTPUT(result)
+
+  IF output.matches_expectation THEN
+    RETURN output
+  ELSE
+    simplified_command ← command
+    WHILE HAS_PIPES(simplified_command) AND NOT HAS_CLUE(output) DO
+      simplified_command ← REMOVE_LAST_PIPE(simplified_command)
+      result ← EXECUTE(simplified_command)
+      output ← GET_OUTPUT(result)
+    ENDWHILE
+
+    IF HAS_CLUE(output) THEN
+      adjusted_command ← ADJUST_BY_CLUE(simplified_command, output)
+      RETURN EXECUTE(adjusted_command)
+    ELSE
+      RETURN INITIATE_FULL_DEVELOPMENT(requirement)
+    ENDIF
+  ENDIF
+ENDPROCESS
+```
+
+**When to Use:**
+- Requirements appear one-time only
+- Solution can be expressed as single command (even with complex pipelines)
+- No persistent file modifications needed
+- Leverages existing tools rather than new logic
+
 ## Core Development Workflow
 
 ```
-PROCESS DeveloperWorkflow:
+PROCESS CoreDevelopmentWorkflow(requirement):
   WHILE developing DO:
     TRY execute command
     IF command_not_found THEN
-      missing_package ← identify_missing_package(command)
-      EDIT shell.nix: ADD pkgs.missing_package TO myPackages list
-      SAVE shell.nix
-      environment ← reload_environment()
-      ASSERT environment.contains(missing_package)
+      missing_pkg ← FIND_MISSING_PKG(command)
+      # Edit appropriate dependency file based on project type, for example:
+      # - shell.nix for system tools and C-family language libraries
+      # - package.json for Node.js dependencies
+      # - pyproject.toml for Python dependencies
+      # - Cargo.toml for Rust dependencies
+      # (These are examples - edit the appropriate file for your project's language)
+      EDIT appropriate_dependency_file: ADD missing_pkg
+      SAVE file
+      env ← AUTO_REBUILD()
+      ASSERT env.contains(missing_pkg)
       CONTINUE development
     ENDIF
   ENDWHILE
@@ -195,79 +201,93 @@ $ screenfetch
 [Successfully displays system information]
 ```
 
+**For language-specific dependencies**, the same pattern applies:
+- Edit `package.json` for Node.js packages
+- Edit `pyproject.toml` for Python packages
+- Edit `Cargo.toml` for Rust packages
+Editing dependency files triggers automatic rebuild with the new dependencies.
+
 This pattern reduces complex package management to **text editing**, truly achieving "environment-as-code".
 
 ## Implementation Guidelines
 
 ```
 PROCESS LanguageSelection:
-  default_approach ← "Prioritize most concise suitable language"
-  native_development ← "Default to native x86_64 optimization"
-  performance_first ← "Evaluate Rust for critical performance projects"
-  RETURN {default_approach, native_development, performance_first}
+  default ← "Prioritize concise suitable language"
+  native_dev ← "Default to native x86_64 optimization"
+  perf_first ← "Evaluate Rust for critical performance projects"
+  RETURN {default, native_dev, perf_first}
 ENDPROCESS
 
 PROCESS CodeImplementation:
-  RULE minimal_prototype_first
-  RULE no_feature_bloat
-  RULE simplicity_over_complexity
-  RULE native_optimization
-  RULE reproducible_builds
-  RULE no_code_comments
+  RULE minimal_first
+  RULE no_bloat
+  RULE simplicity_first
+  RULE native_opt
+  RULE reproducible
+  RULE no_comments
 ENDPROCESS
 
 PROCESS RequirementDiscovery:
-  // Question format priority
-  question_flow ← [
-    "Yes/No questions first",
-    "Multiple choice questions second",
-    "Limited options questions third",
-    "Open-ended questions last (only after options exhausted)"
+  q_flow ← [
+    "Yes/No first",
+    "Multiple choice second",
+    "Limited options third",
+    "Open-ended last (only after options exhausted)"
   ]
-  goal ← "Transform vague ideas into clear, actionable requirements"
-  RETURN {question_flow, goal}
+  goal ← "Transform vague ideas into clear requirements"
+  RETURN {q_flow, goal}
 ENDPROCESS
 
 PROCESS ScriptWriting:
   PRINCIPLE simplicity_first
   PRINCIPLE intent_driven
-  TECHNIQUE use_short_circuit_over_if_then_fi
-  TECHNIQUE one_logic_per_line
-  TECHNIQUE remove_unnecessary_output
+
+  TECHNIQUE short_circuit_over_if
+  TECHNIQUE one_line_logic
+  TECHNIQUE remove_unnecessary
 ENDPROCESS
 
 PROCESS KeyPrinciples:
-  PRINCIPLE ask_clarifying_questions_before_over_engineering
-  PRINCIPLE prefer_standard_library_over_dependencies
-  PRINCIPLE document_trade_offs
-  PRINCIPLE ensure_nix_build_compatibility
+  PRINCIPLE ask_clarifying_questions
+  PRINCIPLE prefer_stdlib
+  PRINCIPLE document_tradeoffs
+  PRINCIPLE ensure_nix_compatibility
 ENDPROCESS
 ```
 
-## Test-Driven Development Process
+## Testing Strategy
 
+### Automatic Testing and Commit
+When a session ends, the system automatically:
+1. Detects project type by config files (Cargo.toml → Rust, package.json → Node.js, pyproject.toml → Python)
+2. Runs the native test command (`cargo test` / `npm test` / `pytest`)
+3. If all tests pass → auto-commits all changes
+4. If any test fails → reports errors, does NOT commit
+
+**You do not need to run tests manually or commit manually.** Just write tests in the correct locations and the system handles the rest.
+
+### Write Tests Using Native Frameworks
+Place tests where the language expects them — the framework discovers them automatically:
+- **Rust**: `#[cfg(test)] mod tests` in source files (unit), `tests/*.rs` at crate root (integration)
+- **Python**: `test_*.py` files discovered by pytest
+- **Node.js**: test script defined in `package.json`, framework discovers test files
+- **Go**: `*_test.go` alongside source files
+
+### Test-Driven Development
 ```
 PROCESS TDD_Cycle(feature):
-  REPEAT UNTIL feature_complete:
-    // Phase 1: Red - Write failing test
-    test_case ← CREATE_TEST(feature.requirements)
-    RUN test_case
-    ASSERT test_case.fails()
+  test_case ← CREATE_TEST(feature.requirements)  # Use native framework
+  RUN native_test_command                         # cargo test / pytest / npm test
+  ASSERT test_case.fails()
 
-    // Phase 2: Green - Minimal implementation
-    implementation ← MINIMAL_CODE(test_case)
-    RUN test_case
-    ASSERT test_case.passes()
+  implementation ← MINIMAL_CODE(test_case)
+  RUN native_test_command
+  ASSERT test_case.passes()
 
-    // Phase 3: Refactor - Improve without changing behavior
-    REPEAT UNTIL code_quality_acceptable:
-      optimized_code ← REFACTOR(implementation)
-      RUN test_case
-      ASSERT test_case.passes()
-    ENDREPEAT
-
-    feature_complete ← EVALUATE(feature, implementation)
-  ENDREPEAT
+  REFACTOR(implementation)
+  RUN native_test_command
+  ASSERT test_case.passes()
 ENDPROCESS
 ```
 
@@ -347,30 +367,9 @@ Each project MUST have a `main` script as unified entry point:
 3. **Self-Documenting**: Script contains all usage instructions in English
 4. **No Additional Docs**: No separate documentation files by default
 5. **Flexible Parameters**: Project-specific parameters and flags allowed
-6. **Test Integration**: Support `main --test` and `main --test <path>`
-7. **Default Run**: Run without parameters executes primary functionality
+6. **Default Run**: Run without parameters executes primary functionality
 
 **Note**: Use `#!/usr/bin/env <interpreter>` shebang, never hardcode interpreter paths.
-
-#### Implementation Pattern:
-```bash
-#!/usr/bin/env bash
-# Project Summary: Brief description of the project
-#
-# Usage:
-#   main [options]
-#
-# Options:
-#   -h, --help              Show this help message
-#   [additional project-specific options...]
-#
-# Examples:
-#   main                 Run the primary functionality (no parameters required)
-#   main --run-tests
-#   main --build
-#
-# For more details, run: main --help
-```
 
 # Ad-hoc Requirements and Notes
 
@@ -385,3 +384,6 @@ Each project MUST have a `main` script as unified entry point:
 
 - 今天解了一个"鸡鸡毛结"。
 - 用户自己养了猫。
+- 需要测试窗口状态的时候，请直接打开窗口，然后用窗口管理器的接口去检查。
+- 查找待办事项：下次找待办事项请到 /home/paradoxist/README.md 文件中查找。
+- 系统重建命令：在用户系统上，重建NixOS系统的一字不差的命令是 `sudo rebuild_nixos.sh`（而不是通常的 `nixos-rebuild switch`）。这个自定义脚本会将home-manager配置复制到 `/etc/nixos/` 然后执行系统重建。

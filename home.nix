@@ -30,6 +30,7 @@ in
     packages = with pkgs; [
       sops
       age
+      claude-code-router
       alacritty-theme
     ];
 

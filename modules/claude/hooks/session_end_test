@@ -1,0 +1,20 @@
+#!/bin/sh
+
+cd "$PROJECT_HOME" 2>/dev/null || exit 0
+git rev-parse --is-inside-work-tree 2>/dev/null || exit 0
+
+errors=0
+
+[ -f Cargo.toml ] && { cargo test 2>&1 || errors=1; }
+[ -f package.json ] && { npm test 2>&1 || errors=1; }
+[ -f pyproject.toml ] && { pytest 2>&1 || errors=1; }
+
+for f in $(git diff --cached --name-only --diff-filter=ACM -- '*.nix' 2>/dev/null); do
+    nix-instantiate --parse "$f" >/dev/null 2>&1 || { echo "nix syntax error: $f"; errors=1; }
+done
+
+[ $errors -ne 0 ] && exit 1
+
+git add -u
+git diff --staged --quiet 2>/dev/null && exit 0
+git commit --allow-empty-message -m ''
