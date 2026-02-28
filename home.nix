@@ -19,9 +19,19 @@ in
     username = builtins.head private.username;
     homeDirectory = "/home/${builtins.head private.username}";
     stateVersion = "25.11";
+
     packages = with pkgs; [
       alacritty-theme
     ];
+
+    sessionVariables = {
+      XCURSOR_SIZE = "24";
+      QT_QPA_PLATFORMTHEME = "qt6ct";
+      QT_IM_MODULE = "fcitx";
+      XMODIFIERS = "@im=fcitx";
+      NIX_PATH = "home-manager=${pkgs.home-manager.src}:$NIX_PATH";
+      SDL_RENDER_DRIVER = "opengles2";
+    };
   };
 
   programs.git.enable = true;
@@ -38,27 +48,38 @@ in
       vim = "nvim";
       vi = "vim";
     };
-    envExtra = ''
-      [ -z "$PS1" ] && [ -f .envrc ] && eval "$(${pkgs.direnv}/bin/direnv export zsh)"
-    '';
     loginExtra = ''
-      if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
-        Hyprland
+      PATH=$HOME/.local/bin:$PATH
+      if [ -z "$DISPLAY" ] && [ -z "$WAYLAND_DISPLAY" ] && tty >/dev/null; then
+        case $(tty) in
+          /dev/tty6) exec journalctl -f ;;
+          /dev/tty*) 
+            for desktop in ${pkgs.lib.concatStringsSep " " private.desktops}; do
+              pgrep -u $USER -f "$desktop" >/dev/null || exec "$desktop"
+            done
+            exec tmux
+            ;;
+        esac
       fi
     '';
     initContent = ''
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
       source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
-      if [ $TERM = xterm-kitty ]; then
-        source /home/paradoxist/.config/home-manager/modules/local/chat/chat.zsh
-      fi
+      # if [ $TERM = xterm-kitty ]; then
+      source ~/.config/home-manager/modules/local/chat/chat.zsh
+      # fi
     '';
   };
 
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
+    defaultOptions = [
+      ''--bind "enter:accept-or-print-query"''
+      "--layout=reverse"
+      "--cycle"
+    ];
   };
 
   programs.direnv = {
