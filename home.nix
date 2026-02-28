@@ -95,7 +95,18 @@ in
 
   programs.direnv = {
       enable = true;
+      silent = true;
       nix-direnv.enable = true;
+      config.whitelist.prefix = [ "/home/tsixodarap/Desktop/Projects" ];
+      stdlib = ''
+        use_conjure() {
+          use flake
+          PATH_add "."
+          [ -f Cargo.toml ] && watch_file Cargo.toml
+          [ -f package.json ] && watch_file package.json
+          [ -f pyproject.toml ] && watch_file pyproject.toml
+        }
+      '';
   };
 
   programs.kitty = {
