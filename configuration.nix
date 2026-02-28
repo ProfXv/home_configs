@@ -72,6 +72,12 @@ in
   };
 
   services.tailscale.enable = true;
+  services.mihomo = {
+    enable = true;
+    configFile = "/etc/mihomo/config.yaml";
+    webui = pkgs.metacubexd;
+    extraOpts = "-d /etc/mihomo";
+  };
   services.samba = {
     enable = true;
     settings = {
