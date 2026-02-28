@@ -1,3 +1,3 @@
 #!/bin/sh
 
-less /tmp/info.json
+less "$XDG_RUNTIME_DIR/info.json"

@@ -9,7 +9,7 @@ sqlite3 ~/.log.db "INSERT INTO focus VALUES (NULL, datetime('now', 'localtime'),
 hyprctl notify -1 1000 "rgb(ff1ea3)" $1
 case $1 in
     paste)
-	    echo $text > /tmp/clipboard
+        echo $text > "$XDG_RUNTIME_DIR/clipboard"
         mkdir -p ~/Documents/notes
         script=Documents/notes/`date +%s`_"$class".md
         echo -e "$text\n\n---\n" > "$script"
@@ -28,7 +28,7 @@ case $1 in
         alacritty -e claude "$text"
         ;;
     execute)
-        script=/tmp/script
+        script="$XDG_RUNTIME_DIR/focus-script"
         wl-paste -p > $script
         chmod +x $script
         alacritty --hold -e sh -c "if ! head -1 $script | grep -q '^#!'; then

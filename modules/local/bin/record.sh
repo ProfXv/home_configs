@@ -33,7 +33,7 @@ case $action in
                 grim -g "`slurp`" - | tee $path | wl-copy
                 ;;
         esac
-        ln -sf $path /tmp/snapshot_picture.png
+        ln -sf $path "$XDG_RUNTIME_DIR/snapshot_picture.png"
         ;;
     "record")
         path=~/Videos/`date +"%s.mp4"`
@@ -53,7 +53,7 @@ case $action in
                     wf-recorder -f $path -g "`slurp`"
                     ;;
             esac
-            ln -sf $path /tmp/snapshot_video
+            ln -sf $path "$XDG_RUNTIME_DIR/snapshot_video"
         }
         ;;
 esac

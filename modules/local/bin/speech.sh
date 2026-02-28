@@ -23,8 +23,8 @@ else
 fi
 
 [ -n "$content" ] && if $c; then
-    claude_terminal='kitten @ --to unix:/tmp/agent'
-    hyprctl dispatch workspace special:
+    claude_terminal="kitten @ --to unix:$XDG_RUNTIME_DIR/agent"
+    hyprctl dispatch workspace special:
     eval $claude_terminal send-text "$content"
     eval $claude_terminal send-key Return
 else
