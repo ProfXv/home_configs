@@ -44,10 +44,10 @@ BWOPTS="$BWOPTS --proc /proc"
 BWOPTS="$BWOPTS --tmpfs /tmp"
 case "$TYPE" in
     terminal)
-        BWOPTS="$BWOPTS --bind /home/paradoxist/.zsh_history /home/paradoxist/.zsh_history"
+        BWOPTS="$BWOPTS --bind $HOME/.zsh_history $HOME/.zsh_history"
         ;;
     termate)
-        BWOPTS="$BWOPTS --bind /home/paradoxist/Documents/conversations /home/paradoxist/Documents/conversations"
+        BWOPTS="$BWOPTS --bind $HOME/Documents/conversations $HOME/Documents/conversations"
         ;;
 esac
 BWOPTS="$BWOPTS --bind \"$DIR\" \"$DIR\""

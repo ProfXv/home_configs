@@ -1,6 +1,21 @@
 { config, pkgs, ... }:
 
 let
+  privateConfigPath = if builtins.pathExists ./private/private.json
+                      then ./private/private.json
+                      else ./templates/private/private.json;
+  privateConfig = builtins.fromJSON (builtins.readFile privateConfigPath);
+  usernames = privateConfig.username;
+  reverseString = str: pkgs.lib.concatStrings (pkgs.lib.reverseList (pkgs.lib.stringToCharacters str));
+  
+  userPairs = map (user: {
+    positive = user;
+    negative = reverseString user;
+  }) usernames;
+  
+  positiveUser = (builtins.head userPairs).positive;
+  negativeUser = (builtins.head userPairs).negative;
+
   systemPrivatePath = if builtins.pathExists ./private/system-private.nix
                       then ./private/system-private.nix
                       else ./templates/private/system-private.nix;
@@ -30,52 +45,62 @@ in
     };
   };
 
-  services.getty.autologinUser = "paradoxist";
+  systemd.services = pkgs.lib.listToAttrs (map (tty:
+    let
+      user = if pkgs.lib.mod tty 2 == 1 then positiveUser else negativeUser;
+      agetty = "${pkgs.util-linux}/sbin/agetty";
+      login = "${pkgs.shadow}/bin/login";
+    in {
+      name = "getty@tty${toString tty}";
+      value = {
+        overrideStrategy = "asDropin";
+        serviceConfig.ExecStart = [
+          ""
+          "@${agetty} agetty --login-program ${login} --autologin ${user} --noclear %I $TERM"
+        ];
+      };
+    }
+  ) [ 1 2 3 4 5 6 ]);
 
-  networking.hostName = "paradoxer";
   networking.wireless.iwd.enable = true;
   networking.firewall.enable = true;
   services.tailscale.enable = true;
 
-  time.timeZone = "Asia/Shanghai";
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.inputMethod = {
-    enable = true;
-    type = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      qt6Packages.fcitx5-chinese-addons
-    ];
-  };
-
-  
-
-  users.users.paradoxist = {
-    isNormalUser = true;
-    group = "paradoxist";
-    extraGroups = [ "wheel" "input" "uinput" "video" "docker" "disk" "dialout" "tty" ];
-    shell = pkgs.zsh;
-    initialPassword = "password";
-  };
-
-  users.groups.paradoxist = {};
-  users.groups.uinput = {};
-
-  nixpkgs.config = {
-    allowUnfree = true;
-    android_sdk.accept_license = true;
-    packageOverrides = pkgs: {
-      unstable = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz") {
-        config = config.nixpkgs.config;
-      };
+  users.users = pkgs.lib.mkMerge (map (pair: {
+    ${pair.positive} = {
+      isNormalUser = true;
+      group = pair.positive;
+      extraGroups = [ "wheel" "input" "uinput" "video" "docker" "disk" "dialout" "tty" pair.negative ];
+      shell = pkgs.zsh;
+      homeMode = "750";
     };
-  };
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.substituters = [ "https://mirror.sjtu.edu.cn/nix-channels/store" ];
+    ${pair.negative} = {
+      isNormalUser = true;
+      group = pair.negative;
+      extraGroups = [ "wheel" "input" "uinput" "video" "docker" "disk" "dialout" "tty" pair.positive ];
+      shell = pkgs.zsh;
+      homeMode = "750";
+    };
+  }) userPairs);
 
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
+  users.groups = pkgs.lib.mkMerge ([
+    (pkgs.lib.mkMerge (map (pair: {
+      ${pair.positive} = {};
+      ${pair.negative} = {};
+    }) userPairs))
+    { uinput = {}; }
+  ]);
+
+  nixpkgs.config.allowUnfree = true;
+  nix = {
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+    };
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
   };
 
   xdg.portal = {
@@ -132,22 +157,32 @@ in
     hyprpolkitagent
   ];
 
-  environment.sessionVariables = {
-      LIBVA_DRIVERS_PATH = "${pkgs.intel-media-driver}/lib/dri";
-      PATH = "${pkgs.hyprpolkitagent}/libexec";
-  };
-
   systemd.tmpfiles.rules = [
     "d /run/polkit-1/rules.d 0755 root root -"
     "d /usr/local/share/polkit-1/rules.d 0755 root root -"
   ];
 
   fonts.packages = with pkgs;[
-    noto-fonts-cjk-sans noto-fonts-color-emoji dejavu_fonts nerd-fonts.noto font-awesome
+    noto-fonts-cjk-sans-static noto-fonts-color-emoji dejavu_fonts nerd-fonts.noto font-awesome
   ];
 
   hardware.bluetooth.enable = true;
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      PermitRootLogin = "no";
+      KbdInteractiveAuthentication = false;
+      AllowUsers = [ positiveUser negativeUser ];
+      LogLevel = "VERBOSE";
+    };
+  };
+  services.fail2ban = {
+    enable = true;
+    bantime = "1s";
+    maxretry = 1;
+    bantime-increment.enable = true;
+  };
   services.vnstat.enable = true;
   services.atd.enable = true;
   services.minidlna.enable = true;
@@ -158,30 +193,10 @@ in
     alsa.enable = true;
     pulse.enable = true;
     jack.enable = true;
-    extraConfig.pipewire = {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-echo-cancel";
-          args = {
-            "source_master" = "bluez_input.41:42:78:94:36:02";
-            "sink_master" = "alsa_output.pci-0000_00_1f.3.hdmi-stereo";
-            "aec_method" = "webrtc";
-          };
-        }
-      ];
-    };
   };
   services.gvfs.enable = true;
 
-  services.udev.extraRules = ''
-    KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"
-    # AR Glasses (Google Nexus/Pixel Device)
-    ACTION=="add", ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="4ee2", RUN+="${pkgs.coreutils}/bin/echo 1 > /home/paradoxist/.phone_state"
-    ACTION=="remove", ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="4ee2", RUN+="${pkgs.coreutils}/bin/echo 0 > /home/paradoxist/.phone_state"
-    # HONOR Phone (ALI-AN00)
-    ACTION=="add", ATTRS{idVendor}=="339b", ATTRS{idProduct}=="107d", RUN+="${pkgs.coreutils}/bin/echo 1 > /home/paradoxist/.phone_state"
-    ACTION=="remove", ATTRS{idVendor}=="339b", ATTRS{idProduct}=="107d", RUN+="${pkgs.coreutils}/bin/echo 0 > /home/paradoxist/.phone_state"
-  '';
+  services.logind.settings.Login.HandlePowerKey = "hibernate";
 
   system.stateVersion = "25.11";
 }
