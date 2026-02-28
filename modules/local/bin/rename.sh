@@ -19,7 +19,9 @@ echo "🌟 Hey there! Let's give your workspace a fresh new name! 🌟"
         sleep 3
     }
 } || {
-    read -p "Enter the cool new name (or press Enter to select from existing ones): " new_name
-    [ -n "$new_name" ] && run_project.sh CAO --init "$new_name" || new_name=$(ls -t | fzf) &&
-    [ -n "$new_name" ] && hyprctl dispatch renameworkspace $old_id "$new_name"
+    new_name=$(ls -t | fzf --prompt="Select project or type new name: ")
+    [ -n "$new_name" ] && {
+        ls -t | grep -Fxq "$new_name" || run_project.sh CAO --init "$new_name"
+        hyprctl dispatch renameworkspace $old_id "$new_name"
+    }
 }
