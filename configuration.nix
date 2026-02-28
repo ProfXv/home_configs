@@ -78,6 +78,7 @@ in
     webui = pkgs.metacubexd;
     extraOpts = "-d /etc/mihomo";
   };
+  services.sunshine.enable = true;
   services.samba = {
     enable = true;
     settings = {
